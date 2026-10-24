@@ -3,376 +3,884 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Professional Admin Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Supabase JS SDK -->
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Admin Dashboard | Syed Fareed Ul Hassan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = { 
-      theme: { 
-        extend: { 
-          colors: { brand: { orange: 'var(--theme-color, #FF4500)', dark: '#08080A', card: '#111116', border: '#1F1F28', sidebar: '#0a0a0d' } } 
-        } 
-      } 
-    }
-  </script>
-  <style> 
-    :root { --theme-color: #FF4500; }
-    body { background-color: #08080A; color: #F3F4F6; } 
-    .tab-content { display: none; }
-    .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    .nav-btn.active { background-color: rgba(255,255,255,0.05); border-left: 3px solid var(--theme-color); color: white; }
+  <style>
+    :root{--a:#ff5500;--a2:#ff8a00;--bg:#090a0f;--panel:#11131a;--panel2:#171a24;--line:#242838;--tx:#e8eaf0;--mu:#8b91a5;--ok:#22c55e;--err:#ef4444;--warn:#f59e0b}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--tx);font-family:Inter,sans-serif;font-size:14px;line-height:1.5}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+    input,select,textarea{font:inherit;color:inherit}
+    ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#2c3142;border-radius:8px}
+    .hidden{display:none!important}
+
+    /* Login */
+    #login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 10%,rgba(255,85,0,.15),transparent 40%),radial-gradient(circle at 80% 90%,rgba(255,140,0,.1),transparent 40%)}
+    .login-card{width:100%;max-width:410px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:34px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+    .login-card .logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;font-weight:900;font-size:24px;color:#fff;margin-bottom:18px;box-shadow:0 10px 30px -6px rgba(255,85,0,.6)}
+    .login-card h1{font-size:22px}
+    .login-card p{color:var(--mu);margin:4px 0 22px}
+
+    /* App layout */
+    #app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
+    #app.with-preview{grid-template-columns:250px minmax(0,1fr) 470px}
+    .side{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--panel);border-right:1px solid var(--line);padding:18px 14px;display:flex;flex-direction:column}
+    .side-brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;border-bottom:1px solid var(--line);margin-bottom:12px}
+    .side-brand .logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;font-weight:900;color:#fff}
+    .side-brand b{display:block;font-size:14px}.side-brand small{color:var(--mu);font-size:11.5px}
+    .nav-group{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#5d6377;padding:14px 10px 6px}
+    .nav-item{display:flex;align-items:center;gap:11px;width:100%;padding:9px 11px;border-radius:10px;color:var(--mu);font-weight:500;transition:.2s;text-align:left}
+    .nav-item i{width:18px;text-align:center}
+    .nav-item:hover{background:var(--panel2);color:var(--tx)}
+    .nav-item.active{background:linear-gradient(90deg,rgba(255,85,0,.18),rgba(255,85,0,.04));color:#fff;box-shadow:inset 3px 0 0 var(--a)}
+    .nav-item.active i{color:var(--a)}
+    .nav-item .badge{margin-left:auto;background:var(--a);color:#fff;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px}
+    .side-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--mu)}
+    .side-foot .user{display:flex;align-items:center;gap:9px;padding:8px}
+    .side-foot .av{width:32px;height:32px;border-radius:50%;background:var(--panel2);display:grid;place-items:center;color:var(--a)}
+    .main{min-width:0;display:flex;flex-direction:column}
+    .topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;padding:12px 24px;background:rgba(9,10,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .topbar h2{font-size:17px;font-weight:700;margin-right:auto;display:flex;align-items:center;gap:10px}
+    .topbar h2 i{color:var(--a)}
+    .dirty-pill{font-size:12px;padding:4px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mu);display:flex;align-items:center;gap:6px}
+    .dirty-pill.on{border-color:rgba(245,158,11,.5);color:#fcd34d;background:rgba(245,158,11,.08)}
+    .dirty-pill .d{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+    .dirty-pill.on .d{background:var(--warn)}
+    .menu-toggle{display:none}
+    .content{padding:24px;width:100%;max-width:1100px}
+    .preview{position:sticky;top:0;height:100vh;border-left:1px solid var(--line);background:#05060a;display:flex;flex-direction:column}
+    .preview-bar{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--panel)}
+    .preview-bar b{margin-right:auto;font-size:13px}
+    .preview-frame{flex:1;display:flex;justify-content:center;overflow:hidden;background:#05060a}
+    .preview iframe{border:0;width:100%;height:100%;background:#000;transition:width .3s}
+    .preview.mobile iframe{width:390px;max-width:100%;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+    @media(max-width:1250px){#app.with-preview{grid-template-columns:250px minmax(0,1fr)}.preview{position:fixed;right:0;top:0;width:min(470px,100%);z-index:80;box-shadow:-20px 0 60px rgba(0,0,0,.6)}}
+    @media(max-width:880px){#app,#app.with-preview{grid-template-columns:minmax(0,1fr)}.side{position:fixed;left:-270px;width:260px;z-index:90;transition:left .3s}.side.open{left:0;box-shadow:20px 0 60px rgba(0,0,0,.6)}.menu-toggle{display:inline-flex}.content{padding:16px}.topbar{padding:10px 14px;flex-wrap:wrap}.hide-sm{display:none}}
+
+    /* Components */
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px}
+    .panel > h3{font-size:15px;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+    .panel > h3 i{color:var(--a)}
+    .panel > .sub{color:var(--mu);font-size:12.5px;margin-bottom:16px}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+    .full{grid-column:1/-1}
+    @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}.grid4{grid-template-columns:repeat(2,1fr)}}
+    .f label{display:block;font-size:12px;font-weight:600;color:var(--mu);margin-bottom:6px}
+    .f .help{font-size:11.5px;color:#666d82;margin-top:4px}
+    .f input[type=text],.f input[type=email],.f input[type=url],.f input[type=number],.f input[type=password],.f textarea,.f select,.inp{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s}
+    .f textarea{resize:vertical;min-height:84px}
+    .f input:focus,.f textarea:focus,.f select:focus,.inp:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(255,85,0,.12)}
+    .f select option{background:var(--panel)}
+    .color-row{display:flex;gap:8px;align-items:center}
+    .color-row input[type=color]{width:46px;height:42px;padding:3px;border-radius:10px;border:1px solid var(--line);background:var(--bg);cursor:pointer;flex-shrink:0}
+    .icon-row{display:flex;gap:8px;align-items:center}
+    .icon-row .ip{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;background:rgba(255,85,0,.1);color:var(--a);border:1px solid rgba(255,85,0,.3);font-size:17px}
+    .range-row{display:flex;align-items:center;gap:12px}
+    .range-row input{flex:1;accent-color:var(--a)}
+    .range-row output{min-width:52px;text-align:right;font-weight:700;color:var(--a);font-size:13px}
+    .switch{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--line);border-radius:10px;cursor:pointer}
+    .switch span{font-weight:600;font-size:13.5px}
+    .switch small{display:block;color:var(--mu);font-weight:400;font-size:12px}
+    .switch input{appearance:none;width:42px;height:24px;border-radius:99px;background:#2a2f40;position:relative;cursor:pointer;flex-shrink:0;transition:.25s}
+    .switch input::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.25s}
+    .switch input:checked{background:var(--a)}
+    .switch input:checked::after{left:21px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 15px;border-radius:10px;font-weight:600;font-size:13px;border:1px solid var(--line);background:var(--panel2);transition:.2s;white-space:nowrap}
+    .btn:hover{border-color:#3a4058;background:#1d2130}
+    .btn.pri{background:linear-gradient(90deg,#ff3b00,#ff7a00);border:0;color:#fff;box-shadow:0 8px 20px -8px rgba(255,85,0,.7)}
+    .btn.pri:hover{filter:brightness(1.08)}
+    .btn.danger{color:#fca5a5;border-color:#5b1f1f}.btn.danger:hover{background:#2a1212}
+    .btn.sm{padding:6px 10px;font-size:12px}
+    .btn.icon{width:32px;height:32px;padding:0}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+    .btn-row{display:flex;flex-wrap:wrap;gap:10px}
+
+    /* List editor */
+    .li-card{border:1px solid var(--line);border-radius:12px;background:var(--panel2);margin-bottom:10px;transition:border-color .2s}
+    .li-card.open{border-color:#3a3f55}
+    .li-head{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;user-select:none}
+    .li-num{width:26px;height:26px;border-radius:8px;background:rgba(255,85,0,.12);color:var(--a);display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .li-title{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .li-actions{display:flex;gap:4px}
+    .li-chev{color:var(--mu);transition:transform .2s}
+    .li-card.open .li-chev{transform:rotate(180deg)}
+    .li-body{display:none;padding:4px 14px 16px;border-top:1px solid var(--line)}
+    .li-card.open .li-body{display:block;padding-top:14px}
+
+    /* Dashboard */
+    .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px}
+    .kpi .ki{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:18px;background:rgba(255,85,0,.12);color:var(--a)}
+    .kpi b{font-size:24px;display:block;line-height:1.1}
+    .kpi small{color:var(--mu);font-size:12px}
+    .welcome{background:linear-gradient(120deg,rgba(255,85,0,.22),rgba(255,85,0,.03) 60%),var(--panel);border:1px solid rgba(255,85,0,.3);border-radius:16px;padding:24px;margin-bottom:18px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+    .welcome h3{font-size:20px}.welcome p{color:var(--mu)}
+    .quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+    .quick button{padding:14px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);text-align:left;transition:.2s}
+    .quick button:hover{border-color:var(--a);transform:translateY(-2px)}
+    .quick i{color:var(--a);font-size:18px;margin-bottom:8px;display:block}
+    .quick span{font-weight:600;font-size:13px}
+
+    /* Messages */
+    .msg{border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:14px 16px;margin-bottom:10px}
+    .msg.unread{border-left:3px solid var(--a)}
+    .msg-top{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+    .msg-av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,85,0,.14);color:var(--a);font-weight:700;flex-shrink:0}
+    .msg-meta{flex:1;min-width:180px}
+    .msg-meta b{font-size:14.5px}
+    .msg-meta small{display:block;color:var(--mu);font-size:12px;word-break:break-all}
+    .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:rgba(255,85,0,.12);color:#ffb38a;border:1px solid rgba(255,85,0,.25)}
+    .tag.new{background:var(--a);color:#fff;border-color:var(--a)}
+    .msg-body{margin:12px 0;color:#c9ccd6;white-space:pre-wrap;word-break:break-word;font-size:13.5px;background:var(--bg);border-radius:10px;padding:12px}
+    .empty{text-align:center;color:var(--mu);padding:40px 20px}
+    .empty i{font-size:34px;color:#3a3f55;margin-bottom:10px;display:block}
+
+    /* Theme presets */
+    .presets{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+    .preset{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--bg);text-align:left;transition:.2s}
+    .preset:hover{transform:translateY(-2px);border-color:#3a3f55}
+    .preset.on{border-color:var(--a);box-shadow:0 0 0 2px rgba(255,85,0,.25)}
+    .preset .sw{height:44px;border-radius:8px;margin-bottom:8px;display:flex;overflow:hidden}
+    .preset .sw i{flex:1}
+    .preset span{font-size:12.5px;font-weight:600}
+
+    .photo-box{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+    .photo-prev{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;overflow:hidden;font-weight:900;font-size:30px;color:#fff;border:3px solid rgba(255,140,0,.5);flex-shrink:0}
+    .photo-prev img{width:100%;height:100%;object-fit:cover}
+    pre.code{background:#05060a;border:1px solid var(--line);border-radius:12px;padding:16px;font-size:12px;color:#86efac;overflow-x:auto;max-height:420px;line-height:1.6}
+    ol.steps{padding-left:20px;color:#c9ccd6;display:grid;gap:8px}
+    ol.steps b{color:#fff}
+    .note{padding:12px 14px;border-radius:10px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);color:#fcd34d;font-size:13px;margin-bottom:14px}
+    .note.ok{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3);color:#86efac}
+    .note.err{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3);color:#fca5a5}
+
+    #toasts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+    .toast{background:#1b1f2b;border:1px solid var(--line);border-left:4px solid var(--ok);padding:11px 16px;border-radius:10px;box-shadow:0 14px 40px rgba(0,0,0,.5);font-size:13.5px;animation:tin .3s;max-width:90vw}
+    .toast.err{border-left-color:var(--err)}.toast.warn{border-left-color:var(--warn)}
+    @keyframes tin{from{opacity:0;transform:translateY(10px)}}
+    .spin{animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+    .scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:85;display:none}
+    .scrim.on{display:block}
   </style>
 </head>
-<body class="antialiased h-screen overflow-hidden flex bg-brand-dark">
+<body>
 
-  <!-- LOGIN SCREEN -->
-  <div id="loginScreen" class="fixed inset-0 z-50 bg-brand-dark flex items-center justify-center p-6">
-    <div class="bg-brand-card border border-brand-border rounded-3xl p-8 max-w-md w-full shadow-2xl">
-      <div class="flex flex-col items-center text-center gap-4 mb-8">
-        <div class="w-16 h-16 rounded-2xl bg-brand-orange flex items-center justify-center text-white font-bold text-3xl shadow-lg">S</div>
-        <div>
-          <h2 class="text-2xl font-bold font-display">Workspace Admin</h2>
-          <p class="text-sm text-gray-400 mt-1">Manage your portfolio content</p>
-        </div>
-      </div>
-      <div class="space-y-5">
-        <div>
-          <input type="password" id="passcode" placeholder="Enter Admin Passcode" class="w-full px-5 py-4 rounded-xl bg-brand-dark border border-brand-border focus:border-brand-orange outline-none text-white text-center tracking-widest" />
-        </div>
-        <button onclick="attemptLogin()" class="w-full py-4 rounded-xl bg-brand-orange text-white font-bold hover:opacity-90 transition shadow-lg">
-          Login to Dashboard
-        </button>
-        <p id="loginError" class="text-red-500 text-sm hidden text-center">Incorrect passcode. Try again.</p>
-      </div>
+<!-- ================= LOGIN ================= -->
+<div id="login" class="hidden">
+  <form class="login-card" id="login-form">
+    <div class="logo">S</div>
+    <h1>Admin Dashboard</h1>
+    <p>Sign in to edit your portfolio website.</p>
+    <div class="f" style="margin-bottom:14px"><label>Email</label><input type="email" id="lg-email" required placeholder="admin@email.com" autocomplete="username"></div>
+    <div class="f" style="margin-bottom:18px"><label>Password</label><input type="password" id="lg-pass" required placeholder="••••••••" autocomplete="current-password"></div>
+    <button class="btn pri" style="width:100%;padding:12px" id="lg-btn"><i class="fa-solid fa-right-to-bracket"></i> Sign In</button>
+    <div id="lg-msg" style="margin-top:14px;font-size:13px;color:#fca5a5"></div>
+    <p style="font-size:12px;margin:18px 0 0">First time? Create your admin user in <b>Supabase → Authentication → Users → Add user</b>, then run the SQL from the Setup page (shown after login, or open <code>admin.html#setup</code>).</p>
+    <button type="button" class="btn sm" style="margin-top:10px" onclick="showSetupPublic()"><i class="fa-solid fa-database"></i> View Setup SQL</button>
+  </form>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app" class="hidden">
+  <aside class="side" id="side">
+    <div class="side-brand"><div class="logo">S</div><div><b>Portfolio Admin</b><small>Syed Fareed Ul Hassan</small></div></div>
+    <div id="side-nav"></div>
+    <div class="side-foot">
+      <div class="user"><div class="av"><i class="fa-solid fa-user-shield"></i></div><div style="overflow:hidden"><div style="color:#fff;font-weight:600;font-size:12.5px">Signed in</div><div id="user-email" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div></div></div>
+      <button class="nav-item" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
     </div>
+  </aside>
+  <div class="scrim" id="scrim" onclick="toggleSide(false)"></div>
+
+  <div class="main">
+    <div class="topbar">
+      <button class="btn icon menu-toggle" onclick="toggleSide()"><i class="fa-solid fa-bars"></i></button>
+      <h2 id="page-title"></h2>
+      <span class="dirty-pill" id="dirty-pill"><span class="d"></span><span id="dirty-text">All changes saved</span></span>
+      <a class="btn hide-sm" href="index.html" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> View Site</a>
+      <button class="btn" onclick="togglePreview()"><i class="fa-solid fa-eye"></i> <span class="hide-sm">Live Preview</span></button>
+      <button class="btn pri" id="save-btn" onclick="save()"><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
+    </div>
+    <div class="content" id="content"></div>
   </div>
 
-  <!-- DASHBOARD WRAPPER -->
-  <div id="dashboardScreen" class="hidden w-full h-full flex">
-    
-    <!-- SIDEBAR -->
-    <div class="w-64 bg-brand-sidebar border-r border-brand-border flex flex-col">
-      <div class="p-6 border-b border-brand-border">
-        <h1 class="text-xl font-bold font-display text-white">Admin Panel</h1>
-        <p class="text-xs text-gray-500 mt-1">Live Editor</p>
-      </div>
-      
-      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-        <button onclick="switchTab('tab-messages')" id="nav-messages" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition active">
-          <i data-lucide="inbox" class="w-4 h-4"></i> Client Messages
-        </button>
-        <button onclick="switchTab('tab-theme')" id="nav-theme" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition">
-          <i data-lucide="palette" class="w-4 h-4"></i> Theme Settings
-        </button>
-        <button onclick="switchTab('tab-hero')" id="nav-hero" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition">
-          <i data-lucide="layout-template" class="w-4 h-4"></i> Hero Section
-        </button>
-        <button onclick="switchTab('tab-about')" id="nav-about" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition">
-          <i data-lucide="user" class="w-4 h-4"></i> About & Contact
-        </button>
-      </nav>
-
-      <div class="p-4 border-t border-brand-border space-y-2">
-        <a href="index.html" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-brand-card border border-brand-border rounded-lg text-sm hover:border-brand-orange transition text-white">
-          <i data-lucide="external-link" class="w-4 h-4"></i> View Live Site
-        </a>
-        <button onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500/10 text-red-500 rounded-lg text-sm hover:bg-red-500/20 transition">
-          <i data-lucide="log-out" class="w-4 h-4"></i> Logout
-        </button>
-      </div>
+  <aside class="preview hidden" id="preview">
+    <div class="preview-bar">
+      <b><i class="fa-solid fa-eye" style="color:var(--a)"></i> Live Preview</b>
+      <button class="btn icon sm" title="Desktop" onclick="setDevice(false)"><i class="fa-solid fa-desktop"></i></button>
+      <button class="btn icon sm" title="Mobile" onclick="setDevice(true)"><i class="fa-solid fa-mobile-screen"></i></button>
+      <button class="btn icon sm" title="Reload" onclick="reloadPreview()"><i class="fa-solid fa-rotate"></i></button>
+      <button class="btn icon sm" title="Close" onclick="togglePreview(false)"><i class="fa-solid fa-xmark"></i></button>
     </div>
+    <div class="preview-frame"><iframe id="pv-frame" title="Preview"></iframe></div>
+  </aside>
+</div>
 
-    <!-- MAIN CONTENT AREA -->
-    <div class="flex-1 flex flex-col h-full bg-brand-dark overflow-y-auto">
-      <div class="p-8 max-w-5xl mx-auto w-full">
-        
-        <!-- HEADER -->
-        <div class="flex items-center justify-between mb-8">
-          <div>
-            <h2 id="currentTabTitle" class="text-2xl font-bold font-display text-white">Client Messages</h2>
-            <p class="text-sm text-gray-400 mt-1">Manage your portfolio data below.</p>
-          </div>
-          <button id="globalSaveBtn" onclick="saveCMSData()" class="hidden px-6 py-2.5 bg-brand-orange text-white rounded-lg font-bold hover:bg-orange-600 transition shadow-lg flex items-center gap-2">
-            <i data-lucide="save" class="w-4 h-4"></i> Publish Changes
-          </button>
-        </div>
+<div id="toasts"></div>
 
-        <!-- NOTIFICATION ALERTS -->
-        <div id="saveStatus" class="hidden mb-6 p-4 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-sm font-medium flex items-center gap-2">
-          <i data-lucide="check-circle" class="w-5 h-5"></i> Live Website Updated Successfully!
-        </div>
+<script>
+/* =========================================================
+   CONFIG
+   ========================================================= */
+const SUPABASE_URL = 'https://pxlpfhagbkbafxgcpcyl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4bHBmaGFnYmtiYWZ4Z2NwY3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDcxMjEsImV4cCI6MjEwODQyMzEyMX0.fLsjVzsqy16qe9wsYsF9KStaVKNm9cZDiInf5gsM3ek';
+const ADMIN_EMAIL = 'fareedulhassan0@gmail.com';   // only this Supabase user can edit the site
+const SETTINGS_ID = 'main';
+const STORAGE_BUCKET = 'portfolio';
+const DRAFT_KEY = 'sfh_admin_draft';
 
-        <!-- 1. MESSAGES TAB -->
-        <div id="tab-messages" class="tab-content active bg-brand-card border border-brand-border rounded-2xl p-6">
-          <div class="flex justify-between items-center mb-6">
-            <h3 class="text-lg font-bold">Inquiries & Emails</h3>
-            <button onclick="fetchMessages()" class="text-brand-orange text-sm font-semibold flex items-center gap-2 hover:underline"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh Data</button>
-          </div>
-          <div class="overflow-x-auto bg-brand-dark rounded-xl border border-brand-border">
-            <table class="w-full text-left text-sm">
-              <thead class="bg-brand-card text-xs uppercase text-gray-400 border-b border-brand-border">
-                <tr><th class="px-4 py-3">Date</th><th class="px-4 py-3">Client</th><th class="px-4 py-3">Service</th><th class="px-4 py-3">Message</th></tr>
-              </thead>
-              <tbody id="messagesTableBody" class="divide-y divide-brand-border">
-                <tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">Loading messages from Supabase...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        <!-- 2. THEME SETTINGS TAB -->
-        <div id="tab-theme" class="tab-content bg-brand-card border border-brand-border rounded-2xl p-8">
-          <h3 class="text-lg font-bold mb-6 border-b border-brand-border pb-3">Website Branding</h3>
-          <div class="space-y-6">
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">Main Theme Color</label>
-              <div class="flex items-center gap-4">
-                <input type="color" id="cms_theme_color" value="#FF4500" class="w-14 h-14 rounded cursor-pointer bg-transparent border-0 p-0" />
-                <p class="text-sm text-gray-400">Click the box to choose a new color for buttons, text highlights, and glows.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+/* =========================================================
+   DEFAULT CONTENT (keep in sync with index.html)
+   ========================================================= */
+const DEFAULTS = {
+  seo: { title: 'Syed Fareed Ul Hassan | Career Expert & Physics Educator', description: 'Portfolio of Syed Fareed Ul Hassan — Career Expert, Physics Educator and Online Instructor based in Sargodha, Punjab, Pakistan.' },
+  theme: { preset: 'flame', primary: '#ff5500', secondary: '#ff9900', bg: '#060609', bg2: '#0c0c12', card: '#13131c', text: '#f3f4f6', muted: '#9ca3af', radius: 18, glow: 40, fontHeading: 'Outfit', fontBody: 'Inter' },
+  animations: { enabled: true, reveal: 'fade-up', speed: 0.8, stagger: 0.08, typewriter: true, typeSpeed: 90, particles: true, particleCount: 60, orbit: true, float: true, cursorGlow: true, tilt: true, marquee: true, marqueeSpeed: 30, counters: true, preloader: true, scrollProgress: true },
+  nav: { cta: "Let's Talk" },
+  profile: {
+    firstName: 'Syed Fareed', lastName: 'Ul Hassan', brand: 'Syed Fareed', initials: 'SFH',
+    hello: "Hello, I'm", badge: 'Available for Career Consulting & Online Instruction',
+    roles: ['Career Expert', 'Physics Educator', 'Online Quran Instructor', 'Resume & Document Specialist'],
+    intro: 'Career services professional and Physics educator with experience in resume guidance, secondary-level science instruction, and online Quran teaching. Combining a BS in Physics with specialized training in Office Management and Amazon Virtual Assistance.',
+    photoUrl: '', cvUrl: '',
+    yearsExp: '4+', yearsLabel: 'Years of Experience', floatBadge: 'BS Physics',
+    email: 'fareedulhassan0@gmail.com', phone: '03205335188', whatsapp: '923205335188',
+    linkedin: 'https://www.linkedin.com/in/syed-fareed-ul-hassan-898844286',
+    location: 'Sargodha, Punjab, Pakistan', availability: 'Available On-Site & Remote Worldwide',
+    aboutTag: 'Career Expert | Physics Educator | Online Instructor',
+    aboutTitle: 'Helping job seekers build targeted career documents and guiding students toward excellence in Physics & Quranic studies.',
+    aboutText1: 'I am a career services professional and Physics educator with hands-on experience in resume guidance, secondary-level science instruction, and online Quran teaching. I hold a BS in Physics from the University of Sargodha, complemented by certified training in Office Management and Amazon Virtual Assistance.',
+    aboutText2: 'At Pixely Careers, I help job seekers present their qualifications, work history, and skills in clear, targeted career documents aligned with their goals — combining clear communication, individualized support, and client-focused review.',
+    cvSummary: 'Career services professional and Physics educator with experience in resume guidance, secondary-level science instruction, and online Quran teaching. Holds an academic background in Physics with training in office management and Amazon virtual assistance. Combines professional communication, learner support, and client-focused document review across education and career services.'
+  },
+  sections: {
+    hero: { show: true, nav: 'Home' },
+    marquee: { show: true },
+    stats: { show: true },
+    about: { show: true, nav: 'About', kicker: 'Discover My Profile', title: 'About', accent: 'Me', sub: '' },
+    services: { show: true, nav: 'Services', kicker: 'What I Do', title: 'My', accent: 'Services', sub: 'Professional solutions across career development, science instruction, online education, and virtual office administration.' },
+    skills: { show: true, nav: 'Skills', kicker: 'Core Competencies', title: 'My Work', accent: 'Skills', sub: 'Combining analytical Physics training with professional career consulting and administrative precision.' },
+    experience: { show: true, nav: 'Experience', kicker: 'Career Journey', title: 'Professional', accent: 'Experience', sub: '' },
+    education: { show: true, nav: 'Education', kicker: 'Academic Credentials', title: 'Education &', accent: 'Certifications', sub: '' },
+    highlights: { show: true, nav: '', kicker: 'Value Delivered', title: 'Why Clients & Learners', accent: 'Work With Me', sub: '' },
+    contact: { show: true, nav: 'Contact', kicker: "Let's Work Together", title: 'Get In', accent: 'Touch', sub: 'Have a resume project, need a Physics or Quran tutor, or looking for a dedicated professional? Reach out below.' }
+  },
+  marquee: ['Resume Review', 'Career Guidance', 'Physics Instruction', 'Online Quran Teaching', 'Lesson Planning', 'Office Administration', 'Amazon Virtual Assistance', 'Client Communication'],
+  stats: [
+    { icon: 'fa-solid fa-briefcase', value: '4', suffix: '+', label: 'Years Professional Experience' },
+    { icon: 'fa-solid fa-chalkboard-user', value: '4', suffix: '', label: 'Professional Roles' },
+    { icon: 'fa-solid fa-layer-group', value: '3', suffix: '', label: 'Core Domains' },
+    { icon: 'fa-solid fa-certificate', value: '2', suffix: '', label: 'Certified Trainings' }
+  ],
+  services: [
+    { icon: 'fa-solid fa-file-pen', title: 'Resume Review & Career Guidance', desc: 'Targeted resume structuring, clarity optimization, professional wording, and alignment with your specific career goals and target roles.', tag: 'Pixely Careers Expertise' },
+    { icon: 'fa-solid fa-atom', title: 'Physics Instruction & Exam Prep', desc: 'Secondary & FSc level Physics coaching focused on foundational concepts, numerical problem-solving, and worked exam solutions.', tag: 'Theory & Exam Prep' },
+    { icon: 'fa-solid fa-book-quran', title: 'Online Quran Instruction', desc: 'Personalized one-on-one online Quran lessons guiding recitation, Tajweed pronunciation, and structured practice with supportive feedback.', tag: '1-on-1 Remote Learning' },
+    { icon: 'fa-solid fa-laptop-file', title: 'Office Admin & Amazon VA', desc: 'Document preparation and organization, professional correspondence, remote client communication, and virtual assistance operations.', tag: 'Certified Operations' }
+  ],
+  skills: [
+    { name: 'Resume Review & Optimization', percent: 96, category: 'Career Services' },
+    { name: 'Career Guidance & Role Alignment', percent: 94, category: 'Career Services' },
+    { name: 'Client Communication', percent: 95, category: 'Career Services' },
+    { name: 'Physics Instruction & Numericals', percent: 95, category: 'Education' },
+    { name: 'Online Quran Teaching & Tajweed', percent: 94, category: 'Education' },
+    { name: 'Lesson Planning & Student Support', percent: 92, category: 'Education' },
+    { name: 'Office Administration & Documents', percent: 92, category: 'Admin & VA' },
+    { name: 'Amazon Virtual Assistance', percent: 90, category: 'Admin & VA' }
+  ],
+  competencies: ['Resume Review', 'Career Guidance', 'Client Communication', 'Document Preparation', 'Physics Instruction', 'Lesson Planning', 'Problem-Solving', 'Student Support', 'Online Instruction', 'Office Administration', 'Document Organization', 'Professional Correspondence', 'Remote Communication', 'Amazon Virtual Assistance'],
+  experience: [
+    { role: 'Career Expert', company: 'Pixely Careers', period: 'June 2026 – Present', type: 'Career Services', icon: 'fa-solid fa-briefcase', current: true, points: ['Help job seekers present qualifications, work history, and relevant skills in clear, targeted career documents.', "Review resumes for structure, relevance, clarity, professional wording, and alignment with applicants' career goals.", 'Discuss career backgrounds and target roles with clients to identify document requirements and improvements.'] },
+    { role: 'Online Quran Teacher', company: 'Remote / Online Instruction', period: '2024 – 2026', type: 'Online Instruction', icon: 'fa-solid fa-globe', current: false, points: ['Delivered online Quran lessons and adapted explanations to individual learning needs and progress.', 'Guided recitation, pronunciation, and regular practice with structured feedback to support learning.'] },
+    { role: 'Physics Teacher', company: 'Islamic Suffah High School', period: '2023 – 2024', type: 'Secondary Education', icon: 'fa-solid fa-school', current: false, points: ['Taught secondary-level Physics, emphasizing scientific concepts, foundational principles, and numerical problem-solving.', 'Developed lesson explanations, examples, and classroom activities aligned with Physics topics.'] },
+    { role: 'Physics Teacher', company: 'Ahmed Science Academy', period: '2022 – 2023', type: 'Science Academy', icon: 'fa-solid fa-flask', current: false, points: ['Delivered Physics instruction covering theory, calculations, and examination-focused problem-solving.', 'Supported topic revision with guided examples, worked solutions, and learner feedback.'] }
+  ],
+  education: [
+    { degree: 'Bachelor of Science (BS) in Physics', institute: 'University of Sargodha', period: '2022 – 2026', location: 'Sargodha, Pakistan', desc: 'Training in classical & modern physics, mathematical methods, analytical problem-solving, and scientific instruction.' },
+    { degree: 'FSc (Pre-Engineering)', institute: 'Government Central Model Higher Secondary School, Sargodha', period: '2020 – 2022', location: 'Sargodha, Pakistan', desc: '' },
+    { degree: 'Secondary School Certificate (Matriculation)', institute: 'Government High School, Sultanabad, Sargodha', period: '2018 – 2020', location: 'Sargodha, Pakistan', desc: '' }
+  ],
+  certifications: [
+    { title: 'Amazon Virtual Assistant Course', org: 'University of Sargodha', year: 'Certified Course', icon: 'fa-brands fa-amazon', desc: 'Training in e-commerce store operations, client management, product research, and remote virtual assistance workflows.' },
+    { title: 'Office Management Course', org: 'I-CET Academy', year: '2021', icon: 'fa-solid fa-folder-tree', desc: 'Foundation in office administration, document preparation, record organization, and professional correspondence.' }
+  ],
+  highlights: [
+    { icon: 'fa-solid fa-bullseye', title: 'Targeted Career Documents', text: "Turns work history and qualifications into clear, focused resumes aligned with each applicant's target roles and goals." },
+    { icon: 'fa-solid fa-square-root-variable', title: 'Clear Step-by-Step Physics', text: 'Breaks complex Physics principles and numericals into structured, worked solutions that build exam confidence.' },
+    { icon: 'fa-solid fa-hands-holding-child', title: 'Patient, Personalized Teaching', text: "Online Quran instruction tailored to each learner's pace, with steady feedback on pronunciation and recitation." }
+  ],
+  contact: { formTitle: 'Send a Direct Message', formSub: 'Your message is saved securely and delivered straight to my Gmail inbox.', gmailTo: 'fareedulhassan0@gmail.com', saveToSupabase: true, sendGmail: true, whatsappButton: true, successMsg: "Thank you! Your message has been received — I'll get back to you soon." },
+  footer: { tagline: 'Career Expert | Physics Educator | Online Instructor', text: 'All Rights Reserved.' }
+};
 
-        <!-- 3. HERO SECTION TAB -->
-        <div id="tab-hero" class="tab-content bg-brand-card border border-brand-border rounded-2xl p-8">
-          <h3 class="text-lg font-bold mb-6 border-b border-brand-border pb-3">Main Page Content (No Coding Required)</h3>
-          
-          <div class="space-y-6">
-            <!-- Image Upload -->
-            <div class="p-4 bg-brand-dark border border-brand-border rounded-xl flex items-center gap-6">
-              <img id="adminPhotoPreview" src="https://via.placeholder.com/100" class="w-20 h-20 rounded-full object-cover border-2 border-brand-orange hidden" />
-              <div>
-                <label class="block text-sm font-semibold text-gray-300 mb-2">Profile Photo</label>
-                <input type="file" id="cmsPhotoUpload" accept="image/*" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-brand-orange file:text-white cursor-pointer" />
-              </div>
-            </div>
+const FONTS = ['Outfit', 'Inter', 'Poppins', 'Montserrat', 'Space Grotesk', 'Sora', 'Plus Jakarta Sans', 'Manrope', 'Raleway', 'Playfair Display', 'DM Sans', 'Urbanist', 'Lexend', 'Rubik', 'Nunito', 'Lora', 'Roboto', 'Open Sans', 'Syne', 'Bebas Neue'];
+const PRESETS = {
+  flame:   { name: 'Flame Orange', primary: '#ff5500', secondary: '#ff9900', bg: '#060609', bg2: '#0c0c12', card: '#13131c', text: '#f3f4f6', muted: '#9ca3af' },
+  ocean:   { name: 'Ocean Blue', primary: '#2f80ff', secondary: '#00d4ff', bg: '#050912', bg2: '#0a1120', card: '#0f182b', text: '#eef4ff', muted: '#94a3b8' },
+  emerald: { name: 'Emerald', primary: '#10b981', secondary: '#84cc16', bg: '#04100c', bg2: '#081a14', card: '#0d211a', text: '#ecfdf5', muted: '#94b3a6' },
+  violet:  { name: 'Royal Violet', primary: '#8b5cf6', secondary: '#ec4899', bg: '#08060f', bg2: '#110c1d', card: '#171127', text: '#f5f3ff', muted: '#a49bb8' },
+  rose:    { name: 'Crimson Rose', primary: '#f43f5e', secondary: '#fb923c', bg: '#0c0507', bg2: '#16090d', card: '#1d0e13', text: '#fff1f2', muted: '#b39aa0' },
+  gold:    { name: 'Luxury Gold', primary: '#d4a017', secondary: '#f5d76e', bg: '#0a0906', bg2: '#13110b', card: '#1a1710', text: '#fdf8ec', muted: '#aaa189' },
+  cyber:   { name: 'Cyber Neon', primary: '#00e5ff', secondary: '#ff00c8', bg: '#05040a', bg2: '#0b0a16', card: '#110f20', text: '#f0f9ff', muted: '#9ba3c4' },
+  light:   { name: 'Clean Light', primary: '#ff5500', secondary: '#ff9900', bg: '#f8f7f4', bg2: '#efede8', card: '#ffffff', text: '#16161d', muted: '#5f6372' },
+  lightblue:{ name: 'Light Corporate', primary: '#2563eb', secondary: '#0ea5e9', bg: '#f6f8fc', bg2: '#eaf0f8', card: '#ffffff', text: '#0f172a', muted: '#55627a' }
+};
+const ICONS = ['fa-solid fa-briefcase','fa-solid fa-atom','fa-solid fa-book-quran','fa-solid fa-file-pen','fa-solid fa-laptop-file','fa-solid fa-graduation-cap','fa-solid fa-certificate','fa-solid fa-award','fa-solid fa-star','fa-solid fa-chalkboard-user','fa-solid fa-school','fa-solid fa-flask','fa-solid fa-globe','fa-solid fa-compass','fa-solid fa-comments','fa-solid fa-user-graduate','fa-solid fa-folder-tree','fa-solid fa-headset','fa-solid fa-bullseye','fa-solid fa-rocket','fa-solid fa-lightbulb','fa-solid fa-square-root-variable','fa-solid fa-layer-group','fa-solid fa-hands-holding-child','fa-solid fa-microscope','fa-solid fa-pen-nib','fa-solid fa-chart-line','fa-solid fa-handshake','fa-solid fa-users','fa-solid fa-envelope-open-text','fa-brands fa-amazon','fa-brands fa-linkedin-in','fa-brands fa-whatsapp'];
 
-            <!-- Names -->
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-semibold text-gray-300 mb-2">First Name</label>
-                <input type="text" id="cms_first_name" placeholder="Syed Fareed" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
-              </div>
-              <div>
-                <label class="block text-sm font-semibold text-gray-300 mb-2">Last Name (Will be colored automatically)</label>
-                <input type="text" id="cms_last_name" placeholder="Ul Hassan" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
-              </div>
-            </div>
+/* =========================================================
+   STATE + HELPERS
+   ========================================================= */
+let cfg = JSON.parse(JSON.stringify(DEFAULTS));
+let savedJSON = '', dirty = false, page = 'dashboard', messages = [], msgFilter = 'all', msgSearch = '';
+let lastSaved = null, settingsError = '', msgError = '', openItems = new Set(), pvReady = false, pvTimer = null;
 
-            <!-- Roles -->
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">Your Roles / Professions</label>
-              <input type="text" id="cms_roles" placeholder="Career Expert, Physics Educator, Online Instructor" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
-              <p class="text-xs text-gray-500 mt-1">Separate each role with a comma (,). The system will style them automatically.</p>
-            </div>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+function merge(base, over) {
+  if (over === undefined || over === null) return base;
+  if (Array.isArray(over)) return over;
+  if (typeof over === 'object' && base && typeof base === 'object' && !Array.isArray(base)) {
+    const out = { ...base }; for (const k in over) out[k] = merge(base[k], over[k]); return out;
+  }
+  return over;
+}
+const getPath = (o, p) => p.split('.').reduce((a, k) => a == null ? a : a[k], o);
+function setPath(o, p, v) { const ks = p.split('.'); let t = o; ks.slice(0, -1).forEach(k => { if (t[k] == null || typeof t[k] !== 'object') t[k] = {}; t = t[k]; }); t[ks.at(-1)] = v; }
+function toast(msg, type = 'ok') { const t = document.createElement('div'); t.className = 'toast ' + type; t.textContent = msg; $('#toasts').appendChild(t); setTimeout(() => t.remove(), 3800); }
+const fmtDate = d => new Date(d).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 
-            <!-- Description -->
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">Hero Description</label>
-              <textarea id="cms_hero_desc" rows="4" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange"></textarea>
-            </div>
-          </div>
-        </div>
+/* =========================================================
+   AUTH
+   ========================================================= */
+async function boot() {
+  const { data: { session } } = await sb.auth.getSession();
+  session ? enter(session) : showLogin();
+  sb.auth.onAuthStateChange((ev, s) => { if (ev === 'SIGNED_OUT') showLogin(); });
+}
+function showLogin() { $('#app').classList.add('hidden'); $('#login').classList.remove('hidden'); }
+$('#login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('#lg-btn'); btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner spin"></i> Signing in...'; $('#lg-msg').textContent = '';
+  const { data, error } = await sb.auth.signInWithPassword({ email: $('#lg-email').value.trim(), password: $('#lg-pass').value });
+  btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+  if (error) { $('#lg-msg').textContent = error.message; return; }
+  enter(data.session);
+});
+async function logout() { if (dirty && !confirm('You have unpublished changes. Logout anyway?')) return; await sb.auth.signOut(); location.reload(); }
+function showSetupPublic() { $('#login').classList.add('hidden'); $('#app').classList.remove('hidden'); $('#user-email').textContent = 'Not signed in'; renderNav(); go('setup'); }
 
-        <!-- 4. ABOUT & CONTACT TAB -->
-        <div id="tab-about" class="tab-content bg-brand-card border border-brand-border rounded-2xl p-8">
-          <h3 class="text-lg font-bold mb-6 border-b border-brand-border pb-3">Personal & Contact Details</h3>
-          
-          <div class="space-y-6">
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">About Me Section (Full Text)</label>
-              <textarea id="cms_about_text" rows="5" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange"></textarea>
-            </div>
+async function enter(session) {
+  $('#login').classList.add('hidden'); $('#app').classList.remove('hidden');
+  $('#user-email').textContent = session.user.email;
+  if (session.user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) toast('Note: only ' + ADMIN_EMAIL + ' can publish changes (database rule).', 'warn');
+  renderNav(); go(location.hash.slice(1) || 'dashboard');
+  await loadConfig(); loadMessages();
+}
 
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-semibold text-gray-300 mb-2">Contact Phone</label>
-                <input type="text" id="cms_phone" placeholder="03205335188" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
-              </div>
-              <div>
-                <label class="block text-sm font-semibold text-gray-300 mb-2">Contact Email</label>
-                <input type="text" id="cms_email" placeholder="fareedulhassan0@gmail.com" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
-              </div>
-              <div>
-                <label class="block text-sm font-semibold text-gray-300 mb-2">Location</label>
-                <input type="text" id="cms_location" placeholder="Sargodha, Punjab, Pakistan" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
-              </div>
-              <div>
-                <label class="block text-sm font-semibold text-gray-300 mb-2">LinkedIn URL</label>
-                <input type="text" id="cms_linkedin" placeholder="https://linkedin.com/in/..." class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
-              </div>
-            </div>
-          </div>
-        </div>
+/* =========================================================
+   DATA
+   ========================================================= */
+async function loadConfig() {
+  settingsError = '';
+  const { data, error } = await sb.from('site_settings').select('data,updated_at').eq('id', SETTINGS_ID).maybeSingle();
+  if (error) settingsError = error.message;
+  cfg = merge(clone(DEFAULTS), data?.data || null);
+  savedJSON = JSON.stringify(cfg);
+  lastSaved = data?.updated_at ? new Date(data.updated_at) : null;
+  setDirty(false); go(page); sendPreview();
+  if (error) toast('Could not load settings: ' + error.message + ' — see Setup page', 'err');
+}
+async function save() {
+  const btn = $('#save-btn'); btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner spin"></i> Publishing...';
+  const { error } = await sb.from('site_settings').upsert({ id: SETTINGS_ID, data: cfg, updated_at: new Date().toISOString() });
+  btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Publish';
+  if (error) { toast('Publish failed: ' + error.message, 'err'); return; }
+  savedJSON = JSON.stringify(cfg); lastSaved = new Date(); setDirty(false);
+  try { localStorage.setItem('sfh_site_cfg', savedJSON); localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+  toast('Published! Your live website is updated.');
+  if (page === 'dashboard') go(page);
+}
+async function loadMessages() {
+  msgError = '';
+  const { data, error } = await sb.from('contact_messages').select('*').order('created_at', { ascending: false });
+  if (error) { msgError = error.message; messages = []; } else messages = data || [];
+  renderNav(); if (page === 'messages' || page === 'dashboard') go(page);
+}
+async function msgAction(act, id) {
+  const m = messages.find(x => String(x.id) === String(id)); if (!m) return;
+  if (act === 'read' || act === 'unread') {
+    const v = act === 'read';
+    const { error } = await sb.from('contact_messages').update({ is_read: v }).eq('id', m.id);
+    if (error) return toast(error.message, 'err'); m.is_read = v;
+  } else if (act === 'delete') {
+    if (!confirm('Delete this message permanently?')) return;
+    const { error } = await sb.from('contact_messages').delete().eq('id', m.id);
+    if (error) return toast(error.message, 'err'); messages = messages.filter(x => x !== m); toast('Message deleted');
+  } else if (act === 'reply') {
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(m.email)}&su=${encodeURIComponent('Re: ' + (m.service || 'Your inquiry'))}&body=${encodeURIComponent(`Assalam-o-Alaikum ${m.name},\n\nThank you for reaching out.\n\n\n---\nYour message:\n${m.message}`)}`, '_blank');
+    if (!m.is_read) return msgAction('read', id);
+  } else if (act === 'wa') {
+    let ph = String(m.phone || '').replace(/\D/g, ''); if (ph.startsWith('0')) ph = '92' + ph.slice(1);
+    window.open(`https://wa.me/${ph}?text=${encodeURIComponent('Assalam-o-Alaikum ' + m.name + ', thank you for contacting me regarding ' + (m.service || 'your inquiry') + '.')}`, '_blank');
+  }
+  renderNav(); go(page);
+}
+function exportCSV() {
+  const cols = ['created_at', 'name', 'email', 'phone', 'service', 'message', 'is_read'];
+  const rows = [cols.join(',')].concat(messages.map(m => cols.map(c => '"' + String(m[c] ?? '').replace(/"/g, '""') + '"').join(',')));
+  download('contact-messages.csv', rows.join('\n'), 'text/csv');
+}
+function download(name, text, type = 'application/json') {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+async function uploadFile(file, folder) {
+  const ext = (file.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const path = `${folder}/${folder}-${Date.now()}.${ext}`;
+  const { error } = await sb.storage.from(STORAGE_BUCKET).upload(path, file, { upsert: true, contentType: file.type });
+  if (error) throw error;
+  return sb.storage.from(STORAGE_BUCKET).getPublicUrl(path).data.publicUrl;
+}
+async function handleUpload(input, target) {
+  const file = input.files[0]; if (!file) return;
+  toast('Uploading ' + file.name + '...', 'warn');
+  try {
+    const url = await uploadFile(file, target === 'profile.photoUrl' ? 'photo' : 'cv');
+    setPath(cfg, target, url); markDirty(); go(page); toast('Uploaded! Click Publish to make it live.');
+  } catch (err) {
+    if (target === 'profile.photoUrl' && file.size < 400000) {
+      const r = new FileReader(); r.onload = e => { setPath(cfg, target, e.target.result); markDirty(); go(page); };
+      r.readAsDataURL(file); toast('Storage upload failed (' + err.message + '). Embedded the small image instead.', 'warn');
+    } else toast('Upload failed: ' + err.message + ' — run the Storage SQL on the Setup page.', 'err');
+  }
+}
 
+/* =========================================================
+   DIRTY / DRAFT / PREVIEW
+   ========================================================= */
+function setDirty(v) {
+  dirty = v;
+  $('#dirty-pill').classList.toggle('on', v);
+  $('#dirty-text').textContent = v ? 'Unpublished changes' : 'All changes published';
+}
+function markDirty() {
+  setDirty(JSON.stringify(cfg) !== savedJSON);
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify(cfg)); } catch (e) {}
+  clearTimeout(pvTimer); pvTimer = setTimeout(sendPreview, 250);
+}
+function sendPreview() { const f = $('#pv-frame'); if (pvReady && f.contentWindow) f.contentWindow.postMessage({ type: 'sfh-preview', config: cfg }, '*'); }
+addEventListener('message', e => { if (e.data?.type === 'sfh-ready' && e.source === $('#pv-frame').contentWindow) { pvReady = true; sendPreview(); } });
+function togglePreview(force) {
+  const p = $('#preview'), on = force ?? p.classList.contains('hidden');
+  p.classList.toggle('hidden', !on); $('#app').classList.toggle('with-preview', on);
+  if (on && !$('#pv-frame').src) reloadPreview();
+}
+function reloadPreview() { pvReady = false; $('#pv-frame').src = 'index.html?preview=1&t=' + Date.now(); }
+function setDevice(m) { $('#preview').classList.toggle('mobile', m); }
+addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); save(); } });
+function toggleSide(force) { const s = $('#side'), on = force ?? !s.classList.contains('open'); s.classList.toggle('open', on); $('#scrim').classList.toggle('on', on); }
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+const PAGES = [
+  { g: 'Overview' },
+  { id: 'dashboard', i: 'fa-gauge-high', l: 'Dashboard' },
+  { id: 'messages', i: 'fa-inbox', l: 'Messages' },
+  { g: 'Content' },
+  { id: 'profile', i: 'fa-id-card', l: 'Profile & Bio' },
+  { id: 'hero', i: 'fa-house', l: 'Hero Section' },
+  { id: 'stats', i: 'fa-chart-simple', l: 'Stats Counter' },
+  { id: 'services', i: 'fa-briefcase', l: 'Services' },
+  { id: 'skills', i: 'fa-bars-progress', l: 'Skills' },
+  { id: 'experience', i: 'fa-timeline', l: 'Experience' },
+  { id: 'education', i: 'fa-graduation-cap', l: 'Education & Certs' },
+  { id: 'highlights', i: 'fa-star', l: 'Highlights' },
+  { id: 'sections', i: 'fa-table-cells-large', l: 'Sections & Menu' },
+  { g: 'Design' },
+  { id: 'theme', i: 'fa-palette', l: 'Theme & Colors' },
+  { id: 'animations', i: 'fa-wand-magic-sparkles', l: 'Animations' },
+  { g: 'System' },
+  { id: 'settings', i: 'fa-sliders', l: 'Contact & SEO' },
+  { id: 'backup', i: 'fa-box-archive', l: 'Backup & Restore' },
+  { id: 'setup', i: 'fa-database', l: 'Supabase Setup' }
+];
+function renderNav() {
+  const unread = messages.filter(m => !m.is_read).length;
+  $('#side-nav').innerHTML = PAGES.map(p => p.g ? `<div class="nav-group">${p.g}</div>` :
+    `<button class="nav-item ${p.id === page ? 'active' : ''}" onclick="go('${p.id}')"><i class="fa-solid ${p.i}"></i>${p.l}${p.id === 'messages' && unread ? `<span class="badge">${unread}</span>` : ''}</button>`).join('');
+}
+function go(id) {
+  const p = PAGES.find(x => x.id === id) || PAGES[1];
+  page = p.id; history.replaceState(null, '', '#' + page);
+  const y = page === go._last ? scrollY : 0; go._last = page;
+  $('#page-title').innerHTML = `<i class="fa-solid ${p.i}"></i>${p.l}`;
+  $('#content').innerHTML = (VIEWS[page] || VIEWS.dashboard)();
+  renderNav(); toggleSide(false); scrollTo(0, y);
+}
+
+/* =========================================================
+   FIELD BUILDERS
+   ========================================================= */
+function input(attrs, f, v) {
+  const t = f.t || 'text';
+  if (t === 'textarea' || t === 'lines') return `<textarea ${attrs} data-t="${t}" rows="${f.rows || (t === 'lines' ? 4 : 3)}" placeholder="${esc(f.ph || '')}">${esc(t === 'lines' ? (v || []).join('\n') : v)}</textarea>`;
+  if (t === 'color') return `<div class="color-row"><input type="color" ${attrs} data-t="color" value="${esc(/^#[0-9a-f]{6}$/i.test(v) ? v : '#000000')}"><input type="text" class="inp" ${attrs} data-t="colortext" value="${esc(v)}"></div>`;
+  if (t === 'icon') return `<div class="icon-row"><span class="ip"><i class="${esc(v)}"></i></span><input type="text" class="inp" list="icon-list" ${attrs} data-t="icon" value="${esc(v)}" placeholder="fa-solid fa-star"></div>`;
+  if (t === 'range') return `<div class="range-row"><input type="range" ${attrs} data-t="range" data-unit="${f.unit || ''}" min="${f.min}" max="${f.max}" step="${f.step || 1}" value="${esc(v)}"><output>${esc(v)}${f.unit || ''}</output></div>`;
+  if (t === 'select') return `<select ${attrs} data-t="select">${f.opts.map(o => { const [val, lab] = Array.isArray(o) ? o : [o, o]; return `<option value="${esc(val)}" ${String(val) === String(v) ? 'selected' : ''}>${esc(lab)}</option>`; }).join('')}</select>`;
+  if (t === 'toggle') return '';
+  return `<input type="${t === 'number' ? 'number' : 'text'}" ${attrs} data-t="${t}" value="${esc(v)}" placeholder="${esc(f.ph || '')}">`;
+}
+function wrap(f, inner, attrs, v) {
+  if (f.t === 'toggle') return `<label class="switch ${f.full ? 'full' : ''}"><span>${esc(f.l)}${f.help ? `<small>${esc(f.help)}</small>` : ''}</span><input type="checkbox" ${attrs} data-t="toggle" ${v ? 'checked' : ''}></label>`;
+  return `<div class="f ${f.full ? 'full' : ''}"><label>${esc(f.l)}</label>${inner}${f.help ? `<div class="help">${esc(f.help)}</div>` : ''}</div>`;
+}
+function field(f) { const v = getPath(cfg, f.p), a = `data-p="${f.p}"`; return wrap(f, input(a, f, v), a, v); }
+function fields(list, cls = 'grid2') { return `<div class="${cls}">${list.map(field).join('')}</div>`; }
+function panel(title, icon, sub, body) { return `<div class="panel"><h3><i class="fa-solid ${icon}"></i>${title}</h3>${sub ? `<div class="sub">${sub}</div>` : '<div style="height:12px"></div>'}${body}</div>`; }
+
+/* List editor */
+const LISTS = {
+  stats: { label: x => `${x.value}${x.suffix} — ${x.label}`, blank: { icon: 'fa-solid fa-star', value: '1', suffix: '+', label: 'New stat' },
+    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'label', l: 'Label' }, { k: 'value', l: 'Number / Value', help: 'Numbers animate as a counter' }, { k: 'suffix', l: 'Suffix (e.g. + or %)' }] },
+  services: { label: x => x.title, blank: { icon: 'fa-solid fa-star', title: 'New Service', desc: '', tag: '' },
+    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'title', l: 'Title' }, { k: 'desc', l: 'Description', t: 'textarea', full: true }, { k: 'tag', l: 'Footer tag' }] },
+  skills: { label: x => `${x.name} (${x.percent}%)`, blank: { name: 'New Skill', percent: 80, category: 'Career Services' },
+    f: [{ k: 'name', l: 'Skill name' }, { k: 'category', l: 'Category (filter tab)' }, { k: 'percent', l: 'Proficiency', t: 'range', min: 0, max: 100, unit: '%', full: true }] },
+  experience: { label: x => `${x.role} — ${x.company}`, blank: { role: 'New Role', company: 'Company', period: '2026 – Present', type: 'Category', icon: 'fa-solid fa-briefcase', current: false, points: [] },
+    f: [{ k: 'role', l: 'Job title' }, { k: 'company', l: 'Company / Organization' }, { k: 'period', l: 'Period' }, { k: 'type', l: 'Category label' }, { k: 'icon', l: 'Icon', t: 'icon' }, { k: 'current', l: 'Current job (highlighted)', t: 'toggle' }, { k: 'points', l: 'Responsibilities (one per line)', t: 'lines', full: true }] },
+  education: { label: x => x.degree, blank: { degree: 'New Degree', institute: 'Institute', period: '', location: '', desc: '' },
+    f: [{ k: 'degree', l: 'Degree' }, { k: 'institute', l: 'Institute' }, { k: 'period', l: 'Period' }, { k: 'location', l: 'Location' }, { k: 'desc', l: 'Description (optional)', t: 'textarea', full: true }] },
+  certifications: { label: x => x.title, blank: { title: 'New Certification', org: '', year: '', icon: 'fa-solid fa-certificate', desc: '' },
+    f: [{ k: 'title', l: 'Title' }, { k: 'org', l: 'Issued by' }, { k: 'year', l: 'Year / Label' }, { k: 'icon', l: 'Icon', t: 'icon' }, { k: 'desc', l: 'Description', t: 'textarea', full: true }] },
+  highlights: { label: x => x.title, blank: { icon: 'fa-solid fa-star', title: 'New Highlight', text: '' },
+    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'title', l: 'Title' }, { k: 'text', l: 'Text', t: 'textarea', full: true }] }
+};
+function listEditor(key) {
+  const L = LISTS[key], arr = cfg[key] || [];
+  return `<div data-listwrap="${key}">${arr.length ? '' : '<div class="empty"><i class="fa-regular fa-folder-open"></i>No items yet.</div>'}${arr.map((it, i) => {
+    const open = openItems.has(key + ':' + i);
+    return `<div class="li-card ${open ? 'open' : ''}">
+      <div class="li-head" data-act="toggle" data-l="${key}" data-i="${i}">
+        <span class="li-num">${i + 1}</span><span class="li-title" id="lt-${key}-${i}">${esc(L.label(it) || 'Untitled')}</span>
+        <span class="li-actions">
+          <button class="btn icon sm" title="Move up" data-act="up" data-l="${key}" data-i="${i}"><i class="fa-solid fa-arrow-up"></i></button>
+          <button class="btn icon sm" title="Move down" data-act="down" data-l="${key}" data-i="${i}"><i class="fa-solid fa-arrow-down"></i></button>
+          <button class="btn icon sm" title="Duplicate" data-act="dup" data-l="${key}" data-i="${i}"><i class="fa-regular fa-copy"></i></button>
+          <button class="btn icon sm danger" title="Delete" data-act="del" data-l="${key}" data-i="${i}"><i class="fa-solid fa-trash"></i></button>
+        </span><i class="fa-solid fa-chevron-down li-chev"></i>
       </div>
+      <div class="li-body"><div class="grid2">${L.f.map(f => { const a = `data-l="${key}" data-i="${i}" data-k="${f.k}"`; return wrap(f, input(a, f, it[f.k]), a, it[f.k]); }).join('')}</div></div>
+    </div>`;
+  }).join('')}<button class="btn pri" data-act="add" data-l="${key}"><i class="fa-solid fa-plus"></i> Add item</button></div>`;
+}
+
+/* =========================================================
+   VIEWS
+   ========================================================= */
+const VIEWS = {
+  dashboard() {
+    const unread = messages.filter(m => !m.is_read).length;
+    const recent = messages.slice(0, 4);
+    return `${settingsError ? `<div class="note err"><b>Database not ready:</b> ${esc(settingsError)} — open <a href="#" onclick="go('setup');return false" style="text-decoration:underline">Supabase Setup</a> and run the SQL.</div>` : ''}
+    <div class="welcome"><div><h3>Assalam-o-Alaikum, ${esc(cfg.profile.firstName)} 👋</h3><p>Edit any part of your website, preview it live, then press <b>Publish</b>.</p></div>
+      <div class="btn-row"><button class="btn" onclick="togglePreview(true)"><i class="fa-solid fa-eye"></i> Live Preview</button><a class="btn pri" href="index.html" target="_blank"><i class="fa-solid fa-globe"></i> Open Website</a></div></div>
+    <div class="grid4" style="margin-bottom:18px">
+      ${[['fa-inbox', messages.length, 'Total Messages'], ['fa-envelope', unread, 'Unread Messages'], ['fa-briefcase', cfg.services.length, 'Services'], ['fa-clock-rotate-left', lastSaved ? lastSaved.toLocaleDateString() : '—', 'Last Published']]
+        .map(k => `<div class="kpi"><div class="ki"><i class="fa-solid ${k[0]}"></i></div><div><b>${esc(k[1])}</b><small>${k[2]}</small></div></div>`).join('')}
     </div>
-  </div>
+    <div class="grid2">
+      ${panel('Recent Messages', 'fa-inbox', 'Latest contact form submissions', recent.length ? recent.map(msgCard).join('') + `<button class="btn" onclick="go('messages')">View all messages →</button>` : `<div class="empty"><i class="fa-regular fa-envelope-open"></i>${msgError ? esc(msgError) : 'No messages yet.'}</div>`)}
+      ${panel('Quick Edit', 'fa-bolt', 'Jump to any part of your site', `<div class="quick">${PAGES.filter(p => p.id && !['dashboard', 'messages'].includes(p.id)).map(p => `<button onclick="go('${p.id}')"><i class="fa-solid ${p.i}"></i><span>${p.l}</span></button>`).join('')}</div>`)}
+    </div>`;
+  },
+  messages() {
+    let list = messages;
+    if (msgFilter === 'unread') list = list.filter(m => !m.is_read);
+    if (msgSearch) { const q = msgSearch.toLowerCase(); list = list.filter(m => [m.name, m.email, m.service, m.message, m.phone].join(' ').toLowerCase().includes(q)); }
+    return `${msgError ? `<div class="note err">${esc(msgError)} — run the SQL on the Setup page.</div>` : ''}
+    <div class="panel"><div class="btn-row" style="align-items:center">
+      <input class="inp" style="max-width:280px" placeholder="Search messages..." value="${esc(msgSearch)}" oninput="msgSearch=this.value;clearTimeout(window._ms);window._ms=setTimeout(()=>{go('messages');const i=document.querySelector('.content .inp');i.focus();i.setSelectionRange(i.value.length,i.value.length)},300)">
+      <button class="btn ${msgFilter === 'all' ? 'pri' : ''}" onclick="msgFilter='all';go('messages')">All (${messages.length})</button>
+      <button class="btn ${msgFilter === 'unread' ? 'pri' : ''}" onclick="msgFilter='unread';go('messages')">Unread (${messages.filter(m => !m.is_read).length})</button>
+      <span style="flex:1"></span>
+      <button class="btn" onclick="loadMessages();toast('Refreshed')"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      <button class="btn" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+    </div></div>
+    ${list.length ? list.map(msgCard).join('') : `<div class="panel empty"><i class="fa-regular fa-envelope-open"></i>No messages found.</div>`}`;
+  },
+  profile() {
+    const p = cfg.profile;
+    return panel('Profile Photo', 'fa-camera', 'Shown in the hero and About circles. Upload saves to Supabase Storage.', `
+      <div class="photo-box"><div class="photo-prev">${p.photoUrl ? `<img src="${esc(p.photoUrl)}" alt="">` : esc(p.initials)}</div>
+      <div style="flex:1;min-width:240px"><div class="btn-row" style="margin-bottom:12px">
+        <label class="btn pri"><i class="fa-solid fa-upload"></i> Upload Photo<input type="file" accept="image/*" hidden onchange="handleUpload(this,'profile.photoUrl')"></label>
+        ${p.photoUrl ? `<button class="btn danger" onclick="cfg.profile.photoUrl='';markDirty();go('profile')"><i class="fa-solid fa-trash"></i> Remove</button>` : ''}
+      </div>${field({ p: 'profile.photoUrl', l: 'or paste image URL', ph: 'https://...' })}</div></div>`) +
+    panel('Name & Identity', 'fa-user', '', fields([
+      { p: 'profile.firstName', l: 'First part of name' }, { p: 'profile.lastName', l: 'Last part (gradient colored)' },
+      { p: 'profile.brand', l: 'Navbar brand text' }, { p: 'profile.initials', l: 'Initials (shown when no photo)' }])) +
+    panel('About / Bio', 'fa-address-card', 'Text for the About Me section', fields([
+      { p: 'profile.aboutTag', l: 'Small tag line', full: true }, { p: 'profile.aboutTitle', l: 'Headline', t: 'textarea', full: true, rows: 2 },
+      { p: 'profile.aboutText1', l: 'Paragraph 1', t: 'textarea', full: true, rows: 4 }, { p: 'profile.aboutText2', l: 'Paragraph 2', t: 'textarea', full: true, rows: 4 },
+      { p: 'profile.cvSummary', l: 'CV professional profile (printable CV)', t: 'textarea', full: true, rows: 4 }])) +
+    panel('Contact Details', 'fa-phone', '', fields([
+      { p: 'profile.email', l: 'Email' }, { p: 'profile.phone', l: 'Phone' },
+      { p: 'profile.whatsapp', l: 'WhatsApp number (international, digits only)', ph: '923205335188' }, { p: 'profile.linkedin', l: 'LinkedIn URL' },
+      { p: 'profile.location', l: 'Location' }, { p: 'profile.availability', l: 'Availability note' }])) +
+    panel('CV / Resume File', 'fa-file-pdf', 'Optional — if set, "View CV" buttons open this file instead of the built-in printable CV.', `
+      <div class="btn-row" style="margin-bottom:12px"><label class="btn"><i class="fa-solid fa-upload"></i> Upload PDF<input type="file" accept="application/pdf" hidden onchange="handleUpload(this,'profile.cvUrl')"></label>
+      ${p.cvUrl ? `<a class="btn" href="${esc(p.cvUrl)}" target="_blank"><i class="fa-solid fa-eye"></i> Open</a><button class="btn danger" onclick="cfg.profile.cvUrl='';markDirty();go('profile')">Remove</button>` : ''}</div>
+      ${field({ p: 'profile.cvUrl', l: 'CV file URL', ph: 'Leave empty to use the built-in printable CV' })}`);
+  },
+  hero() {
+    return panel('Hero Text', 'fa-house', 'The first screen visitors see', fields([
+      { p: 'profile.badge', l: 'Top badge text', full: true }, { p: 'profile.hello', l: 'Greeting line' }, { p: 'nav.cta', l: 'Main button text' },
+      { p: 'profile.roles', l: 'Typewriter roles (one per line)', t: 'lines', full: true },
+      { p: 'profile.intro', l: 'Intro paragraph', t: 'textarea', full: true, rows: 4 }])) +
+    panel('Floating Badges', 'fa-award', 'Little cards floating around your photo (leave empty to hide)', fields([
+      { p: 'profile.yearsExp', l: 'Big number', ph: '4+' }, { p: 'profile.yearsLabel', l: 'Number label' }, { p: 'profile.floatBadge', l: 'Pill badge text' }], 'grid3')) +
+    panel('Scrolling Ticker', 'fa-arrows-left-right', 'Animated strip below the hero', fields([{ p: 'sections.marquee.show', l: 'Show ticker strip', t: 'toggle', full: true }, { p: 'marquee', l: 'Ticker items (one per line)', t: 'lines', full: true, rows: 6 }]));
+  },
+  stats() { return panel('Stats Counter', 'fa-chart-simple', 'Animated numbers below the hero', fields([{ p: 'sections.stats.show', l: 'Show stats section', t: 'toggle', full: true }]) + '<div style="height:14px"></div>' + listEditor('stats')); },
+  services() { return sectionHeadPanel('services') + panel('Service Cards', 'fa-briefcase', 'Also used as options in the contact form', listEditor('services')); },
+  skills() { return sectionHeadPanel('skills') + panel('Skill Bars', 'fa-bars-progress', 'Categories automatically become filter tabs', listEditor('skills')) + panel('Competency Tags', 'fa-tags', 'Shown below the bars and in the printable CV', fields([{ p: 'competencies', l: 'One per line', t: 'lines', full: true, rows: 8 }])); },
+  experience() { return sectionHeadPanel('experience') + panel('Jobs Timeline', 'fa-timeline', 'Top item appears first', listEditor('experience')); },
+  education() { return sectionHeadPanel('education') + panel('Academic Degrees', 'fa-graduation-cap', '', listEditor('education')) + panel('Training & Certifications', 'fa-certificate', '', listEditor('certifications')); },
+  highlights() { return sectionHeadPanel('highlights') + panel('Highlight Cards', 'fa-star', '', listEditor('highlights')); },
+  sections() {
+    const keys = ['hero', 'about', 'services', 'skills', 'experience', 'education', 'highlights', 'contact'];
+    return panel('Navigation Menu', 'fa-bars', 'Menu labels — leave empty to hide a section from the menu', fields(keys.map(k => ({ p: `sections.${k}.nav`, l: k[0].toUpperCase() + k.slice(1) + ' menu label' })), 'grid4')) +
+      panel('Show / Hide Sections', 'fa-eye', '', fields(['hero', 'marquee', 'stats', ...keys.slice(1)].map(k => ({ p: `sections.${k}.show`, l: k[0].toUpperCase() + k.slice(1) + ' section', t: 'toggle' })), 'grid3')) +
+      keys.slice(1).map(k => sectionHeadPanel(k)).join('');
+  },
+  theme() {
+    const t = cfg.theme;
+    return panel('Color Presets', 'fa-swatchbook', 'One click to change the whole website color scheme', `<div class="presets">${Object.entries(PRESETS).map(([k, p]) => `
+      <button class="preset ${t.preset === k ? 'on' : ''}" data-act="preset" data-k="${k}"><div class="sw"><i style="background:${p.bg}"></i><i style="background:${p.card}"></i><i style="background:${p.primary}"></i><i style="background:${p.secondary}"></i></div><span>${p.name}</span></button>`).join('')}</div>`) +
+    panel('Custom Colors', 'fa-palette', 'Fine-tune every color', fields([
+      { p: 'theme.primary', l: 'Primary / accent', t: 'color' }, { p: 'theme.secondary', l: 'Secondary (gradient end)', t: 'color' },
+      { p: 'theme.bg', l: 'Page background', t: 'color' }, { p: 'theme.bg2', l: 'Alternate section background', t: 'color' },
+      { p: 'theme.card', l: 'Card background', t: 'color' }, { p: 'theme.text', l: 'Main text', t: 'color' }, { p: 'theme.muted', l: 'Secondary text', t: 'color' }], 'grid3')) +
+    panel('Typography & Shape', 'fa-font', 'Fonts load automatically from Google Fonts', fields([
+      { p: 'theme.fontHeading', l: 'Heading font', t: 'select', opts: FONTS }, { p: 'theme.fontBody', l: 'Body font', t: 'select', opts: FONTS },
+      { p: 'theme.radius', l: 'Card corner roundness', t: 'range', min: 0, max: 36, unit: 'px' }, { p: 'theme.glow', l: 'Glow intensity', t: 'range', min: 0, max: 90, unit: 'px' }]));
+  },
+  animations() {
+    return panel('Master Control', 'fa-power-off', '', fields([{ p: 'animations.enabled', l: 'Enable all animations', t: 'toggle', help: 'Turn off for a fully static site', full: true }])) +
+      panel('Scroll Reveal', 'fa-arrow-down-wide-short', 'How sections appear while scrolling', fields([
+        { p: 'animations.reveal', l: 'Reveal style', t: 'select', opts: [['fade-up', 'Fade Up'], ['fade', 'Fade'], ['zoom', 'Zoom In'], ['slide-left', 'Slide from Left'], ['slide-right', 'Slide from Right'], ['flip', '3D Flip'], ['blur', 'Blur In']] },
+        { p: 'animations.speed', l: 'Animation duration', t: 'range', min: 0.2, max: 2, step: 0.1, unit: 's' },
+        { p: 'animations.stagger', l: 'Delay between items', t: 'range', min: 0, max: 0.3, step: 0.01, unit: 's' }], 'grid3')) +
+      panel('Hero Effects', 'fa-wand-magic-sparkles', '', fields([
+        { p: 'animations.typewriter', l: 'Typewriter roles', t: 'toggle' }, { p: 'animations.typeSpeed', l: 'Typing speed (lower = faster)', t: 'range', min: 30, max: 200, unit: 'ms' },
+        { p: 'animations.orbit', l: 'Rotating orbit rings', t: 'toggle' }, { p: 'animations.float', l: 'Floating photo & badges', t: 'toggle' },
+        { p: 'animations.preloader', l: 'Loading screen', t: 'toggle' }, { p: 'animations.counters', l: 'Counting numbers', t: 'toggle' }])) +
+      panel('Background & Interaction', 'fa-hand-pointer', '', fields([
+        { p: 'animations.particles', l: 'Particle network background', t: 'toggle' }, { p: 'animations.particleCount', l: 'Particle amount', t: 'range', min: 10, max: 150 },
+        { p: 'animations.cursorGlow', l: 'Cursor glow', t: 'toggle' }, { p: 'animations.tilt', l: '3D card tilt on hover', t: 'toggle' },
+        { p: 'animations.marquee', l: 'Moving ticker strip', t: 'toggle' }, { p: 'animations.marqueeSpeed', l: 'Ticker loop time (higher = slower)', t: 'range', min: 8, max: 80, unit: 's' },
+        { p: 'animations.scrollProgress', l: 'Top scroll progress bar', t: 'toggle' }])) +
+      `<button class="btn" onclick="togglePreview(true);reloadPreview()"><i class="fa-solid fa-rotate"></i> Replay animations in preview</button>`;
+  },
+  settings() {
+    return panel('Contact Form', 'fa-envelope', 'Where form messages go', fields([
+      { p: 'contact.saveToSupabase', l: 'Save messages to Supabase', t: 'toggle', help: 'Appears in Messages inbox' },
+      { p: 'contact.sendGmail', l: 'Forward to Gmail', t: 'toggle', help: 'Via FormSubmit — confirm the first activation email' },
+      { p: 'contact.gmailTo', l: 'Gmail address to receive messages' }, { p: 'contact.whatsappButton', l: 'Show "Send via WhatsApp" button', t: 'toggle' },
+      { p: 'contact.formTitle', l: 'Form title' }, { p: 'contact.formSub', l: 'Form subtitle' },
+      { p: 'contact.successMsg', l: 'Success message', full: true }])) +
+      panel('SEO', 'fa-magnifying-glass', 'How your site appears on Google', fields([{ p: 'seo.title', l: 'Page title', full: true }, { p: 'seo.description', l: 'Meta description', t: 'textarea', full: true }])) +
+      panel('Footer', 'fa-shoe-prints', '', fields([{ p: 'footer.tagline', l: 'Footer tagline' }, { p: 'footer.text', l: 'Copyright text' }]));
+  },
+  backup() {
+    return panel('Export & Import', 'fa-file-export', 'Keep a backup copy of all your website content', `<div class="btn-row">
+      <button class="btn pri" onclick="download('portfolio-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(cfg,null,2))"><i class="fa-solid fa-download"></i> Export JSON</button>
+      <label class="btn"><i class="fa-solid fa-upload"></i> Import JSON<input type="file" accept=".json,application/json" hidden onchange="importJSON(this)"></label></div>`) +
+      panel('Restore', 'fa-clock-rotate-left', '', `<div class="btn-row">
+      <button class="btn" onclick="restoreDraft()"><i class="fa-solid fa-file-pen"></i> Restore last local draft</button>
+      <button class="btn" onclick="if(confirm('Discard unpublished changes?'))loadConfig()"><i class="fa-solid fa-rotate-left"></i> Discard unpublished changes</button>
+      <button class="btn danger" onclick="if(confirm('Reset ALL content to the original defaults? (You still need to Publish)')){cfg=clone(DEFAULTS);markDirty();go('backup');toast('Defaults loaded — click Publish to apply')}"><i class="fa-solid fa-triangle-exclamation"></i> Reset to defaults</button></div>`);
+  },
+  setup() {
+    return `<div class="note ok">Run this <b>once</b>. It creates the tables, security rules and photo storage your website needs.</div>` +
+      panel('Steps', 'fa-list-check', '', `<ol class="steps">
+        <li>Open <a href="https://supabase.com/dashboard/project/pxlpfhagbkbafxgcpcyl/sql/new" target="_blank" style="color:var(--a)">Supabase → SQL Editor → New query</a>.</li>
+        <li>Copy the SQL below, paste it and press <b>Run</b>.</li>
+        <li>Go to <b>Authentication → Users → Add user</b> and create a user with email <b>${esc(ADMIN_EMAIL)}</b> and a strong password (tick “Auto confirm”).</li>
+        <li>Optional but recommended: <b>Authentication → Sign In / Providers</b> → turn off “Allow new users to sign up”.</li>
+        <li>Log in here, edit your content and click <b>Publish</b>.</li>
+        <li>Gmail: submit the website contact form once — FormSubmit sends an activation email to <b>${esc(cfg.contact.gmailTo)}</b>. Click “Activate” and all future messages arrive in Gmail.</li>
+      </ol>`) +
+      panel('Setup SQL', 'fa-database', '', `<pre class="code" id="sql">${esc(SETUP_SQL)}</pre><div class="btn-row" style="margin-top:12px"><button class="btn pri" onclick="navigator.clipboard.writeText(SETUP_SQL).then(()=>toast('SQL copied'))"><i class="fa-regular fa-copy"></i> Copy SQL</button></div>`);
+  }
+};
+function sectionHeadPanel(k) {
+  return panel(k[0].toUpperCase() + k.slice(1) + ' — Section Heading', 'fa-heading', '', fields([
+    { p: `sections.${k}.show`, l: 'Show this section', t: 'toggle', full: true },
+    { p: `sections.${k}.kicker`, l: 'Small label above title' }, { p: `sections.${k}.title`, l: 'Title (plain part)' },
+    { p: `sections.${k}.accent`, l: 'Title (gradient part)' }, { p: `sections.${k}.sub`, l: 'Subtitle' }]));
+}
+function msgCard(m) {
+  const phone = String(m.phone || '').replace(/\D/g, '');
+  return `<div class="msg ${m.is_read ? '' : 'unread'}"><div class="msg-top">
+    <div class="msg-av">${esc((m.name || '?').charAt(0).toUpperCase())}</div>
+    <div class="msg-meta"><b>${esc(m.name)}</b> ${m.is_read ? '' : '<span class="tag new">New</span>'}<small>${esc(m.email)}${m.phone ? ' • ' + esc(m.phone) : ''}</small><small>${fmtDate(m.created_at)}</small></div>
+    ${m.service ? `<span class="tag">${esc(m.service)}</span>` : ''}</div>
+    <div class="msg-body">${esc(m.message)}</div>
+    <div class="btn-row">
+      <button class="btn sm pri" onclick="msgAction('reply','${m.id}')"><i class="fa-solid fa-reply"></i> Reply in Gmail</button>
+      ${phone ? `<button class="btn sm" onclick="msgAction('wa','${m.id}')"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>` : ''}
+      <button class="btn sm" onclick="msgAction('${m.is_read ? 'unread' : 'read'}','${m.id}')"><i class="fa-solid ${m.is_read ? 'fa-envelope' : 'fa-envelope-open'}"></i> Mark ${m.is_read ? 'unread' : 'read'}</button>
+      <button class="btn sm danger" onclick="msgAction('delete','${m.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+    </div></div>`;
+}
+function importJSON(inp) {
+  const f = inp.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = e => { try { cfg = merge(clone(DEFAULTS), JSON.parse(e.target.result)); markDirty(); go(page); toast('Imported — click Publish to apply'); } catch (err) { toast('Invalid JSON file', 'err'); } };
+  r.readAsText(f);
+}
+function restoreDraft() {
+  try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); if (!d) return toast('No local draft found', 'warn'); cfg = merge(clone(DEFAULTS), d); markDirty(); go(page); toast('Draft restored'); }
+  catch (e) { toast('Could not read draft', 'err'); }
+}
 
-  <script>
-    lucide.createIcons();
+/* =========================================================
+   EVENT DELEGATION (all editing happens here)
+   ========================================================= */
+function readVal(el) {
+  const t = el.dataset.t;
+  if (t === 'toggle') return el.checked;
+  if (t === 'range' || t === 'number') return parseFloat(el.value);
+  if (t === 'lines') return el.value.split('\n').map(s => s.trim()).filter(Boolean);
+  return el.value;
+}
+function onEdit(e) {
+  const el = e.target; if (!el.dataset || !el.dataset.t) return;
+  const t = el.dataset.t, val = readVal(el);
+  if (t === 'colortext' && !/^#[0-9a-f]{6}$/i.test(val)) return;
+  if (el.dataset.p) {
+    setPath(cfg, el.dataset.p, val);
+    if (el.dataset.p.startsWith('theme.') && ['color', 'colortext'].includes(t)) { cfg.theme.preset = 'custom'; document.querySelectorAll('.preset.on').forEach(p => p.classList.remove('on')); }
+    if (t === 'color' || t === 'colortext') document.querySelectorAll(`[data-p="${el.dataset.p}"]`).forEach(o => { if (o !== el) o.value = val; });
+  } else if (el.dataset.l) {
+    const key = el.dataset.l, i = +el.dataset.i;
+    cfg[key][i][el.dataset.k] = val;
+    const lt = document.getElementById(`lt-${key}-${i}`); if (lt) lt.textContent = LISTS[key].label(cfg[key][i]) || 'Untitled';
+  } else return;
+  if (t === 'range') el.nextElementSibling.textContent = el.value + (el.dataset.unit || '');
+  if (t === 'icon') el.previousElementSibling.innerHTML = `<i class="${esc(val)}"></i>`;
+  markDirty();
+}
+$('#content').addEventListener('input', onEdit);
+$('#content').addEventListener('change', e => { if (['toggle', 'select'].includes(e.target.dataset?.t)) onEdit(e); });
+$('#content').addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const act = b.dataset.act, key = b.dataset.l, i = +b.dataset.i;
+  if (act === 'preset') { Object.assign(cfg.theme, PRESETS[b.dataset.k]); delete cfg.theme.name; cfg.theme.preset = b.dataset.k; markDirty(); go('theme'); return; }
+  if (!key) return;
+  const arr = cfg[key];
+  if (act === 'toggle') { if (e.target.closest('.li-actions')) return; const id = key + ':' + i; openItems.has(id) ? openItems.delete(id) : openItems.add(id); b.parentElement.classList.toggle('open'); return; }
+  e.stopPropagation();
+  if (act === 'add') { arr.push(clone(LISTS[key].blank)); openItems.add(key + ':' + (arr.length - 1)); }
+  if (act === 'del') { if (!confirm('Delete this item?')) return; arr.splice(i, 1); openItems.clear(); }
+  if (act === 'dup') { arr.splice(i + 1, 0, clone(arr[i])); openItems.clear(); openItems.add(key + ':' + (i + 1)); }
+  if (act === 'up' && i > 0) { [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]]; openItems.clear(); }
+  if (act === 'down' && i < arr.length - 1) { [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]]; openItems.clear(); }
+  markDirty(); go(page);
+});
 
-    // 1. Enter Key Login
-    document.getElementById('passcode').addEventListener('keypress', function (e) {
-      if (e.key === 'Enter') attemptLogin();
-    });
+/* =========================================================
+   SETUP SQL
+   ========================================================= */
+const SETUP_SQL = `-- ===== 1. Website settings (all editable content) =====
+create table if not exists public.site_settings (
+  id text primary key,
+  data jsonb not null default '{}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+alter table public.site_settings enable row level security;
 
-    // 2. Supabase Setup
-    let supabase;
-    try {
-      const SUPABASE_URL = 'https://pxlpfhagbkbafxgcpcyl.supabase.co';
-      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4bHBmaGFnYmtiYWZ4Z2NwY3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDcxMjEsImV4cCI6MjEwODQyMzEyMX0.fLsjVzsqy16qe9wsYsF9KStaVKNm9cZDiInf5gsM3ek';
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch (err) {}
+drop policy if exists "Public can read settings" on public.site_settings;
+create policy "Public can read settings" on public.site_settings
+  for select to anon, authenticated using (true);
 
-    // 3. Login Logic
-    function attemptLogin() {
-      const pass = document.getElementById('passcode').value.trim();
-      if (pass === 'fareed2026') {
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('dashboardScreen').classList.remove('hidden');
-        loadCMSData();
-        fetchMessages();
-      } else {
-        document.getElementById('loginError').classList.remove('hidden');
-      }
-    }
+drop policy if exists "Admin can write settings" on public.site_settings;
+create policy "Admin can write settings" on public.site_settings
+  for all to authenticated
+  using ((auth.jwt() ->> 'email') = '${ADMIN_EMAIL}')
+  with check ((auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
 
-    function logout() {
-      document.getElementById('dashboardScreen').classList.add('hidden');
-      document.getElementById('loginScreen').classList.remove('hidden');
-      document.getElementById('passcode').value = '';
-    }
+-- ===== 2. Contact form messages =====
+create table if not exists public.contact_messages (
+  id bigint generated by default as identity primary key,
+  name text not null,
+  email text not null,
+  phone text,
+  service text,
+  message text not null,
+  is_read boolean not null default false,
+  created_at timestamptz not null default now()
+);
+alter table public.contact_messages add column if not exists is_read boolean not null default false;
+alter table public.contact_messages enable row level security;
 
-    // 4. Tab Switching Logic
-    function switchTab(tabId) {
-      // Hide all tabs
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      
-      // Show selected tab
-      document.getElementById(tabId).classList.add('active');
-      document.getElementById('nav-' + tabId.replace('tab-', '')).classList.add('active');
-      
-      // Update Header Title
-      const titles = {
-        'tab-messages': 'Client Messages',
-        'tab-theme': 'Theme & Colors',
-        'tab-hero': 'Hero Section Editing',
-        'tab-about': 'About & Contact Details'
-      };
-      document.getElementById('currentTabTitle').innerText = titles[tabId];
+drop policy if exists "Allow anonymous inserts" on public.contact_messages;
+create policy "Allow anonymous inserts" on public.contact_messages
+  for insert to anon, authenticated with check (true);
 
-      // Show/Hide Save Button (Don't need it on messages tab)
-      const saveBtn = document.getElementById('globalSaveBtn');
-      if (tabId === 'tab-messages') { saveBtn.classList.add('hidden'); } 
-      else { saveBtn.classList.remove('hidden'); }
-    }
+drop policy if exists "Admin can read messages" on public.contact_messages;
+create policy "Admin can read messages" on public.contact_messages
+  for select to authenticated using ((auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
 
-    // 5. Image Preview & Saving
-    document.getElementById('cmsPhotoUpload').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (event) => { 
-        localStorage.setItem('sfh_profile_photo', event.target.result); 
-        document.getElementById('adminPhotoPreview').src = event.target.result;
-        document.getElementById('adminPhotoPreview').classList.remove('hidden');
-      };
-      reader.readAsDataURL(file);
-    });
+drop policy if exists "Admin can update messages" on public.contact_messages;
+create policy "Admin can update messages" on public.contact_messages
+  for update to authenticated using ((auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
 
-    // 6. Color Picker Logic
-    document.getElementById('cms_theme_color').addEventListener('input', function(e) {
-      document.documentElement.style.setProperty('--theme-color', e.target.value);
-    });
+drop policy if exists "Admin can delete messages" on public.contact_messages;
+create policy "Admin can delete messages" on public.contact_messages
+  for delete to authenticated using ((auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
 
-    // 7. Load & Save Data (No HTML coding required from user)
-    function loadCMSData() {
-      // Photo Load
-      const savedPhoto = localStorage.getItem('sfh_profile_photo');
-      if (savedPhoto) {
-        document.getElementById('adminPhotoPreview').src = savedPhoto;
-        document.getElementById('adminPhotoPreview').classList.remove('hidden');
-      }
+-- ===== 3. Storage bucket for profile photo & CV =====
+insert into storage.buckets (id, name, public)
+values ('${STORAGE_BUCKET}', '${STORAGE_BUCKET}', true)
+on conflict (id) do update set public = true;
 
-      // Text Load
-      const data = localStorage.getItem('portfolio_cms_data');
-      if (data) {
-        try {
-          const parsed = JSON.parse(data);
-          if(parsed.themeColor) {
-            document.getElementById('cms_theme_color').value = parsed.themeColor;
-            document.documentElement.style.setProperty('--theme-color', parsed.themeColor);
-          }
-          if(parsed.firstName) document.getElementById('cms_first_name').value = parsed.firstName;
-          if(parsed.lastName) document.getElementById('cms_last_name').value = parsed.lastName;
-          if(parsed.roles) document.getElementById('cms_roles').value = parsed.roles;
-          if(parsed.heroDesc) document.getElementById('cms_hero_desc').value = parsed.heroDesc;
-          if(parsed.aboutText) document.getElementById('cms_about_text').value = parsed.aboutText;
-          if(parsed.phone) document.getElementById('cms_phone').value = parsed.phone;
-          if(parsed.email) document.getElementById('cms_email').value = parsed.email;
-          if(parsed.location) document.getElementById('cms_location').value = parsed.location;
-          if(parsed.linkedin) document.getElementById('cms_linkedin').value = parsed.linkedin;
-        } catch(e) {}
-      }
-    }
+drop policy if exists "Public read portfolio files" on storage.objects;
+create policy "Public read portfolio files" on storage.objects
+  for select using (bucket_id = '${STORAGE_BUCKET}');
 
-    function saveCMSData() {
-      const newData = {
-        themeColor: document.getElementById('cms_theme_color').value,
-        firstName: document.getElementById('cms_first_name').value,
-        lastName: document.getElementById('cms_last_name').value,
-        roles: document.getElementById('cms_roles').value,
-        heroDesc: document.getElementById('cms_hero_desc').value,
-        aboutText: document.getElementById('cms_about_text').value,
-        phone: document.getElementById('cms_phone').value,
-        email: document.getElementById('cms_email').value,
-        location: document.getElementById('cms_location').value,
-        linkedin: document.getElementById('cms_linkedin').value
-      };
-      
-      localStorage.setItem('portfolio_cms_data', JSON.stringify(newData));
-      
-      const status = document.getElementById('saveStatus');
-      status.classList.remove('hidden');
-      setTimeout(() => status.classList.add('hidden'), 3000);
-    }
+drop policy if exists "Admin upload portfolio files" on storage.objects;
+create policy "Admin upload portfolio files" on storage.objects
+  for insert to authenticated
+  with check (bucket_id = '${STORAGE_BUCKET}' and (auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
 
-    // 8. Fetch Client Messages
-    async function fetchMessages() {
-      const tbody = document.getElementById('messagesTableBody');
-      if (!supabase) return;
-      tbody.innerHTML = '<tr><td colspan="4" class="px-4 py-8 text-center text-brand-orange animate-pulse">Fetching messages...</td></tr>';
-      try {
-        const { data, error } = await supabase.from('contact_messages').select('*').order('created_at', { ascending: false });
-        if (error) throw error;
-        if (data.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">No messages found yet.</td></tr>';
-          return;
-        }
-        tbody.innerHTML = '';
-        data.forEach(msg => {
-          const date = new Date(msg.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-brand-card/50 border-b border-brand-border';
-          tr.innerHTML = `
-            <td class="px-4 py-3 text-gray-400 whitespace-nowrap">${date}</td>
-            <td class="px-4 py-3"><div class="font-bold text-white">${msg.name}</div><div class="text-xs text-brand-orange">${msg.email}</div><div class="text-xs text-gray-500">${msg.phone||''}</div></td>
-            <td class="px-4 py-3 text-gray-300"><span class="px-2 py-1 bg-brand-dark rounded text-xs border border-brand-border">${msg.service}</span></td>
-            <td class="px-4 py-3 text-gray-400">${msg.message}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="4" class="px-4 py-8 text-center text-red-500">Error loading messages</td></tr>`;
-      }
-    }
-  </script>
+drop policy if exists "Admin update portfolio files" on storage.objects;
+create policy "Admin update portfolio files" on storage.objects
+  for update to authenticated
+  using (bucket_id = '${STORAGE_BUCKET}' and (auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
+
+drop policy if exists "Admin delete portfolio files" on storage.objects;
+create policy "Admin delete portfolio files" on storage.objects
+  for delete to authenticated
+  using (bucket_id = '${STORAGE_BUCKET}' and (auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
+`;
+
+/* icon suggestions */
+document.body.insertAdjacentHTML('beforeend', `<datalist id="icon-list">${ICONS.map(i => `<option value="${i}">`).join('')}</datalist>`);
+
+boot();
+</script>
 </body>
 </html>
