@@ -3,258 +3,374 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio Admin Control Center</title>
+  <title>Professional Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <script>
-    tailwind.config = { theme: { extend: { colors: { brand: { orange: '#FF4500', dark: '#08080A', card: '#111116', border: '#1F1F28' } } } } }
+    tailwind.config = { 
+      theme: { 
+        extend: { 
+          colors: { brand: { orange: 'var(--theme-color, #FF4500)', dark: '#08080A', card: '#111116', border: '#1F1F28', sidebar: '#0a0a0d' } } 
+        } 
+      } 
+    }
   </script>
-  <style> body { background-color: #08080A; color: #F3F4F6; } </style>
+  <style> 
+    :root { --theme-color: #FF4500; }
+    body { background-color: #08080A; color: #F3F4F6; } 
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .nav-btn.active { background-color: rgba(255,255,255,0.05); border-left: 3px solid var(--theme-color); color: white; }
+  </style>
 </head>
-<body class="antialiased min-h-screen flex items-center justify-center p-6">
+<body class="antialiased h-screen overflow-hidden flex bg-brand-dark">
 
   <!-- LOGIN SCREEN -->
-  <div id="loginScreen" class="bg-brand-card border border-brand-border rounded-3xl p-8 max-w-md w-full shadow-2xl transition-all duration-300">
-    <div class="flex items-center gap-4 mb-8">
-      <div class="w-12 h-12 rounded-xl bg-brand-orange flex items-center justify-center text-white font-bold text-xl">S</div>
-      <div>
-        <h2 class="text-xl font-bold">Admin Control Center</h2>
-        <p class="text-sm text-gray-400">Syed Fareed Ul Hassan</p>
+  <div id="loginScreen" class="fixed inset-0 z-50 bg-brand-dark flex items-center justify-center p-6">
+    <div class="bg-brand-card border border-brand-border rounded-3xl p-8 max-w-md w-full shadow-2xl">
+      <div class="flex flex-col items-center text-center gap-4 mb-8">
+        <div class="w-16 h-16 rounded-2xl bg-brand-orange flex items-center justify-center text-white font-bold text-3xl shadow-lg">S</div>
+        <div>
+          <h2 class="text-2xl font-bold font-display">Workspace Admin</h2>
+          <p class="text-sm text-gray-400 mt-1">Manage your portfolio content</p>
+        </div>
       </div>
-    </div>
-    <div class="space-y-5">
-      <div>
-        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Admin Passcode</label>
-        <!-- Added onkeydown for Enter Key support -->
-        <input type="password" id="passcode" onkeydown="if(event.key === 'Enter') attemptLogin()" placeholder="Enter secure passcode (fareed2026)" class="w-full px-4 py-3 rounded-xl bg-brand-dark border border-brand-border focus:border-brand-orange outline-none text-white transition-colors" />
+      <div class="space-y-5">
+        <div>
+          <input type="password" id="passcode" placeholder="Enter Admin Passcode" class="w-full px-5 py-4 rounded-xl bg-brand-dark border border-brand-border focus:border-brand-orange outline-none text-white text-center tracking-widest" />
+        </div>
+        <button onclick="attemptLogin()" class="w-full py-4 rounded-xl bg-brand-orange text-white font-bold hover:opacity-90 transition shadow-lg">
+          Login to Dashboard
+        </button>
+        <p id="loginError" class="text-red-500 text-sm hidden text-center">Incorrect passcode. Try again.</p>
       </div>
-      <button id="loginBtn" onclick="attemptLogin()" class="w-full py-3 rounded-xl bg-brand-orange text-white font-semibold hover:bg-orange-600 transition-colors">
-        Access Admin Dashboard
-      </button>
-      <p id="loginError" class="text-red-500 text-sm hidden text-center bg-red-500/10 py-2 rounded-lg border border-red-500/20">Incorrect passcode. Please try again.</p>
     </div>
   </div>
 
-  <!-- DASHBOARD SCREEN -->
-  <div id="dashboardScreen" class="hidden w-full max-w-6xl h-[90vh] flex flex-col transition-opacity duration-500">
-    <!-- Top Nav -->
-    <div class="flex items-center justify-between mb-6 pb-4 border-b border-brand-border">
-      <div>
-        <h1 class="text-2xl font-bold font-display">Admin Control Center</h1>
-        <p class="text-xs text-gray-400 mt-1">Supabase connected to: pxlpfhagbkbafxgcpcyl</p>
+  <!-- DASHBOARD WRAPPER -->
+  <div id="dashboardScreen" class="hidden w-full h-full flex">
+    
+    <!-- SIDEBAR -->
+    <div class="w-64 bg-brand-sidebar border-r border-brand-border flex flex-col">
+      <div class="p-6 border-b border-brand-border">
+        <h1 class="text-xl font-bold font-display text-white">Admin Panel</h1>
+        <p class="text-xs text-gray-500 mt-1">Live Editor</p>
       </div>
-      <div class="flex gap-3">
-        <a href="index.html" class="px-4 py-2 bg-brand-dark border border-brand-border rounded-lg text-sm hover:border-brand-orange transition">View Live Site</a>
-        <button onclick="fetchMessagesSafe()" class="px-4 py-2 border border-brand-border rounded-lg text-sm flex items-center gap-2 hover:bg-brand-dark"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh</button>
-        <button onclick="logout()" class="px-4 py-2 bg-red-500/10 text-red-500 rounded-lg text-sm hover:bg-red-500/20">Logout</button>
+      
+      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <button onclick="switchTab('tab-messages')" id="nav-messages" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition active">
+          <i data-lucide="inbox" class="w-4 h-4"></i> Client Messages
+        </button>
+        <button onclick="switchTab('tab-theme')" id="nav-theme" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition">
+          <i data-lucide="palette" class="w-4 h-4"></i> Theme Settings
+        </button>
+        <button onclick="switchTab('tab-hero')" id="nav-hero" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition">
+          <i data-lucide="layout-template" class="w-4 h-4"></i> Hero Section
+        </button>
+        <button onclick="switchTab('tab-about')" id="nav-about" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition">
+          <i data-lucide="user" class="w-4 h-4"></i> About & Contact
+        </button>
+      </nav>
+
+      <div class="p-4 border-t border-brand-border space-y-2">
+        <a href="index.html" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-brand-card border border-brand-border rounded-lg text-sm hover:border-brand-orange transition text-white">
+          <i data-lucide="external-link" class="w-4 h-4"></i> View Live Site
+        </a>
+        <button onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500/10 text-red-500 rounded-lg text-sm hover:bg-red-500/20 transition">
+          <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+        </button>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
-      
-      <!-- LEFT: WEBSITE EDITOR (CMS) -->
-      <div class="lg:col-span-1 bg-brand-card border border-brand-border rounded-2xl p-6 overflow-y-auto">
-        <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="edit-3" class="w-5 h-5 text-brand-orange"></i> Website Editor</h2>
+    <!-- MAIN CONTENT AREA -->
+    <div class="flex-1 flex flex-col h-full bg-brand-dark overflow-y-auto">
+      <div class="p-8 max-w-5xl mx-auto w-full">
         
-        <div class="space-y-6">
+        <!-- HEADER -->
+        <div class="flex items-center justify-between mb-8">
           <div>
-            <label class="block text-sm font-semibold text-gray-300 mb-2">Profile Photo</label>
-            <input type="file" id="cmsPhotoUpload" accept="image/*" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-orange file:text-white hover:file:bg-orange-600 transition" />
+            <h2 id="currentTabTitle" class="text-2xl font-bold font-display text-white">Client Messages</h2>
+            <p class="text-sm text-gray-400 mt-1">Manage your portfolio data below.</p>
           </div>
+          <button id="globalSaveBtn" onclick="saveCMSData()" class="hidden px-6 py-2.5 bg-brand-orange text-white rounded-lg font-bold hover:bg-orange-600 transition shadow-lg flex items-center gap-2">
+            <i data-lucide="save" class="w-4 h-4"></i> Publish Changes
+          </button>
+        </div>
 
-          <div>
-            <label class="block text-sm font-semibold text-gray-300 mb-2">Hero Title</label>
-            <textarea id="cms_hero_title" rows="2" class="w-full px-3 py-2 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm"></textarea>
-          </div>
+        <!-- NOTIFICATION ALERTS -->
+        <div id="saveStatus" class="hidden mb-6 p-4 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-sm font-medium flex items-center gap-2">
+          <i data-lucide="check-circle" class="w-5 h-5"></i> Live Website Updated Successfully!
+        </div>
 
-          <div>
-            <label class="block text-sm font-semibold text-gray-300 mb-2">Roles</label>
-            <input type="text" id="cms_hero_roles" class="w-full px-3 py-2 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm" />
+        <!-- 1. MESSAGES TAB -->
+        <div id="tab-messages" class="tab-content active bg-brand-card border border-brand-border rounded-2xl p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-bold">Inquiries & Emails</h3>
+            <button onclick="fetchMessages()" class="text-brand-orange text-sm font-semibold flex items-center gap-2 hover:underline"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh Data</button>
           </div>
+          <div class="overflow-x-auto bg-brand-dark rounded-xl border border-brand-border">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-brand-card text-xs uppercase text-gray-400 border-b border-brand-border">
+                <tr><th class="px-4 py-3">Date</th><th class="px-4 py-3">Client</th><th class="px-4 py-3">Service</th><th class="px-4 py-3">Message</th></tr>
+              </thead>
+              <tbody id="messagesTableBody" class="divide-y divide-brand-border">
+                <tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">Loading messages from Supabase...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-          <div>
-            <label class="block text-sm font-semibold text-gray-300 mb-2">Main Description</label>
-            <textarea id="cms_hero_desc" rows="4" class="w-full px-3 py-2 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm"></textarea>
+        <!-- 2. THEME SETTINGS TAB -->
+        <div id="tab-theme" class="tab-content bg-brand-card border border-brand-border rounded-2xl p-8">
+          <h3 class="text-lg font-bold mb-6 border-b border-brand-border pb-3">Website Branding</h3>
+          <div class="space-y-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">Main Theme Color</label>
+              <div class="flex items-center gap-4">
+                <input type="color" id="cms_theme_color" value="#FF4500" class="w-14 h-14 rounded cursor-pointer bg-transparent border-0 p-0" />
+                <p class="text-sm text-gray-400">Click the box to choose a new color for buttons, text highlights, and glows.</p>
+              </div>
+            </div>
           </div>
+        </div>
+
+        <!-- 3. HERO SECTION TAB -->
+        <div id="tab-hero" class="tab-content bg-brand-card border border-brand-border rounded-2xl p-8">
+          <h3 class="text-lg font-bold mb-6 border-b border-brand-border pb-3">Main Page Content (No Coding Required)</h3>
           
-          <div>
-            <label class="block text-sm font-semibold text-gray-300 mb-2">About Me Section</label>
-            <textarea id="cms_about_text" rows="5" class="w-full px-3 py-2 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm"></textarea>
+          <div class="space-y-6">
+            <!-- Image Upload -->
+            <div class="p-4 bg-brand-dark border border-brand-border rounded-xl flex items-center gap-6">
+              <img id="adminPhotoPreview" src="https://via.placeholder.com/100" class="w-20 h-20 rounded-full object-cover border-2 border-brand-orange hidden" />
+              <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">Profile Photo</label>
+                <input type="file" id="cmsPhotoUpload" accept="image/*" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-brand-orange file:text-white cursor-pointer" />
+              </div>
+            </div>
+
+            <!-- Names -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">First Name</label>
+                <input type="text" id="cms_first_name" placeholder="Syed Fareed" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">Last Name (Will be colored automatically)</label>
+                <input type="text" id="cms_last_name" placeholder="Ul Hassan" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
+              </div>
+            </div>
+
+            <!-- Roles -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">Your Roles / Professions</label>
+              <input type="text" id="cms_roles" placeholder="Career Expert, Physics Educator, Online Instructor" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
+              <p class="text-xs text-gray-500 mt-1">Separate each role with a comma (,). The system will style them automatically.</p>
+            </div>
+
+            <!-- Description -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">Hero Description</label>
+              <textarea id="cms_hero_desc" rows="4" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange"></textarea>
+            </div>
           </div>
-
-          <button onclick="saveCMSData()" class="w-full py-3 bg-brand-orange text-white rounded-xl font-bold hover:bg-orange-600 transition">Save Changes to Website</button>
-          <p id="saveStatus" class="text-emerald-400 text-xs hidden text-center font-semibold mt-2">✅ Changes saved! Open live site to see.</p>
         </div>
-      </div>
 
-      <!-- RIGHT: CLIENT MESSAGES -->
-      <div class="lg:col-span-2 bg-brand-card border border-brand-border rounded-2xl p-6 flex flex-col min-h-0">
-        <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="inbox" class="w-5 h-5 text-brand-orange"></i> Client Messages</h2>
-        
-        <div class="overflow-x-auto flex-1 bg-brand-dark rounded-xl border border-brand-border">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-brand-card text-xs uppercase text-gray-400 border-b border-brand-border">
-              <tr>
-                <th class="px-4 py-3">Date</th>
-                <th class="px-4 py-3">Client</th>
-                <th class="px-4 py-3">Service</th>
-                <th class="px-4 py-3">Message</th>
-                <th class="px-4 py-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody id="messagesTableBody" class="divide-y divide-brand-border">
-              <tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Loading messages from Supabase...</td></tr>
-            </tbody>
-          </table>
+        <!-- 4. ABOUT & CONTACT TAB -->
+        <div id="tab-about" class="tab-content bg-brand-card border border-brand-border rounded-2xl p-8">
+          <h3 class="text-lg font-bold mb-6 border-b border-brand-border pb-3">Personal & Contact Details</h3>
+          
+          <div class="space-y-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">About Me Section (Full Text)</label>
+              <textarea id="cms_about_text" rows="5" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">Contact Phone</label>
+                <input type="text" id="cms_phone" placeholder="03205335188" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">Contact Email</label>
+                <input type="text" id="cms_email" placeholder="fareedulhassan0@gmail.com" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">Location</label>
+                <input type="text" id="cms_location" placeholder="Sargodha, Punjab, Pakistan" class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">LinkedIn URL</label>
+                <input type="text" id="cms_linkedin" placeholder="https://linkedin.com/in/..." class="w-full px-4 py-3 rounded-lg bg-brand-dark border border-brand-border outline-none text-sm text-white focus:border-brand-orange" />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 
   <script>
-    // Safe Icon Loading
-    try { lucide.createIcons(); } catch (e) { console.log("Lucide icons error", e); }
+    lucide.createIcons();
 
-    // --- CORE LOGIC (SAFE FROM NETWORK ERRORS) ---
-    
+    // 1. Enter Key Login
+    document.getElementById('passcode').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') attemptLogin();
+    });
+
+    // 2. Supabase Setup
+    let supabase;
+    try {
+      const SUPABASE_URL = 'https://pxlpfhagbkbafxgcpcyl.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4bHBmaGFnYmtiYWZ4Z2NwY3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDcxMjEsImV4cCI6MjEwODQyMzEyMX0.fLsjVzsqy16qe9wsYsF9KStaVKNm9cZDiInf5gsM3ek';
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (err) {}
+
+    // 3. Login Logic
     function attemptLogin() {
-      const pass = document.getElementById('passcode').value;
-      const btn = document.getElementById('loginBtn');
-      const err = document.getElementById('loginError');
-
-      // Visual feedback
-      btn.innerText = "Checking...";
-      btn.classList.add("opacity-75");
-      err.classList.add('hidden');
-
-      setTimeout(() => {
-        if (pass === 'fareed2026') {
-          document.getElementById('loginScreen').classList.add('hidden');
-          document.getElementById('dashboardScreen').classList.remove('hidden');
-          loadCMSData();
-          fetchMessagesSafe();
-        } else {
-          err.classList.remove('hidden');
-          btn.innerText = "Access Admin Dashboard";
-          btn.classList.remove("opacity-75");
-        }
-      }, 300); // 300ms delay to feel natural
+      const pass = document.getElementById('passcode').value.trim();
+      if (pass === 'fareed2026') {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('dashboardScreen').classList.remove('hidden');
+        loadCMSData();
+        fetchMessages();
+      } else {
+        document.getElementById('loginError').classList.remove('hidden');
+      }
     }
 
     function logout() {
       document.getElementById('dashboardScreen').classList.add('hidden');
       document.getElementById('loginScreen').classList.remove('hidden');
       document.getElementById('passcode').value = '';
-      
-      const btn = document.getElementById('loginBtn');
-      btn.innerText = "Access Admin Dashboard";
-      btn.classList.remove("opacity-75");
     }
 
-    // --- CMS EDITOR LOGIC ---
+    // 4. Tab Switching Logic
+    function switchTab(tabId) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      
+      // Show selected tab
+      document.getElementById(tabId).classList.add('active');
+      document.getElementById('nav-' + tabId.replace('tab-', '')).classList.add('active');
+      
+      // Update Header Title
+      const titles = {
+        'tab-messages': 'Client Messages',
+        'tab-theme': 'Theme & Colors',
+        'tab-hero': 'Hero Section Editing',
+        'tab-about': 'About & Contact Details'
+      };
+      document.getElementById('currentTabTitle').innerText = titles[tabId];
+
+      // Show/Hide Save Button (Don't need it on messages tab)
+      const saveBtn = document.getElementById('globalSaveBtn');
+      if (tabId === 'tab-messages') { saveBtn.classList.add('hidden'); } 
+      else { saveBtn.classList.remove('hidden'); }
+    }
+
+    // 5. Image Preview & Saving
     document.getElementById('cmsPhotoUpload').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
       const reader = new FileReader();
       reader.onload = (event) => { 
-        try { localStorage.setItem('sfh_profile_photo', event.target.result); } catch(err){}
+        localStorage.setItem('sfh_profile_photo', event.target.result); 
+        document.getElementById('adminPhotoPreview').src = event.target.result;
+        document.getElementById('adminPhotoPreview').classList.remove('hidden');
       };
       reader.readAsDataURL(file);
     });
 
+    // 6. Color Picker Logic
+    document.getElementById('cms_theme_color').addEventListener('input', function(e) {
+      document.documentElement.style.setProperty('--theme-color', e.target.value);
+    });
+
+    // 7. Load & Save Data (No HTML coding required from user)
     function loadCMSData() {
-      try {
-        const data = localStorage.getItem('portfolio_cms_data');
-        if (data) {
+      // Photo Load
+      const savedPhoto = localStorage.getItem('sfh_profile_photo');
+      if (savedPhoto) {
+        document.getElementById('adminPhotoPreview').src = savedPhoto;
+        document.getElementById('adminPhotoPreview').classList.remove('hidden');
+      }
+
+      // Text Load
+      const data = localStorage.getItem('portfolio_cms_data');
+      if (data) {
+        try {
           const parsed = JSON.parse(data);
-          if(parsed.hero_title) document.getElementById('cms_hero_title').value = parsed.hero_title;
-          if(parsed.hero_roles) document.getElementById('cms_hero_roles').value = parsed.hero_roles;
-          if(parsed.hero_desc) document.getElementById('cms_hero_desc').value = parsed.hero_desc;
-          if(parsed.about_text) document.getElementById('cms_about_text').value = parsed.about_text;
-        }
-      } catch (e) { console.log("Localstorage error", e); }
+          if(parsed.themeColor) {
+            document.getElementById('cms_theme_color').value = parsed.themeColor;
+            document.documentElement.style.setProperty('--theme-color', parsed.themeColor);
+          }
+          if(parsed.firstName) document.getElementById('cms_first_name').value = parsed.firstName;
+          if(parsed.lastName) document.getElementById('cms_last_name').value = parsed.lastName;
+          if(parsed.roles) document.getElementById('cms_roles').value = parsed.roles;
+          if(parsed.heroDesc) document.getElementById('cms_hero_desc').value = parsed.heroDesc;
+          if(parsed.aboutText) document.getElementById('cms_about_text').value = parsed.aboutText;
+          if(parsed.phone) document.getElementById('cms_phone').value = parsed.phone;
+          if(parsed.email) document.getElementById('cms_email').value = parsed.email;
+          if(parsed.location) document.getElementById('cms_location').value = parsed.location;
+          if(parsed.linkedin) document.getElementById('cms_linkedin').value = parsed.linkedin;
+        } catch(e) {}
+      }
     }
 
     function saveCMSData() {
-      try {
-        const newData = {
-          hero_title: document.getElementById('cms_hero_title').value,
-          hero_roles: document.getElementById('cms_hero_roles').value,
-          hero_desc: document.getElementById('cms_hero_desc').value,
-          about_text: document.getElementById('cms_about_text').value
-        };
-        localStorage.setItem('portfolio_cms_data', JSON.stringify(newData));
-        
-        const status = document.getElementById('saveStatus');
-        status.classList.remove('hidden');
-        setTimeout(() => status.classList.add('hidden'), 3500);
-      } catch (e) { alert("Error saving data"); }
+      const newData = {
+        themeColor: document.getElementById('cms_theme_color').value,
+        firstName: document.getElementById('cms_first_name').value,
+        lastName: document.getElementById('cms_last_name').value,
+        roles: document.getElementById('cms_roles').value,
+        heroDesc: document.getElementById('cms_hero_desc').value,
+        aboutText: document.getElementById('cms_about_text').value,
+        phone: document.getElementById('cms_phone').value,
+        email: document.getElementById('cms_email').value,
+        location: document.getElementById('cms_location').value,
+        linkedin: document.getElementById('cms_linkedin').value
+      };
+      
+      localStorage.setItem('portfolio_cms_data', JSON.stringify(newData));
+      
+      const status = document.getElementById('saveStatus');
+      status.classList.remove('hidden');
+      setTimeout(() => status.classList.add('hidden'), 3000);
     }
 
-
-    // --- SUPABASE & DATABASE LOGIC ---
-    let supabaseClient = null;
-    const SUPABASE_URL = 'https://pxlpfhagbkbafxgcpcyl.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4bHBmaGFnYmtiYWZ4Z2NwY3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDcxMjEsImV4cCI6MjEwODQyMzEyMX0.fLsjVzsqy16qe9wsYsF9KStaVKNm9cZDiInf5gsM3ek';
-    
-    // Safely try to connect to database without breaking the whole page if it fails
-    try {
-      if (window.supabase) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
-    } catch (e) {
-      console.warn("Could not connect to database on load.");
-    }
-
-    async function fetchMessagesSafe() {
+    // 8. Fetch Client Messages
+    async function fetchMessages() {
       const tbody = document.getElementById('messagesTableBody');
-      tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-brand-orange animate-pulse">Fetching messages from database...</td></tr>';
-      
-      if (!supabaseClient) {
-        tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-red-500">Database connection failed. Please check internet or turn off Ad-Blocker.</td></tr>';
-        return;
-      }
-      
+      if (!supabase) return;
+      tbody.innerHTML = '<tr><td colspan="4" class="px-4 py-8 text-center text-brand-orange animate-pulse">Fetching messages...</td></tr>';
       try {
-        const { data, error } = await supabaseClient.from('contact_messages').select('*').order('created_at', { ascending: false });
-        
+        const { data, error } = await supabase.from('contact_messages').select('*').order('created_at', { ascending: false });
         if (error) throw error;
-
-        if (!data || data.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">No messages found yet. Submit a message on the live site!</td></tr>';
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">No messages found yet.</td></tr>';
           return;
         }
-
         tbody.innerHTML = '';
         data.forEach(msg => {
-          const date = new Date(msg.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          const date = new Date(msg.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
           const tr = document.createElement('tr');
-          tr.className = 'hover:bg-brand-card/50 transition border-b border-brand-border/50 last:border-0';
-          
-          // Using strict replace to avoid quotes breaking the alert
-          const safeMsg = msg.message ? msg.message.replace(/'/g, "\\'").replace(/"/g, "&quot;").replace(/\n/g, "\\n") : "No message provided";
-          
+          tr.className = 'hover:bg-brand-card/50 border-b border-brand-border';
           tr.innerHTML = `
-            <td class="px-4 py-3 whitespace-nowrap text-gray-400">${date}</td>
-            <td class="px-4 py-3">
-              <div class="font-medium text-white">${msg.name}</div>
-              <div class="text-xs text-brand-orange">${msg.email}</div>
-              ${msg.phone ? `<div class="text-xs text-gray-500">${msg.phone}</div>` : ''}
-            </td>
-            <td class="px-4 py-3 text-gray-300"><span class="px-2 py-1 bg-brand-dark rounded-md text-xs border border-brand-border">${msg.service}</span></td>
-            <td class="px-4 py-3"><div class="max-w-xs truncate text-gray-400" title="${msg.message}">${msg.message}</div></td>
-            <td class="px-4 py-3 text-right">
-              <button onclick="alert('Message from ${msg.name}:\\n\\n' + '${safeMsg}')" class="px-3 py-1.5 bg-brand-dark border border-brand-border rounded hover:border-brand-orange text-xs text-white transition-colors">Read</button>
-            </td>
+            <td class="px-4 py-3 text-gray-400 whitespace-nowrap">${date}</td>
+            <td class="px-4 py-3"><div class="font-bold text-white">${msg.name}</div><div class="text-xs text-brand-orange">${msg.email}</div><div class="text-xs text-gray-500">${msg.phone||''}</div></td>
+            <td class="px-4 py-3 text-gray-300"><span class="px-2 py-1 bg-brand-dark rounded text-xs border border-brand-border">${msg.service}</span></td>
+            <td class="px-4 py-3 text-gray-400">${msg.message}</td>
           `;
           tbody.appendChild(tr);
         });
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-red-500">Error loading messages: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="px-4 py-8 text-center text-red-500">Error loading messages</td></tr>`;
       }
     }
   </script>
