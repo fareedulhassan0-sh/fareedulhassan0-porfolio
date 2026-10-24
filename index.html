@@ -1,259 +1,960 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Syed Fareed Ul Hassan | Portfolio</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <title>Syed Fareed Ul Hassan | Career Expert & Physics Educator</title>
+  <meta name="description" id="meta-desc" content="Portfolio of Syed Fareed Ul Hassan — Career Expert, Physics Educator and Online Instructor based in Sargodha, Punjab, Pakistan." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link id="gfonts" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-
-  <script>
-    // Dynamic Theme Logic via Tailwind
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Space Grotesk', 'sans-serif'] },
-          colors: { brand: { orange: 'var(--theme-color, #FF4500)', amber: 'var(--theme-color, #FF6B00)', dark: '#08080A', card: '#111116', border: '#1F1F28' } }
-        }
-      }
-    }
-  </script>
 
   <style>
-    /* CSS Variables for Real-time Theme Updates */
-    :root { --theme-color: #FF4500; }
-    body { background-color: #08080A; color: #F3F4F6; overflow-x: hidden; }
-    
-    .glow-orange { box-shadow: 0 0 50px -10px var(--theme-color); }
-    .glow-orange-sm { box-shadow: 0 0 25px -5px var(--theme-color); }
-    
-    .text-gradient {
-      background: linear-gradient(135deg, var(--theme-color) 0%, #FF8C00 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    :root{
+      --primary:#ff5500; --secondary:#ff9900; --bg:#060609; --bg2:#0c0c12; --card:#13131c;
+      --text:#f3f4f6; --muted:#9ca3af; --radius:18px; --glow:40px;
+      --font-h:'Outfit',sans-serif; --font-b:'Inter',sans-serif; --speed:.8s;
+      --border:color-mix(in srgb,var(--text) 10%,transparent);
+      --p10:color-mix(in srgb,var(--primary) 10%,transparent);
+      --p20:color-mix(in srgb,var(--primary) 20%,transparent);
+      --p40:color-mix(in srgb,var(--primary) 40%,transparent);
+      --p60:color-mix(in srgb,var(--primary) 60%,transparent);
     }
-    .bg-gradient-brand { background: linear-gradient(135deg, var(--theme-color) 0%, #FF8C00 100%); }
-    
-    .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .card-hover:hover { transform: translateY(-6px); border-color: var(--theme-color); box-shadow: 0 15px 35px -10px rgba(255, 69, 0, 0.1); }
-    .skill-bar { transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
-    
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #08080A; }
-    ::-webkit-scrollbar-thumb { background: var(--theme-color); border-radius: 4px; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-b);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+    input,select,textarea{font:inherit}
+    ::selection{background:var(--primary);color:#fff}
+    ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:linear-gradient(var(--primary),var(--secondary));border-radius:9px}
+    .container{max-width:1200px;margin:0 auto;padding:0 20px}
+    h1,h2,h3,h4{font-family:var(--font-h);line-height:1.15}
+    .grad{background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+    /* ===== Background FX ===== */
+    #particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+    .ambient{position:fixed;border-radius:50%;filter:blur(130px);pointer-events:none;z-index:0;opacity:.5}
+    .ambient.a1{width:420px;height:420px;background:var(--p20);top:-120px;right:-120px}
+    .ambient.a2{width:380px;height:380px;background:color-mix(in srgb,var(--secondary) 15%,transparent);bottom:-80px;left:-120px}
+    .cursor-glow{position:fixed;width:420px;height:420px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,var(--p10),transparent 65%);transform:translate(-50%,-50%);left:-500px;top:-500px;transition:opacity .3s}
+    #progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:200;background:linear-gradient(90deg,var(--primary),var(--secondary));box-shadow:0 0 12px var(--primary)}
+    main,footer,.nav{position:relative;z-index:2}
+
+    /* ===== Preloader ===== */
+    #preloader{position:fixed;inset:0;z-index:999;background:var(--bg);display:grid;place-items:center;transition:opacity .6s,visibility .6s}
+    #preloader.hide{opacity:0;visibility:hidden}
+    .pl-logo{width:78px;height:78px;border-radius:22px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:grid;place-items:center;font-family:var(--font-h);font-weight:900;font-size:34px;color:#fff;animation:plPulse 1.2s ease-in-out infinite;box-shadow:0 0 50px var(--p60)}
+    .pl-bar{width:140px;height:3px;border-radius:3px;background:var(--border);margin:22px auto 0;overflow:hidden}
+    .pl-bar i{display:block;height:100%;width:40%;background:var(--primary);animation:plBar 1s ease-in-out infinite}
+    @keyframes plPulse{50%{transform:scale(1.08) rotate(6deg)}}
+    @keyframes plBar{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+
+    /* ===== Buttons ===== */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 28px;border-radius:999px;font-weight:700;font-size:15px;transition:transform .3s,box-shadow .3s,filter .3s,border-color .3s,background .3s}
+    .btn-primary{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 10px var(--glow) -10px var(--p60)}
+    .btn-primary:hover{transform:translateY(-3px);filter:brightness(1.08);box-shadow:0 16px calc(var(--glow) + 10px) -8px var(--p60)}
+    .btn-ghost{border:1px solid var(--p40);background:color-mix(in srgb,var(--text) 4%,transparent)}
+    .btn-ghost:hover{border-color:var(--primary);transform:translateY(-3px)}
+    .btn-ghost i{color:var(--primary)}
+
+    /* ===== Navbar ===== */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 0;transition:padding .3s,background .3s,border-color .3s;border-bottom:1px solid transparent}
+    .nav.scrolled{background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--border);padding:11px 0}
+    .nav .container{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-h);font-weight:800;font-size:22px;letter-spacing:-.01em}
+    .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:grid;place-items:center;color:#fff;font-weight:900;box-shadow:0 6px 20px -4px var(--p60)}
+    .brand b{color:var(--primary)}
+    .nav-links{display:flex;gap:26px;font-size:14px;font-weight:500;color:var(--muted)}
+    .nav-links a{position:relative;transition:color .25s}
+    .nav-links a:hover,.nav-links a.active{color:var(--text)}
+    .nav-links a::after{content:'';position:absolute;left:0;bottom:-6px;height:2px;width:0;border-radius:2px;background:var(--primary);transition:width .3s}
+    .nav-links a:hover::after,.nav-links a.active::after{width:100%}
+    .nav-cta{padding:10px 22px;font-size:14px}
+    .menu-btn{display:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--border);place-items:center;font-size:18px}
+    .mobile-menu{position:fixed;top:72px;left:16px;right:16px;z-index:99;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;display:none;flex-direction:column;gap:4px;box-shadow:0 30px 60px rgba(0,0,0,.45)}
+    .mobile-menu.open{display:flex;animation:dropIn .3s ease}
+    .mobile-menu a{padding:10px 12px;border-radius:10px;font-weight:500}
+    .mobile-menu a:hover{background:var(--p10);color:var(--primary)}
+    @keyframes dropIn{from{opacity:0;transform:translateY(-10px)}}
+    @media(max-width:960px){.nav-links,.nav .nav-cta{display:none}.menu-btn{display:grid}}
+
+    /* ===== Hero ===== */
+    .hero{min-height:100vh;display:flex;align-items:center;padding:130px 0 80px;position:relative}
+    .hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:50px;align-items:center}
+    .pill{display:inline-flex;align-items:center;gap:10px;padding:7px 16px;border-radius:999px;background:var(--p10);border:1px solid var(--p40);color:var(--primary);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+    .pill .dot{width:8px;height:8px;border-radius:50%;background:var(--primary);animation:pulse 2s infinite}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 var(--p60)}70%{box-shadow:0 0 0 10px transparent}100%{box-shadow:0 0 0 0 transparent}}
+    .hello{color:var(--muted);letter-spacing:.25em;text-transform:uppercase;font-size:14px;font-weight:600;margin-top:24px}
+    .hero h1{font-size:clamp(38px,6.2vw,74px);font-weight:900;letter-spacing:-.02em;margin:8px 0 14px}
+    .typer{font-family:var(--font-h);font-size:clamp(20px,2.6vw,30px);font-weight:700;color:var(--primary);min-height:1.45em}
+    .caret{display:inline-block;width:3px;height:1em;background:var(--primary);margin-left:4px;vertical-align:-3px;animation:blink 1s steps(1) infinite}
+    @keyframes blink{50%{opacity:0}}
+    .intro{color:var(--muted);font-size:17px;max-width:600px;margin:18px 0 32px}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:14px}
+    .socials{display:flex;align-items:center;gap:12px;margin-top:34px;flex-wrap:wrap}
+    .socials .lbl{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600}
+    .social{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--p60);color:var(--primary);background:var(--p10);transition:all .3s}
+    .social:hover{background:var(--primary);color:#fff;transform:translateY(-4px);box-shadow:0 10px 24px -6px var(--p60)}
+    .avatar-wrap{position:relative;width:min(420px,82vw);aspect-ratio:1;margin:0 auto}
+    .orbit{position:absolute;inset:0;border-radius:50%;border:1.5px dashed var(--p40);animation:spin 26s linear infinite}
+    .orbit.o2{inset:7%;border-style:solid;border-color:var(--p20);animation-duration:18s;animation-direction:reverse}
+    .orbit .el{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--primary);box-shadow:0 0 18px var(--primary);top:-7px;left:calc(50% - 7px)}
+    .orbit.o2 .el{background:var(--secondary);box-shadow:0 0 16px var(--secondary);top:auto;bottom:-6px;width:12px;height:12px;left:calc(50% - 6px)}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .avatar{position:absolute;inset:14%;border-radius:50%;overflow:hidden;display:grid;place-items:center;
+      background:radial-gradient(circle at 50% 38%,var(--secondary),var(--primary) 55%,color-mix(in srgb,var(--primary) 45%,#000) 100%);
+      box-shadow:0 0 var(--glow) var(--p60),0 0 calc(var(--glow)*2.6) var(--p20),inset 0 0 35px rgba(255,200,0,.35);
+      border:3px solid color-mix(in srgb,var(--secondary) 70%,transparent);animation:float 6s ease-in-out infinite}
+    .avatar img{width:100%;height:100%;object-fit:cover;object-position:top}
+    .monogram{font-family:var(--font-h);font-weight:900;font-size:clamp(52px,8vw,92px);color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.35);letter-spacing:.04em}
+    .float-card{position:absolute;z-index:3;background:color-mix(in srgb,var(--card) 92%,transparent);border:1px solid var(--p40);backdrop-filter:blur(10px);border-radius:16px;padding:12px 16px;box-shadow:0 20px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:10px;animation:float 5s ease-in-out infinite}
+    .fc1{right:0;bottom:10%}.fc2{left:-2%;top:12%;animation-delay:-2.5s;border-radius:999px;padding:9px 16px}
+    .fc1 .num{font-family:var(--font-h);font-size:26px;font-weight:900;color:var(--primary);line-height:1}
+    .fc1 small{display:block;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;line-height:1.3}
+    .fc2 i{color:var(--primary);animation:spin 4s linear infinite}
+    .fc2 span{font-size:13px;font-weight:600}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+    .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);width:26px;height:42px;border:2px solid var(--border);border-radius:20px}
+    .scroll-hint::after{content:'';position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--primary);animation:scrollDot 1.6s infinite}
+    @keyframes scrollDot{0%{opacity:0;transform:translateY(0)}40%{opacity:1}100%{opacity:0;transform:translateY(14px)}}
+    @media(max-width:960px){.hero-grid{grid-template-columns:1fr;text-align:center}.hero-visual{order:-1}.intro{margin-left:auto;margin-right:auto}.hero-actions,.socials{justify-content:center}.scroll-hint{display:none}}
+
+    /* ===== Marquee ===== */
+    .marquee{border-block:1px solid var(--border);background:var(--bg2);overflow:hidden;padding:18px 0;position:relative;z-index:2}
+    .marquee-track{display:flex;width:max-content;animation:marq var(--mq,30s) linear infinite}
+    .marquee:hover .marquee-track{animation-play-state:paused}
+    .marquee span{font-family:var(--font-h);font-weight:700;font-size:clamp(16px,2vw,22px);white-space:nowrap;color:var(--muted);display:flex;align-items:center;gap:40px;padding-right:40px}
+    .marquee span::after{content:'✦';color:var(--primary)}
+    @keyframes marq{to{transform:translateX(-50%)}}
+
+    /* ===== Sections ===== */
+    .sec{padding:100px 0;position:relative}
+    .sec.alt{background:color-mix(in srgb,var(--bg2) 80%,transparent);border-block:1px solid var(--border)}
+    .sec-head{text-align:center;max-width:700px;margin:0 auto 60px}
+    .kicker{color:var(--primary);font-size:12px;font-weight:800;letter-spacing:.25em;text-transform:uppercase}
+    .sec-head h2{font-size:clamp(30px,4.6vw,50px);font-weight:800;margin-top:10px;letter-spacing:-.01em}
+    .sec-head p{color:var(--muted);margin-top:14px}
+    .bar-line{width:70px;height:4px;border-radius:4px;margin:18px auto 0;background:linear-gradient(90deg,var(--primary),var(--secondary))}
+
+    /* ===== Card ===== */
+    .card{background:linear-gradient(145deg,color-mix(in srgb,var(--card) 96%,transparent),color-mix(in srgb,var(--bg) 92%,transparent));border:1px solid var(--border);border-radius:var(--radius);padding:28px;position:relative;overflow:hidden}
+    .card::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),var(--p10),transparent 45%)}
+    .card:hover::before{opacity:1}
+    .card:hover{border-color:var(--p60);box-shadow:0 22px 45px -18px var(--p40)}
+    .lift:hover{transform:translateY(-6px)}
+    .icon-box{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-size:24px;color:var(--primary);background:var(--p10);border:1px solid var(--p40);transition:all .35s}
+    .card:hover .icon-box{background:var(--primary);color:#fff;transform:rotate(-6deg) scale(1.06);box-shadow:0 10px 25px -6px var(--p60)}
+    .chip{display:inline-block;padding:5px 14px;border-radius:999px;font-size:12px;font-weight:700;background:var(--p10);color:var(--primary);border:1px solid var(--p40)}
+    .chip.solid{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+    /* ===== Stats ===== */
+    .stats{padding:60px 0;position:relative;z-index:2}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .stat{text-align:center;padding:26px 18px}
+    .stat > i{font-size:22px;color:var(--primary);margin-bottom:10px}
+    .stat-num{font-family:var(--font-h);font-size:clamp(32px,4vw,46px);font-weight:900;line-height:1}
+    .stat-num b{color:var(--primary)}
+    .stat p{color:var(--muted);font-size:13.5px;margin-top:8px;font-weight:500}
+    @media(max-width:800px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+
+    /* ===== About ===== */
+    .about-grid{display:grid;grid-template-columns:5fr 7fr;gap:60px;align-items:center}
+    .about-photo{position:relative;width:min(320px,75vw);aspect-ratio:1;margin:0 auto}
+    .about-photo .avatar{inset:0;animation:none}
+    .about-photo .orb{position:absolute;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));z-index:3;box-shadow:0 0 25px var(--p60)}
+    .about-photo .orb.b1{width:48px;height:48px;top:-6px;left:-6px;animation:float 4s ease-in-out infinite}
+    .about-photo .orb.b2{width:34px;height:34px;bottom:20px;right:-8px;animation:float 5s ease-in-out infinite reverse}
+    .about-tag{display:inline-block;padding:6px 14px;border-radius:999px;background:var(--p10);border:1px solid var(--p40);color:var(--primary);font-size:12px;font-weight:700}
+    .about-text h3{font-size:clamp(22px,2.6vw,32px);font-weight:700;margin:16px 0}
+    .about-text p{color:var(--muted);margin-bottom:14px}
+    .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:24px 0}
+    .info{display:flex;align-items:center;gap:14px;padding:16px}
+    .info .ib{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;color:var(--primary);background:var(--p10);border:1px solid var(--p40)}
+    .info small{display:block;color:var(--muted);font-size:12px}
+    .info strong{font-size:14px;font-weight:600;word-break:break-word}
+    .btn-row{display:flex;flex-wrap:wrap;gap:14px}
+    @media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:40px}.info-grid{grid-template-columns:1fr}}
+
+    /* ===== Services ===== */
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px}
+    .service{display:flex;flex-direction:column}
+    .service h3{font-size:20px;margin:22px 0 10px}
+    .service p{color:var(--muted);font-size:14.5px;flex:1}
+    .service .foot{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--primary)}
+    .service .go{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-size:12px;transition:transform .3s}
+    .service:hover .go{transform:rotate(-45deg)}
+    .service .num-bg{position:absolute;right:18px;top:8px;font-family:var(--font-h);font-weight:900;font-size:64px;color:var(--text);opacity:.04;line-height:1}
+
+    /* ===== Skills ===== */
+    .tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:34px}
+    .tab{padding:9px 20px;border-radius:999px;font-size:13.5px;font-weight:600;border:1px solid var(--border);background:color-mix(in srgb,var(--text) 4%,transparent);color:var(--muted);transition:all .3s}
+    .tab:hover{color:var(--text);border-color:var(--p40)}
+    .tab.active{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;border-color:transparent;box-shadow:0 8px 22px -8px var(--p60)}
+    .skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px 50px}
+    .skill-top{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:10px;gap:12px}
+    .skill-top b{color:var(--primary)}
+    .track{height:10px;border-radius:99px;background:color-mix(in srgb,var(--text) 8%,transparent);overflow:hidden}
+    .fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--secondary));box-shadow:0 0 14px var(--p60);transition:width 1.5s cubic-bezier(.2,.8,.2,1);position:relative;overflow:hidden}
+    .fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-100%);animation:shine 2.4s infinite}
+    @keyframes shine{to{transform:translateX(100%)}}
+    .skill-cloud{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:34px}
+    .skill-cloud span{padding:8px 16px;border-radius:12px;background:var(--card);border:1px solid var(--border);font-size:13px;font-weight:500;transition:all .3s}
+    .skill-cloud span:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-3px)}
+    @media(max-width:800px){.skills-grid{grid-template-columns:1fr}}
+
+    /* ===== Timeline ===== */
+    .timeline{position:relative;max-width:1040px;margin:0 auto}
+    .timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-50%);background:linear-gradient(var(--primary),var(--p20) 80%,transparent)}
+    .t-item{position:relative;width:50%;padding:0 44px 40px 0}
+    .t-item:nth-child(even){margin-left:50%;padding:0 0 40px 44px}
+    .t-item .dot{position:absolute;top:30px;right:-9px;width:18px;height:18px;border-radius:50%;background:var(--bg);border:3px solid var(--primary);z-index:2}
+    .t-item .dot.live{background:var(--primary);box-shadow:0 0 0 5px var(--p20),0 0 20px var(--primary)}
+    .t-item:nth-child(even) .dot{right:auto;left:-9px}
+    .t-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+    .t-type{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+    .t-type i{color:var(--primary);margin-right:4px}
+    .t-item h3{font-size:21px}
+    .company{color:var(--primary);font-weight:600;font-size:14.5px;margin:4px 0 14px}
+    .checks{list-style:none;display:grid;gap:9px}
+    .checks li{display:flex;gap:10px;color:var(--muted);font-size:14.5px}
+    .checks i{color:var(--primary);margin-top:5px;font-size:12px}
+    @media(max-width:820px){.timeline::before{left:9px}.t-item,.t-item:nth-child(even){width:100%;margin-left:0;padding:0 0 28px 40px}.t-item .dot,.t-item:nth-child(even) .dot{left:0;right:auto}}
+
+    /* ===== Education ===== */
+    .edu-grid{display:grid;grid-template-columns:7fr 5fr;gap:34px}
+    .col-title{display:flex;align-items:center;gap:12px;font-size:22px;margin-bottom:20px}
+    .col-title span{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-size:16px}
+    .stack{display:grid;gap:18px}
+    .edu .meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:12.5px;color:var(--muted)}
+    .edu h4{font-size:19px}
+    .edu .inst{color:var(--primary);font-weight:600;font-size:14px;margin-top:4px}
+    .edu p.d{color:var(--muted);font-size:14px;margin-top:8px}
+    .cert{border-left:4px solid var(--primary)}
+    .cert .ct{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .cert .ct .icon-box{width:46px;height:46px;font-size:18px;border-radius:12px}
+    .cv-card{text-align:center;background:linear-gradient(140deg,var(--p20),var(--card) 55%);border-color:var(--p40)}
+    .cv-card > i{font-size:32px;color:var(--primary)}
+    .cv-card h4{margin:12px 0 6px;font-size:18px}
+    .cv-card p{color:var(--muted);font-size:13px;margin-bottom:16px}
+    @media(max-width:900px){.edu-grid{grid-template-columns:1fr}}
+
+    /* ===== Highlights ===== */
+    .hl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+    .hl h4{font-size:19px;margin:20px 0 10px}
+    .hl p{color:var(--muted);font-size:14.5px}
+
+    /* ===== Contact ===== */
+    .contact-grid{display:grid;grid-template-columns:5fr 7fr;gap:34px}
+    .c-info{display:flex;gap:16px;align-items:flex-start;padding:22px;margin-bottom:16px}
+    .c-info .ib{width:50px;height:50px;border-radius:14px;flex-shrink:0;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-size:18px}
+    .c-info h4{font-size:16px}
+    .c-info small{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}
+    .c-info a,.c-info strong{font-size:14px;font-weight:600;word-break:break-all}
+    .c-info a{color:var(--primary)}
+    .wa-chip{display:inline-flex;align-items:center;gap:6px;margin-left:8px;padding:3px 10px;border-radius:99px;font-size:12px;background:rgba(16,185,129,.15);color:#34d399!important;border:1px solid rgba(16,185,129,.35)}
+    .form-card{padding:34px}
+    .form-card h3{font-size:24px}
+    .form-card > p{color:var(--muted);font-size:14px;margin:6px 0 22px}
+    .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .fg{margin-bottom:16px}
+    .fg label{display:block;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px}
+    .fg input,.fg select,.fg textarea{width:100%;padding:13px 16px;border-radius:12px;background:color-mix(in srgb,var(--bg) 90%,transparent);border:1px solid var(--border);color:var(--text);font-size:14px;transition:border-color .3s,box-shadow .3s;outline:none}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--p10)}
+    .fg select option{background:var(--card)}
+    .hp{position:absolute;left:-9999px;opacity:0}
+    .f-actions{display:flex;flex-wrap:wrap;gap:12px}
+    .f-actions .btn{flex:1;min-width:200px;border-radius:12px}
+    .btn-wa{background:#059669;color:#fff}.btn-wa:hover{background:#10b981;transform:translateY(-3px)}
+    .status{display:none;margin-top:16px;padding:14px 16px;border-radius:12px;font-size:14px}
+    .status.show{display:block;animation:dropIn .3s}
+    .status.ok{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.4);color:#6ee7b7}
+    .status.warn{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.4);color:#fcd34d}
+    .status.info{background:var(--p10);border:1px solid var(--p40);color:var(--primary)}
+    @media(max-width:900px){.contact-grid{grid-template-columns:1fr}.fgrid{grid-template-columns:1fr}.form-card{padding:24px}}
+
+    /* ===== Footer ===== */
+    footer{border-top:1px solid var(--border);background:var(--bg);padding:48px 0 30px}
+    .f-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px}
+    .f-brand p{color:var(--muted);font-size:12.5px}
+    .f-links{display:flex;flex-wrap:wrap;gap:20px;font-size:13px;color:var(--muted)}
+    .f-links a:hover{color:var(--primary)}
+    .f-social{display:flex;gap:10px}
+    .f-social a{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--text) 6%,transparent);transition:all .3s}
+    .f-social a:hover{background:var(--primary);color:#fff}
+    .copy{text-align:center;color:var(--muted);font-size:12.5px;margin-top:30px;padding-top:22px;border-top:1px solid var(--border)}
+
+    #toTop{position:fixed;right:22px;bottom:22px;z-index:90;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 10px 25px -6px var(--p60);opacity:0;visibility:hidden;transform:translateY(20px);transition:all .35s}
+    #toTop.show{opacity:1;visibility:visible;transform:none}
+
+    /* ===== CV Modal ===== */
+    #cv-modal{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);overflow-y:auto;padding:24px;display:none}
+    #cv-modal.open{display:block;animation:dropIn .3s}
+    .cv-bar{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:14px 18px}
+    .cv-bar b{font-family:var(--font-h)}
+    .cv-bar .btn{padding:9px 18px;font-size:13px}
+    .cv-sheet{max-width:860px;margin:0 auto 40px;background:#fff;color:#111827;padding:48px;border-radius:0 0 16px 16px;font-family:'Inter',sans-serif;font-size:13.5px;line-height:1.55}
+    .cv-sheet h1{font-size:28px;letter-spacing:.02em;text-transform:uppercase;font-family:'Inter',sans-serif;font-weight:800}
+    .cv-sheet .cv-role{color:#c2410c;font-weight:700;text-transform:uppercase;font-size:12.5px;letter-spacing:.08em;margin-top:4px}
+    .cv-head{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-bottom:2px solid #111827;padding-bottom:18px;margin-bottom:18px}
+    .cv-contact{font-size:12px;color:#374151;text-align:right}
+    .cv-sheet h2{font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;border-bottom:1px solid #d1d5db;padding-bottom:4px;margin:20px 0 10px;font-family:'Inter',sans-serif}
+    .cv-row{display:flex;justify-content:space-between;gap:12px;font-weight:700}
+    .cv-sheet ul{padding-left:18px;color:#374151;margin:4px 0 12px}
+    .cv-sheet p{color:#374151}
+    .cv-comp{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 14px;color:#1f2937}
+    @media(max-width:640px){.cv-sheet{padding:24px}.cv-contact{text-align:left}.cv-comp{grid-template-columns:1fr 1fr}}
+    @media print{
+      body>*:not(#cv-modal){display:none!important}
+      #cv-modal{position:static;display:block!important;background:none;padding:0;backdrop-filter:none}
+      .cv-bar{display:none!important}
+      .cv-sheet{margin:0;max-width:none;border-radius:0;padding:0}
+      body{background:#fff}
+    }
+
+    /* ===== Reveal animations ===== */
+    .rv{transition:opacity var(--speed) cubic-bezier(.2,.7,.2,1),transform var(--speed) cubic-bezier(.2,.7,.2,1),filter var(--speed),border-color .4s,box-shadow .4s;transition-delay:var(--d,0s)}
+    .card:not(.rv){transition:transform .4s,border-color .4s,box-shadow .4s}
+    body[data-anim="fade-up"] .rv:not(.in){opacity:0;transform:translateY(42px)}
+    body[data-anim="fade"] .rv:not(.in){opacity:0}
+    body[data-anim="zoom"] .rv:not(.in){opacity:0;transform:scale(.86)}
+    body[data-anim="slide-left"] .rv:not(.in){opacity:0;transform:translateX(-60px)}
+    body[data-anim="slide-right"] .rv:not(.in){opacity:0;transform:translateX(60px)}
+    body[data-anim="flip"] .rv:not(.in){opacity:0;transform:perspective(900px) rotateX(22deg) translateY(30px)}
+    body[data-anim="blur"] .rv:not(.in){opacity:0;filter:blur(14px);transform:scale(1.04)}
+    body.no-anim .rv{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+    body.no-anim *,body.no-anim *::before,body.no-anim *::after{animation:none!important}
+    body.no-anim .fill{transition:none}
+    body.no-orbit .orbit{display:none}
+    body.no-float .avatar,body.no-float .float-card,body.no-float .orb{animation:none}
+    @media(prefers-reduced-motion:reduce){.rv{opacity:1!important;transform:none!important;filter:none!important}}
   </style>
 </head>
-<body class="antialiased selection:bg-brand-orange selection:text-white">
+<body data-anim="fade-up">
 
-  <!-- Ambient Background Glows -->
-  <div class="fixed top-0 left-1/4 w-96 h-96 bg-brand-orange/10 rounded-full blur-[130px] pointer-events-none -z-10"></div>
-  <div class="fixed bottom-10 right-10 w-96 h-96 bg-brand-orange/10 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+  <div id="preloader"><div><div class="pl-logo" id="pl-logo">S</div><div class="pl-bar"><i></i></div></div></div>
+  <div id="progress"></div>
+  <canvas id="particles"></canvas>
+  <div class="ambient a1"></div><div class="ambient a2"></div>
+  <div class="cursor-glow" id="cursor-glow"></div>
 
-  <!-- NAVBAR -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/85 backdrop-blur-md border-b border-brand-border">
-    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-      <a href="#home" class="font-display text-2xl font-bold tracking-tight flex items-center gap-2">
-        <span class="w-9 h-9 rounded-lg bg-gradient-brand flex items-center justify-center text-white font-black shadow-lg shadow-brand-orange/30" id="live_logo_letter">S</span>
-        <span id="live_nav_name">Syed <span class="text-brand-orange">Fareed</span></span>
-      </a>
-
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-        <a href="#home" class="hover:text-brand-orange transition">Home</a>
-        <a href="#about" class="hover:text-brand-orange transition">About</a>
-        <a href="#services" class="hover:text-brand-orange transition">Services</a>
-        <a href="#experience" class="hover:text-brand-orange transition">Experience</a>
-        <a href="#contact" class="hover:text-brand-orange transition">Contact</a>
-      </nav>
-
-      <a href="#contact" class="px-5 py-2.5 rounded-full bg-gradient-brand text-white text-sm font-semibold glow-orange-sm hover:opacity-95 transition flex items-center gap-2">
-        <span>Let's Talk</span>
-        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
-      </a>
+  <header class="nav" id="nav">
+    <div class="container">
+      <a href="#home" class="brand" id="brand"></a>
+      <nav class="nav-links" id="nav-links"></nav>
+      <a href="#contact" class="btn btn-primary nav-cta" id="nav-cta">Let's Talk <i class="fa-solid fa-arrow-right"></i></a>
+      <button class="menu-btn" id="menu-btn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
     </div>
   </header>
+  <div class="mobile-menu" id="mobile-menu"></div>
 
-  <!-- HERO SECTION -->
-  <section id="home" class="pt-32 pb-20 md:pt-40 md:pb-28 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-12 items-center">
-      
-      <!-- Left Column -->
-      <div class="lg:col-span-7 space-y-6">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-orange/10 border border-brand-orange/30 text-brand-orange text-xs font-semibold tracking-wider uppercase">
-          <span class="w-2 h-2 rounded-full bg-brand-orange animate-ping"></span>
-          <span>Available for New Opportunities</span>
-        </div>
+  <main>
+    <section class="hero" id="home"><div class="container" id="hero-c"></div><div class="scroll-hint"></div></section>
+    <div class="marquee" id="marquee"><div class="marquee-track" id="marquee-track"></div></div>
+    <section class="stats" id="stats"><div class="container"><div class="stats-grid" id="stats-c"></div></div></section>
+    <section class="sec" id="about"><div class="container" id="about-c"></div></section>
+    <section class="sec alt" id="services"><div class="container" id="services-c"></div></section>
+    <section class="sec" id="skills"><div class="container" id="skills-c"></div></section>
+    <section class="sec alt" id="experience"><div class="container" id="experience-c"></div></section>
+    <section class="sec" id="education"><div class="container" id="education-c"></div></section>
+    <section class="sec alt" id="highlights"><div class="container" id="highlights-c"></div></section>
+    <section class="sec" id="contact"><div class="container" id="contact-c"></div></section>
+  </main>
 
-        <div class="space-y-2">
-          <p class="text-gray-400 font-medium tracking-widest uppercase text-sm">Hello, I'm</p>
-          <h1 id="live_hero_title" class="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08]">
-            SYED FAREED <br />
-            <span class="text-gradient">UL HASSAN</span>
-          </h1>
-        </div>
+  <footer id="footer"><div class="container" id="footer-c"></div></footer>
+  <button id="toTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
 
-        <h2 id="live_hero_roles" class="text-lg sm:text-xl font-semibold text-gray-200 flex flex-wrap items-center gap-2">
-          <span>Career Expert</span> <span class="text-brand-orange">•</span> <span>Physics Educator</span>
-        </h2>
-
-        <p id="live_hero_desc" class="text-gray-400 leading-relaxed max-w-2xl text-base sm:text-lg">
-          Career services professional and Physics educator with proven expertise in resume optimization, secondary-level science instruction, and online Quran teaching.
-        </p>
-
-        <!-- CTA -->
-        <div class="flex flex-wrap items-center gap-4 pt-2">
-          <a href="#contact" class="px-7 py-3.5 rounded-full bg-gradient-brand text-white font-semibold glow-orange-sm hover:scale-[1.02] transition flex items-center gap-2">
-            <span>Hire Me / Consult</span>
-            <i data-lucide="send" class="w-4 h-4"></i>
-          </a>
-          <button onclick="window.print()" class="px-7 py-3.5 rounded-full border border-brand-border bg-brand-card hover:border-brand-orange text-white font-semibold transition flex items-center gap-2">
-            <span>Download CV</span>
-            <i data-lucide="download" class="w-4 h-4 text-brand-orange"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Right Column: Avatar -->
-      <div class="lg:col-span-5 flex justify-center relative">
-        <div class="relative w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 flex items-center justify-center">
-          <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-brand-orange via-orange-500 to-yellow-600 glow-orange opacity-90 animate-pulse"></div>
-          
-          <div class="absolute inset-2 rounded-full bg-brand-dark border-4 border-brand-orange/60 overflow-hidden flex items-center justify-center">
-            <img id="live_profile_img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover hidden" />
-            
-            <div id="live_placeholder" class="flex flex-col items-center justify-center text-center p-6">
-              <div id="live_placeholder_letters" class="w-24 h-24 rounded-2xl bg-gradient-brand flex items-center justify-center text-white font-display text-4xl font-black mb-3 shadow-xl">SFH</div>
-              <p id="live_avatar_name" class="font-display font-bold text-lg text-white">Syed Fareed</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ABOUT ME SECTION -->
-  <section id="about" class="py-24 bg-brand-card/30 border-y border-brand-border">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center max-w-2xl mx-auto mb-16">
-        <p class="text-brand-orange text-xs font-bold tracking-widest uppercase mb-2">Discover</p>
-        <h2 class="font-display text-3xl sm:text-4xl font-bold">About <span class="text-gradient">Me</span></h2>
-      </div>
-
-      <div class="grid lg:grid-cols-12 gap-12 items-center bg-brand-card border border-brand-border rounded-3xl p-8 sm:p-12">
-        <div class="lg:col-span-6 space-y-5">
-          <span class="px-3 py-1 rounded-full bg-brand-orange/15 text-brand-orange text-xs font-semibold">Professional Profile</span>
-          <p id="live_about_text" class="text-gray-400 leading-relaxed whitespace-pre-wrap">
-            I am a Career Services Professional and Physics Educator experienced in resume guidance, secondary-level science instruction, and online Quran teaching...
-          </p>
-        </div>
-
-        <div class="lg:col-span-6 grid sm:grid-cols-2 gap-4">
-          <div class="p-4 rounded-2xl bg-brand-dark border border-brand-border flex items-start gap-3.5">
-            <div class="p-2.5 rounded-xl bg-brand-orange/15 text-brand-orange"><i data-lucide="phone" class="w-5 h-5"></i></div>
-            <div>
-              <p class="text-xs text-gray-500">Phone</p>
-              <a href="#" id="live_phone" class="text-sm font-semibold text-white hover:text-brand-orange transition mt-0.5 block">03205335188</a>
-            </div>
-          </div>
-
-          <div class="p-4 rounded-2xl bg-brand-dark border border-brand-border flex items-start gap-3.5">
-            <div class="p-2.5 rounded-xl bg-brand-orange/15 text-brand-orange"><i data-lucide="mail" class="w-5 h-5"></i></div>
-            <div class="overflow-hidden">
-              <p class="text-xs text-gray-500">Email</p>
-              <a href="#" id="live_email" class="text-sm font-semibold text-white hover:text-brand-orange transition mt-0.5 block truncate">fareedulhassan0@gmail.com</a>
-            </div>
-          </div>
-
-          <div class="p-4 rounded-2xl bg-brand-dark border border-brand-border flex items-start gap-3.5">
-            <div class="p-2.5 rounded-xl bg-brand-orange/15 text-brand-orange"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
-            <div>
-              <p class="text-xs text-gray-500">Location</p>
-              <p id="live_location" class="text-sm font-semibold text-white mt-0.5">Sargodha, Pakistan</p>
-            </div>
-          </div>
-
-          <div class="p-4 rounded-2xl bg-brand-dark border border-brand-border flex items-start gap-3.5">
-            <div class="p-2.5 rounded-xl bg-brand-orange/15 text-brand-orange"><i data-lucide="linkedin" class="w-5 h-5"></i></div>
-            <div class="overflow-hidden">
-              <p class="text-xs text-gray-500">LinkedIn</p>
-              <a href="#" id="live_linkedin" target="_blank" class="text-sm font-semibold text-brand-orange hover:underline mt-0.5 block truncate">View Profile</a>
-            </div>
-          </div>
-        </div>
+  <div id="cv-modal">
+    <div class="cv-bar">
+      <b><i class="fa-solid fa-file-lines" style="color:var(--primary)"></i> Curriculum Vitae</b>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+        <button class="btn btn-ghost" onclick="closeCV()"><i class="fa-solid fa-xmark"></i></button>
       </div>
     </div>
-  </section>
+    <div class="cv-sheet" id="cv-sheet"></div>
+  </div>
 
-  <!-- CMS ENGINE SCRIPT (No Coding Required by User) -->
-  <script>
-    lucide.createIcons();
+<script>
+/* =========================================================
+   SUPABASE CONFIG
+   ========================================================= */
+const SUPABASE_URL = 'https://pxlpfhagbkbafxgcpcyl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4bHBmaGFnYmtiYWZ4Z2NwY3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDcxMjEsImV4cCI6MjEwODQyMzEyMX0.fLsjVzsqy16qe9wsYsF9KStaVKNm9cZDiInf5gsM3ek';
+const SETTINGS_ID = 'main';
+const CACHE_KEY = 'sfh_site_cfg';
 
-    document.addEventListener('DOMContentLoaded', () => {
-      
-      // 1. Load Photo
-      const savedPhoto = localStorage.getItem('sfh_profile_photo');
-      if (savedPhoto) {
-        document.getElementById('live_profile_img').src = savedPhoto;
-        document.getElementById('live_profile_img').classList.remove('hidden');
-        document.getElementById('live_placeholder').classList.add('hidden');
+/* =========================================================
+   DEFAULT CONTENT (admin.html overrides all of this)
+   ========================================================= */
+const DEFAULTS = {
+  seo: { title: 'Syed Fareed Ul Hassan | Career Expert & Physics Educator', description: 'Portfolio of Syed Fareed Ul Hassan — Career Expert, Physics Educator and Online Instructor based in Sargodha, Punjab, Pakistan.' },
+  theme: { preset: 'flame', primary: '#ff5500', secondary: '#ff9900', bg: '#060609', bg2: '#0c0c12', card: '#13131c', text: '#f3f4f6', muted: '#9ca3af', radius: 18, glow: 40, fontHeading: 'Outfit', fontBody: 'Inter' },
+  animations: { enabled: true, reveal: 'fade-up', speed: 0.8, stagger: 0.08, typewriter: true, typeSpeed: 90, particles: true, particleCount: 60, orbit: true, float: true, cursorGlow: true, tilt: true, marquee: true, marqueeSpeed: 30, counters: true, preloader: true, scrollProgress: true },
+  nav: { cta: "Let's Talk" },
+  profile: {
+    firstName: 'Syed Fareed', lastName: 'Ul Hassan', brand: 'Syed Fareed', initials: 'SFH',
+    hello: "Hello, I'm", badge: 'Available for Career Consulting & Online Instruction',
+    roles: ['Career Expert', 'Physics Educator', 'Online Quran Instructor', 'Resume & Document Specialist'],
+    intro: 'Career services professional and Physics educator with experience in resume guidance, secondary-level science instruction, and online Quran teaching. Combining a BS in Physics with specialized training in Office Management and Amazon Virtual Assistance.',
+    photoUrl: '', cvUrl: '',
+    yearsExp: '4+', yearsLabel: 'Years of Experience', floatBadge: 'BS Physics',
+    email: 'fareedulhassan0@gmail.com', phone: '03205335188', whatsapp: '923205335188',
+    linkedin: 'https://www.linkedin.com/in/syed-fareed-ul-hassan-898844286',
+    location: 'Sargodha, Punjab, Pakistan', availability: 'Available On-Site & Remote Worldwide',
+    aboutTag: 'Career Expert | Physics Educator | Online Instructor',
+    aboutTitle: 'Helping job seekers build targeted career documents and guiding students toward excellence in Physics & Quranic studies.',
+    aboutText1: 'I am a career services professional and Physics educator with hands-on experience in resume guidance, secondary-level science instruction, and online Quran teaching. I hold a BS in Physics from the University of Sargodha, complemented by certified training in Office Management and Amazon Virtual Assistance.',
+    aboutText2: 'At Pixely Careers, I help job seekers present their qualifications, work history, and skills in clear, targeted career documents aligned with their goals — combining clear communication, individualized support, and client-focused review.',
+    cvSummary: 'Career services professional and Physics educator with experience in resume guidance, secondary-level science instruction, and online Quran teaching. Holds an academic background in Physics with training in office management and Amazon virtual assistance. Combines professional communication, learner support, and client-focused document review across education and career services.'
+  },
+  sections: {
+    hero: { show: true, nav: 'Home' },
+    marquee: { show: true },
+    stats: { show: true },
+    about: { show: true, nav: 'About', kicker: 'Discover My Profile', title: 'About', accent: 'Me', sub: '' },
+    services: { show: true, nav: 'Services', kicker: 'What I Do', title: 'My', accent: 'Services', sub: 'Professional solutions across career development, science instruction, online education, and virtual office administration.' },
+    skills: { show: true, nav: 'Skills', kicker: 'Core Competencies', title: 'My Work', accent: 'Skills', sub: 'Combining analytical Physics training with professional career consulting and administrative precision.' },
+    experience: { show: true, nav: 'Experience', kicker: 'Career Journey', title: 'Professional', accent: 'Experience', sub: '' },
+    education: { show: true, nav: 'Education', kicker: 'Academic Credentials', title: 'Education &', accent: 'Certifications', sub: '' },
+    highlights: { show: true, nav: '', kicker: 'Value Delivered', title: 'Why Clients & Learners', accent: 'Work With Me', sub: '' },
+    contact: { show: true, nav: 'Contact', kicker: "Let's Work Together", title: 'Get In', accent: 'Touch', sub: 'Have a resume project, need a Physics or Quran tutor, or looking for a dedicated professional? Reach out below.' }
+  },
+  marquee: ['Resume Review', 'Career Guidance', 'Physics Instruction', 'Online Quran Teaching', 'Lesson Planning', 'Office Administration', 'Amazon Virtual Assistance', 'Client Communication'],
+  stats: [
+    { icon: 'fa-solid fa-briefcase', value: '4', suffix: '+', label: 'Years Professional Experience' },
+    { icon: 'fa-solid fa-chalkboard-user', value: '4', suffix: '', label: 'Professional Roles' },
+    { icon: 'fa-solid fa-layer-group', value: '3', suffix: '', label: 'Core Domains' },
+    { icon: 'fa-solid fa-certificate', value: '2', suffix: '', label: 'Certified Trainings' }
+  ],
+  services: [
+    { icon: 'fa-solid fa-file-pen', title: 'Resume Review & Career Guidance', desc: 'Targeted resume structuring, clarity optimization, professional wording, and alignment with your specific career goals and target roles.', tag: 'Pixely Careers Expertise' },
+    { icon: 'fa-solid fa-atom', title: 'Physics Instruction & Exam Prep', desc: 'Secondary & FSc level Physics coaching focused on foundational concepts, numerical problem-solving, and worked exam solutions.', tag: 'Theory & Exam Prep' },
+    { icon: 'fa-solid fa-book-quran', title: 'Online Quran Instruction', desc: 'Personalized one-on-one online Quran lessons guiding recitation, Tajweed pronunciation, and structured practice with supportive feedback.', tag: '1-on-1 Remote Learning' },
+    { icon: 'fa-solid fa-laptop-file', title: 'Office Admin & Amazon VA', desc: 'Document preparation and organization, professional correspondence, remote client communication, and virtual assistance operations.', tag: 'Certified Operations' }
+  ],
+  skills: [
+    { name: 'Resume Review & Optimization', percent: 96, category: 'Career Services' },
+    { name: 'Career Guidance & Role Alignment', percent: 94, category: 'Career Services' },
+    { name: 'Client Communication', percent: 95, category: 'Career Services' },
+    { name: 'Physics Instruction & Numericals', percent: 95, category: 'Education' },
+    { name: 'Online Quran Teaching & Tajweed', percent: 94, category: 'Education' },
+    { name: 'Lesson Planning & Student Support', percent: 92, category: 'Education' },
+    { name: 'Office Administration & Documents', percent: 92, category: 'Admin & VA' },
+    { name: 'Amazon Virtual Assistance', percent: 90, category: 'Admin & VA' }
+  ],
+  competencies: ['Resume Review', 'Career Guidance', 'Client Communication', 'Document Preparation', 'Physics Instruction', 'Lesson Planning', 'Problem-Solving', 'Student Support', 'Online Instruction', 'Office Administration', 'Document Organization', 'Professional Correspondence', 'Remote Communication', 'Amazon Virtual Assistance'],
+  experience: [
+    { role: 'Career Expert', company: 'Pixely Careers', period: 'June 2026 – Present', type: 'Career Services', icon: 'fa-solid fa-briefcase', current: true, points: ['Help job seekers present qualifications, work history, and relevant skills in clear, targeted career documents.', "Review resumes for structure, relevance, clarity, professional wording, and alignment with applicants' career goals.", 'Discuss career backgrounds and target roles with clients to identify document requirements and improvements.'] },
+    { role: 'Online Quran Teacher', company: 'Remote / Online Instruction', period: '2024 – 2026', type: 'Online Instruction', icon: 'fa-solid fa-globe', current: false, points: ['Delivered online Quran lessons and adapted explanations to individual learning needs and progress.', 'Guided recitation, pronunciation, and regular practice with structured feedback to support learning.'] },
+    { role: 'Physics Teacher', company: 'Islamic Suffah High School', period: '2023 – 2024', type: 'Secondary Education', icon: 'fa-solid fa-school', current: false, points: ['Taught secondary-level Physics, emphasizing scientific concepts, foundational principles, and numerical problem-solving.', 'Developed lesson explanations, examples, and classroom activities aligned with Physics topics.'] },
+    { role: 'Physics Teacher', company: 'Ahmed Science Academy', period: '2022 – 2023', type: 'Science Academy', icon: 'fa-solid fa-flask', current: false, points: ['Delivered Physics instruction covering theory, calculations, and examination-focused problem-solving.', 'Supported topic revision with guided examples, worked solutions, and learner feedback.'] }
+  ],
+  education: [
+    { degree: 'Bachelor of Science (BS) in Physics', institute: 'University of Sargodha', period: '2022 – 2026', location: 'Sargodha, Pakistan', desc: 'Training in classical & modern physics, mathematical methods, analytical problem-solving, and scientific instruction.' },
+    { degree: 'FSc (Pre-Engineering)', institute: 'Government Central Model Higher Secondary School, Sargodha', period: '2020 – 2022', location: 'Sargodha, Pakistan', desc: '' },
+    { degree: 'Secondary School Certificate (Matriculation)', institute: 'Government High School, Sultanabad, Sargodha', period: '2018 – 2020', location: 'Sargodha, Pakistan', desc: '' }
+  ],
+  certifications: [
+    { title: 'Amazon Virtual Assistant Course', org: 'University of Sargodha', year: 'Certified Course', icon: 'fa-brands fa-amazon', desc: 'Training in e-commerce store operations, client management, product research, and remote virtual assistance workflows.' },
+    { title: 'Office Management Course', org: 'I-CET Academy', year: '2021', icon: 'fa-solid fa-folder-tree', desc: 'Foundation in office administration, document preparation, record organization, and professional correspondence.' }
+  ],
+  highlights: [
+    { icon: 'fa-solid fa-bullseye', title: 'Targeted Career Documents', text: "Turns work history and qualifications into clear, focused resumes aligned with each applicant's target roles and goals." },
+    { icon: 'fa-solid fa-square-root-variable', title: 'Clear Step-by-Step Physics', text: 'Breaks complex Physics principles and numericals into structured, worked solutions that build exam confidence.' },
+    { icon: 'fa-solid fa-hands-holding-child', title: 'Patient, Personalized Teaching', text: "Online Quran instruction tailored to each learner's pace, with steady feedback on pronunciation and recitation." }
+  ],
+  contact: { formTitle: 'Send a Direct Message', formSub: 'Your message is saved securely and delivered straight to my Gmail inbox.', gmailTo: 'fareedulhassan0@gmail.com', saveToSupabase: true, sendGmail: true, whatsappButton: true, successMsg: "Thank you! Your message has been received — I'll get back to you soon." },
+  footer: { tagline: 'Career Expert | Physics Educator | Online Instructor', text: 'All Rights Reserved.' }
+};
+
+const FONT_WEIGHTS = {
+  'Outfit':'300;400;500;600;700;800;900','Inter':'300;400;500;600;700;800;900','Poppins':'300;400;500;600;700;800;900',
+  'Montserrat':'300;400;500;600;700;800;900','Space Grotesk':'300;400;500;600;700','Sora':'300;400;500;600;700;800',
+  'Plus Jakarta Sans':'300;400;500;600;700;800','Manrope':'300;400;500;600;700;800','Raleway':'300;400;500;600;700;800;900',
+  'Playfair Display':'400;500;600;700;800;900','DM Sans':'300;400;500;600;700;800;900','Urbanist':'300;400;500;600;700;800;900',
+  'Lexend':'300;400;500;600;700;800;900','Rubik':'300;400;500;600;700;800;900','Nunito':'300;400;500;600;700;800;900',
+  'Lora':'400;500;600;700','Roboto':'300;400;500;700;900','Open Sans':'300;400;500;600;700;800','Syne':'400;500;600;700;800','Bebas Neue':'400'
+};
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ico = c => { c = String(c || 'fa-solid fa-star').trim(); return c.includes(' ') ? c : 'fa-solid ' + c; };
+const safeUrl = u => { u = String(u || '').trim(); return /^(https?:|mailto:|tel:|data:image\/)/i.test(u) ? u : (u ? 'https://' + u : ''); };
+function merge(base, over) {
+  if (over === undefined || over === null) return base;
+  if (Array.isArray(over)) return over;
+  if (typeof over === 'object' && base && typeof base === 'object' && !Array.isArray(base)) {
+    const out = { ...base };
+    for (const k in over) out[k] = merge(base[k], over[k]);
+    return out;
+  }
+  return over;
+}
+function readCache() { try { return JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); } catch (e) { return null; } }
+function writeCache(c) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(c)); } catch (e) {} }
+function hexToRgba(hex, a) {
+  const h = String(hex || '#ff5500').replace('#', '');
+  const f = h.length === 3 ? h.split('').map(x => x + x).join('') : h.slice(0, 6);
+  const n = parseInt(f, 16) || 0;
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+}
+
+let sb = null;
+try { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch (e) { console.warn('Supabase not loaded', e); }
+
+const IS_PREVIEW = new URLSearchParams(location.search).has('preview');
+let CFG = merge(DEFAULTS, IS_PREVIEW ? null : readCache());
+let skillFilter = 'All';
+
+/* =========================================================
+   THEME + ANIMATION SETTINGS
+   ========================================================= */
+function applyTheme() {
+  const t = CFG.theme, r = document.documentElement.style;
+  ['primary', 'secondary', 'bg', 'bg2', 'card', 'text', 'muted'].forEach(k => t[k] && r.setProperty('--' + k, t[k]));
+  r.setProperty('--radius', (t.radius ?? 18) + 'px');
+  r.setProperty('--glow', (t.glow ?? 40) + 'px');
+  r.setProperty('--font-h', `'${t.fontHeading}',sans-serif`);
+  r.setProperty('--font-b', `'${t.fontBody}',sans-serif`);
+  const fams = [...new Set([t.fontHeading, t.fontBody, 'Inter'])].filter(Boolean).map(f => {
+    const w = FONT_WEIGHTS[f];
+    return 'family=' + f.trim().replace(/ /g, '+') + (w ? ':wght@' + w : '');
+  }).join('&');
+  const href = `https://fonts.googleapis.com/css2?${fams}&display=swap`;
+  if ($('#gfonts').href !== href) $('#gfonts').href = href;
+}
+function applyAnim() {
+  const a = CFG.animations, b = document.body;
+  b.dataset.anim = a.reveal || 'fade-up';
+  b.classList.toggle('no-anim', !a.enabled);
+  b.classList.toggle('no-orbit', !a.orbit);
+  b.classList.toggle('no-float', !a.float);
+  document.documentElement.style.setProperty('--speed', (a.speed ?? .8) + 's');
+  document.documentElement.style.setProperty('--mq', (a.marqueeSpeed ?? 30) + 's');
+  $('#cursor-glow').style.display = a.enabled && a.cursorGlow && matchMedia('(pointer:fine)').matches ? 'block' : 'none';
+  $('#progress').style.display = a.scrollProgress ? 'block' : 'none';
+}
+const show = k => CFG.sections[k]?.show !== false;
+const st = () => CFG.animations.enabled ? (CFG.animations.stagger ?? .08) : 0;
+
+/* =========================================================
+   RENDERERS
+   ========================================================= */
+function head(k) {
+  const s = CFG.sections[k] || {};
+  return `<div class="sec-head rv"><span class="kicker">${esc(s.kicker)}</span>
+    <h2>${esc(s.title)} <span class="grad">${esc(s.accent)}</span></h2>
+    ${s.sub ? `<p>${esc(s.sub)}</p>` : ''}<div class="bar-line"></div></div>`;
+}
+function avatarInner() {
+  const p = CFG.profile;
+  return p.photoUrl ? `<img src="${esc(safeUrl(p.photoUrl))}" alt="${esc(p.firstName + ' ' + p.lastName)}" />` : `<span class="monogram">${esc(p.initials || 'S')}</span>`;
+}
+function renderNav() {
+  const p = CFG.profile;
+  const brandParts = String(p.brand || '').split(' ');
+  $('#brand').innerHTML = `<span class="logo">${esc((p.brand || 'S').charAt(0))}</span><span>${esc(brandParts[0] || '')} <b>${esc(brandParts.slice(1).join(' '))}</b></span>`;
+  $('#pl-logo').textContent = (p.brand || 'S').charAt(0);
+  const links = Object.entries(CFG.sections).filter(([k, s]) => s.show !== false && s.nav).map(([k, s]) => `<a href="#${k === 'hero' ? 'home' : k}" data-sec="${k === 'hero' ? 'home' : k}">${esc(s.nav)}</a>`).join('');
+  $('#nav-links').innerHTML = links;
+  $('#mobile-menu').innerHTML = links + `<a href="#contact" class="btn btn-primary" style="margin-top:8px;justify-content:center">${esc(CFG.nav.cta)}</a>`;
+  $('#nav-cta').innerHTML = `${esc(CFG.nav.cta)} <i class="fa-solid fa-arrow-right"></i>`;
+}
+function socialsHTML() {
+  const p = CFG.profile;
+  let h = '';
+  if (p.linkedin) h += `<a class="social" href="${esc(safeUrl(p.linkedin))}" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>`;
+  if (p.email) h += `<a class="social" href="mailto:${esc(p.email)}" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>`;
+  if (p.whatsapp) h += `<a class="social" href="https://wa.me/${esc(p.whatsapp.replace(/\D/g, ''))}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>`;
+  if (p.phone) h += `<a class="social" href="tel:${esc(p.phone)}" aria-label="Phone"><i class="fa-solid fa-phone"></i></a>`;
+  return h;
+}
+function renderHero() {
+  const p = CFG.profile, d = st();
+  $('#hero-c').innerHTML = `<div class="hero-grid">
+    <div>
+      <span class="pill rv"><span class="dot"></span>${esc(p.badge)}</span>
+      <p class="hello rv" style="--d:${d}s">${esc(p.hello)}</p>
+      <h1 class="rv" style="--d:${d * 2}s">${esc(p.firstName)} <span class="grad">${esc(p.lastName)}</span></h1>
+      <div class="typer rv" style="--d:${d * 3}s"><span id="typer-text"></span><span class="caret"></span></div>
+      <p class="intro rv" style="--d:${d * 4}s">${esc(p.intro)}</p>
+      <div class="hero-actions rv" style="--d:${d * 5}s">
+        <a href="#contact" class="btn btn-primary">${esc(CFG.nav.cta)} <i class="fa-solid fa-paper-plane"></i></a>
+        <button class="btn btn-ghost" onclick="openCV()">View / Print CV <i class="fa-solid fa-file-pdf"></i></button>
+      </div>
+      <div class="socials rv" style="--d:${d * 6}s"><span class="lbl">Find me on</span>${socialsHTML()}</div>
+    </div>
+    <div class="hero-visual rv" style="--d:${d * 2}s">
+      <div class="avatar-wrap">
+        <div class="orbit"><span class="el"></span></div>
+        <div class="orbit o2"><span class="el"></span></div>
+        <div class="avatar">${avatarInner()}</div>
+        ${p.yearsExp ? `<div class="float-card fc1"><div class="num">${esc(p.yearsExp)}</div><small>${esc(p.yearsLabel).replace(' ', '<br>')}</small></div>` : ''}
+        ${p.floatBadge ? `<div class="float-card fc2"><i class="fa-solid fa-atom"></i><span>${esc(p.floatBadge)}</span></div>` : ''}
+      </div>
+    </div></div>`;
+}
+function renderMarquee() {
+  const items = (CFG.marquee || []).map(m => `<span>${esc(m)}</span>`).join('');
+  $('#marquee-track').innerHTML = items + items;
+  $('#marquee').style.display = show('marquee') && CFG.marquee?.length ? '' : 'none';
+  $('#marquee-track').style.animationPlayState = CFG.animations.marquee ? '' : 'paused';
+}
+function renderStats() {
+  const a = CFG.animations;
+  $('#stats-c').innerHTML = CFG.stats.map((s, i) => {
+    const num = /^\d+(\.\d+)?$/.test(String(s.value).trim());
+    const counting = num && a.enabled && a.counters;
+    return `<div class="card stat lift rv" style="--d:${i * st()}s"><i class="${esc(ico(s.icon))}"></i>
+      <div class="stat-num"><span ${counting ? `data-count="${esc(s.value)}"` : ''}>${counting ? '0' : esc(s.value)}</span><b>${esc(s.suffix)}</b></div>
+      <p>${esc(s.label)}</p></div>`;
+  }).join('');
+}
+function renderAbout() {
+  const p = CFG.profile;
+  const infos = [
+    ['fa-user', 'Full Name', esc(p.firstName + ' ' + p.lastName)],
+    ['fa-phone', 'Phone / WhatsApp', p.phone ? `<a href="tel:${esc(p.phone)}">${esc(p.phone)}</a>` : ''],
+    ['fa-envelope', 'Email Address', p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ''],
+    ['fa-location-dot', 'Location', esc(p.location)]
+  ].filter(x => x[2]);
+  $('#about-c').innerHTML = head('about') + `<div class="about-grid">
+    <div class="rv"><div class="about-photo"><span class="orb b1"></span><span class="orb b2"></span><div class="avatar">${avatarInner()}</div></div></div>
+    <div class="about-text">
+      <span class="about-tag rv">${esc(p.aboutTag)}</span>
+      <h3 class="rv">${esc(p.aboutTitle)}</h3>
+      <p class="rv">${esc(p.aboutText1)}</p>
+      ${p.aboutText2 ? `<p class="rv">${esc(p.aboutText2)}</p>` : ''}
+      <div class="info-grid">${infos.map((x, i) => `<div class="card info rv" style="--d:${i * st()}s"><span class="ib"><i class="fa-solid ${x[0]}"></i></span><div><small>${x[1]}</small><strong>${x[2]}</strong></div></div>`).join('')}</div>
+      <div class="btn-row rv"><a href="#contact" class="btn btn-primary">Hire Me <i class="fa-solid fa-arrow-right"></i></a>
+      <button class="btn btn-ghost" onclick="openCV()">Download Resume <i class="fa-solid fa-download"></i></button></div>
+    </div></div>`;
+}
+function renderServices() {
+  $('#services-c').innerHTML = head('services') + `<div class="services-grid">${CFG.services.map((s, i) => `
+    <div class="card service lift tilt rv" style="--d:${i * st()}s"><span class="num-bg">0${i + 1}</span>
+      <div class="icon-box"><i class="${esc(ico(s.icon))}"></i></div>
+      <h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p>
+      <div class="foot"><span>${esc(s.tag)}</span><a href="#contact" class="go" aria-label="Contact"><i class="fa-solid fa-arrow-right"></i></a></div>
+    </div>`).join('')}</div>`;
+}
+function skillBars() {
+  const list = skillFilter === 'All' ? CFG.skills : CFG.skills.filter(s => s.category === skillFilter);
+  return list.map(s => `<div class="skill"><div class="skill-top"><span>${esc(s.name)}</span><b>${esc(s.percent)}%</b></div>
+    <div class="track"><div class="fill" data-w="${Math.max(0, Math.min(100, +s.percent || 0))}"></div></div></div>`).join('');
+}
+function renderSkills() {
+  const cats = ['All', ...new Set(CFG.skills.map(s => s.category).filter(Boolean))];
+  if (!cats.includes(skillFilter)) skillFilter = 'All';
+  $('#skills-c').innerHTML = head('skills') +
+    (cats.length > 2 ? `<div class="tabs rv">${cats.map(c => `<button class="tab ${c === skillFilter ? 'active' : ''}" data-cat="${esc(c)}">${esc(c === 'All' ? 'All Competencies' : c)}</button>`).join('')}</div>` : '') +
+    `<div class="card rv"><div class="skills-grid" id="skills-grid">${skillBars()}</div></div>` +
+    (CFG.competencies?.length ? `<div class="skill-cloud">${CFG.competencies.map((c, i) => `<span class="rv" style="--d:${i * st() / 2}s">${esc(c)}</span>`).join('')}</div>` : '');
+}
+function renderExperience() {
+  $('#experience-c').innerHTML = head('experience') + `<div class="timeline">${CFG.experience.map((x, i) => `
+    <div class="t-item rv" style="--d:${i * st()}s"><span class="dot ${x.current ? 'live' : ''}"></span>
+      <div class="card lift tilt">
+        <div class="t-top"><span class="chip ${x.current ? 'solid' : ''}">${esc(x.period)}</span><span class="t-type"><i class="${esc(ico(x.icon))}"></i>${esc(x.type)}</span></div>
+        <h3>${esc(x.role)}</h3><p class="company">${esc(x.company)}</p>
+        <ul class="checks">${(x.points || []).map(pt => `<li><i class="fa-solid fa-circle-check"></i><span>${esc(pt)}</span></li>`).join('')}</ul>
+      </div></div>`).join('')}</div>`;
+}
+function renderEducation() {
+  $('#education-c').innerHTML = head('education') + `<div class="edu-grid">
+    <div><h3 class="col-title rv"><span><i class="fa-solid fa-graduation-cap"></i></span>Academic Background</h3>
+      <div class="stack">${CFG.education.map((e, i) => `<div class="card edu lift rv" style="--d:${i * st()}s">
+        <div class="meta"><span class="chip">${esc(e.period)}</span><span>${esc(e.location)}</span></div>
+        <h4>${esc(e.degree)}</h4><p class="inst">${esc(e.institute)}</p>${e.desc ? `<p class="d">${esc(e.desc)}</p>` : ''}</div>`).join('')}</div></div>
+    <div><h3 class="col-title rv"><span><i class="fa-solid fa-certificate"></i></span>Training & Certifications</h3>
+      <div class="stack">${CFG.certifications.map((c, i) => `<div class="card cert lift rv" style="--d:${i * st()}s">
+        <div class="ct"><span class="icon-box"><i class="${esc(ico(c.icon))}"></i></span><span class="chip">${esc(c.year)}</span></div>
+        <h4>${esc(c.title)}</h4><p class="inst" style="color:var(--primary);font-weight:600;font-size:14px">${esc(c.org)}</p>${c.desc ? `<p class="d" style="color:var(--muted);font-size:14px;margin-top:8px">${esc(c.desc)}</p>` : ''}</div>`).join('')}
+        <div class="card cv-card rv"><i class="fa-solid fa-file-circle-check"></i><h4>Need a Formal Copy of My CV?</h4><p>View the formatted resume in your browser or save it as a PDF.</p>
+          <button class="btn btn-primary" style="width:100%;border-radius:12px" onclick="openCV()"><i class="fa-solid fa-print"></i> Open Printable CV</button></div>
+      </div></div></div>`;
+}
+function renderHighlights() {
+  $('#highlights-c').innerHTML = head('highlights') + `<div class="hl-grid">${CFG.highlights.map((h, i) => `
+    <div class="card hl lift tilt rv" style="--d:${i * st()}s"><div class="icon-box"><i class="${esc(ico(h.icon))}"></i></div>
+      <h4>${esc(h.title)}</h4><p>${esc(h.text)}</p></div>`).join('')}</div>`;
+}
+function renderContact() {
+  const p = CFG.profile, c = CFG.contact;
+  const wa = (p.whatsapp || '').replace(/\D/g, '');
+  const opts = [...CFG.services.map(s => s.title), 'General Inquiry / Job Opportunity'];
+  $('#contact-c').innerHTML = head('contact') + `<div class="contact-grid"><div>
+    ${p.email ? `<div class="card c-info lift rv"><span class="ib"><i class="fa-solid fa-envelope"></i></span><div><h4>Email Address</h4><small>Send me an email anytime</small><a href="mailto:${esc(p.email)}">${esc(p.email)}</a></div></div>` : ''}
+    ${p.phone ? `<div class="card c-info lift rv" style="--d:${st()}s"><span class="ib"><i class="fa-solid fa-phone-volume"></i></span><div><h4>Phone & WhatsApp</h4><small>Available for calls & messages</small><strong><a href="tel:${esc(p.phone)}" style="color:var(--text)">${esc(p.phone)}</a></strong>${wa ? `<a class="wa-chip" href="https://wa.me/${wa}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Chat</a>` : ''}</div></div>` : ''}
+    ${p.linkedin ? `<div class="card c-info lift rv" style="--d:${st() * 2}s"><span class="ib"><i class="fa-brands fa-linkedin-in"></i></span><div><h4>LinkedIn</h4><small>Connect with me professionally</small><a href="${esc(safeUrl(p.linkedin))}" target="_blank" rel="noopener">View Profile <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px"></i></a></div></div>` : ''}
+    ${p.location ? `<div class="card c-info lift rv" style="--d:${st() * 3}s"><span class="ib"><i class="fa-solid fa-location-dot"></i></span><div><h4>Location</h4><small>${esc(p.availability)}</small><strong>${esc(p.location)}</strong></div></div>` : ''}
+  </div>
+  <div class="card form-card rv">
+    <h3>${esc(c.formTitle)}</h3><p>${esc(c.formSub)}</p>
+    <form id="contact-form" novalidate>
+      <input type="text" name="cf_website" class="hp" tabindex="-1" autocomplete="off">
+      <div class="fgrid">
+        <div class="fg"><label>Your Name *</label><input name="cf_name" required placeholder="Enter your full name"></div>
+        <div class="fg"><label>Your Email *</label><input name="cf_email" type="email" required placeholder="you@example.com"></div>
+      </div>
+      <div class="fgrid">
+        <div class="fg"><label>Phone / WhatsApp</label><input name="cf_phone" type="tel" placeholder="+92 300 0000000"></div>
+        <div class="fg"><label>Service Needed *</label><select name="cf_service">${opts.map(o => `<option>${esc(o)}</option>`).join('')}</select></div>
+      </div>
+      <div class="fg"><label>Your Message *</label><textarea name="cf_message" rows="5" required placeholder="Tell me about your career goals, tutoring needs, or project..."></textarea></div>
+      <div class="f-actions">
+        <button type="submit" class="btn btn-primary" id="cf-submit"><i class="fa-solid fa-paper-plane"></i> <span>Send Message</span></button>
+        ${c.whatsappButton && wa ? `<button type="button" class="btn btn-wa" id="cf-wa"><i class="fa-brands fa-whatsapp"></i> Send via WhatsApp</button>` : ''}
+      </div>
+      <div class="status" id="cf-status"></div>
+    </form>
+  </div></div>`;
+  $('#contact-form').addEventListener('submit', submitContact);
+  const waBtn = $('#cf-wa'); if (waBtn) waBtn.onclick = sendWhatsApp;
+}
+function renderFooter() {
+  const p = CFG.profile, wa = (p.whatsapp || '').replace(/\D/g, '');
+  const links = Object.entries(CFG.sections).filter(([k, s]) => s.show !== false && s.nav).map(([k, s]) => `<a href="#${k === 'hero' ? 'home' : k}">${esc(s.nav)}</a>`).join('');
+  $('#footer-c').innerHTML = `<div class="f-top">
+    <div class="brand f-brand"><span class="logo">${esc((p.brand || 'S').charAt(0))}</span><div><div>${esc(p.firstName + ' ' + p.lastName)}</div><p>${esc(CFG.footer.tagline)}</p></div></div>
+    <div class="f-links">${links}</div>
+    <div class="f-social">
+      ${p.linkedin ? `<a href="${esc(safeUrl(p.linkedin))}" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>` : ''}
+      ${p.email ? `<a href="mailto:${esc(p.email)}" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>` : ''}
+      ${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+    </div></div>
+    <div class="copy">© ${new Date().getFullYear()} ${esc(p.firstName + ' ' + p.lastName)}. ${esc(CFG.footer.text)} | ${esc(p.location)}</div>`;
+}
+function buildCV() {
+  const p = CFG.profile;
+  $('#cv-sheet').innerHTML = `
+    <div class="cv-head"><div><h1>${esc(p.firstName + ' ' + p.lastName)}</h1><div class="cv-role">${esc((p.roles || []).slice(0, 3).join(' | '))}</div></div>
+      <div class="cv-contact"><div><b>Location:</b> ${esc(p.location)}</div><div><b>Phone:</b> ${esc(p.phone)}</div><div><b>Email:</b> ${esc(p.email)}</div><div><b>LinkedIn:</b> ${esc(String(p.linkedin).replace(/^https?:\/\/(www\.)?/, ''))}</div></div></div>
+    <h2>Professional Profile</h2><p>${esc(p.cvSummary || p.intro)}</p>
+    <h2>Professional Experience</h2>
+    ${CFG.experience.map(x => `<div class="cv-row"><span>${esc(x.role)}${x.company ? ' | ' + esc(x.company) : ''}</span><span>${esc(x.period)}</span></div><ul>${(x.points || []).map(pt => `<li>${esc(pt)}</li>`).join('')}</ul>`).join('')}
+    <h2>Education</h2>
+    ${CFG.education.map(e => `<div class="cv-row" style="font-weight:400;margin-bottom:6px"><span><b>${esc(e.degree)}</b> — ${esc(e.institute)}</span><b>${esc(e.period)}</b></div>`).join('')}
+    <h2>Professional Training & Certifications</h2>
+    <ul>${CFG.certifications.map(c => `<li><b>${esc(c.title)}</b> | ${esc(c.org)}${c.year ? ' | ' + esc(c.year) : ''}</li>`).join('')}</ul>
+    <h2>Core Competencies</h2>
+    <div class="cv-comp">${(CFG.competencies || []).map(c => `<div>• ${esc(c)}</div>`).join('')}</div>`;
+}
+
+/* =========================================================
+   ANIMATION ENGINE
+   ========================================================= */
+let io = null;
+function reveal(el, instant) {
+  el.classList.add('in');
+  if (el.dataset.w !== undefined) el.style.width = el.dataset.w + '%';
+  if (el.dataset.count !== undefined) countUp(el, instant);
+  const delay = parseFloat(getComputedStyle(el).getPropertyValue('--d')) || 0;
+  setTimeout(() => el.style.setProperty('--d', '0s'), (delay + (CFG.animations.speed || .8)) * 1000 + 50);
+}
+function observeIn(root = document) {
+  const els = root.querySelectorAll('.rv:not(.in),[data-w]:not(.in),[data-count]:not(.in)');
+  if (!CFG.animations.enabled || !('IntersectionObserver' in window)) { els.forEach(e => reveal(e, true)); return; }
+  if (!io) io = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { reveal(en.target); io.unobserve(en.target); } }), { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(e => io.observe(e));
+}
+function countUp(el, instant) {
+  const target = parseFloat(el.dataset.count), dec = (String(el.dataset.count).split('.')[1] || '').length;
+  if (instant || isNaN(target)) { el.textContent = el.dataset.count; return; }
+  const dur = 1700, t0 = performance.now();
+  (function step(t) {
+    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = (target * e).toFixed(dec);
+    if (k < 1) requestAnimationFrame(step);
+  })(t0);
+}
+let typerToken = 0;
+function startTyper() {
+  const el = $('#typer-text'); if (!el) return;
+  const my = ++typerToken, roles = (CFG.profile.roles || []).filter(Boolean);
+  if (!roles.length) { el.textContent = ''; return; }
+  const a = CFG.animations;
+  if (!a.enabled || !a.typewriter) { el.textContent = roles.join(' • '); return; }
+  let ri = 0, ci = 0, del = false; const sp = +a.typeSpeed || 90;
+  (function tick() {
+    if (my !== typerToken) return;
+    const w = roles[ri % roles.length];
+    ci += del ? -1 : 1; el.textContent = w.slice(0, ci);
+    let t = del ? sp / 2 : sp;
+    if (!del && ci >= w.length) { t = 1800; del = true; }
+    else if (del && ci <= 0) { del = false; ri++; t = 350; }
+    setTimeout(tick, t);
+  })();
+}
+/* Particles */
+const cv = $('#particles'), ctx = cv.getContext('2d');
+let parts = [], raf = null;
+function sizeCanvas() { cv.width = innerWidth; cv.height = innerHeight; }
+function initParticles() {
+  cancelAnimationFrame(raf);
+  const a = CFG.animations;
+  if (!a.enabled || !a.particles || matchMedia('(prefers-reduced-motion: reduce)').matches) { cv.style.display = 'none'; return; }
+  cv.style.display = 'block'; sizeCanvas();
+  const n = Math.min(160, +a.particleCount || 60) * (innerWidth < 700 ? .5 : 1);
+  parts = Array.from({ length: n }, () => ({ x: Math.random() * cv.width, y: Math.random() * cv.height, vx: (Math.random() - .5) * .45, vy: (Math.random() - .5) * .45, r: Math.random() * 1.8 + .6 }));
+  loop();
+}
+function loop() {
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  const col = CFG.theme.primary;
+  ctx.fillStyle = hexToRgba(col, .7);
+  for (const p of parts) {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = cv.width; if (p.x > cv.width) p.x = 0;
+    if (p.y < 0) p.y = cv.height; if (p.y > cv.height) p.y = 0;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+  }
+  for (let i = 0; i < parts.length; i++) for (let j = i + 1; j < parts.length; j++) {
+    const a = parts[i], b = parts[j], dx = a.x - b.x, dy = a.y - b.y, d = Math.sqrt(dx * dx + dy * dy);
+    if (d < 120) { ctx.strokeStyle = hexToRgba(col, (1 - d / 120) * .22); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+  }
+  raf = requestAnimationFrame(loop);
+}
+function bindCards() {
+  document.querySelectorAll('.card').forEach(c => {
+    c.onmousemove = e => {
+      const r = c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+      c.style.setProperty('--mx', x + 'px'); c.style.setProperty('--my', y + 'px');
+      if (CFG.animations.enabled && CFG.animations.tilt && c.classList.contains('tilt') && c.classList.contains('in') && matchMedia('(pointer:fine)').matches) {
+        const rx = ((y / r.height) - .5) * -8, ry = ((x / r.width) - .5) * 8;
+        c.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
       }
+    };
+    c.onmouseleave = () => { c.style.transform = ''; };
+  });
+}
 
-      // 2. Load and Auto-Format Text Data
-      const data = localStorage.getItem('portfolio_cms_data');
-      if (data) {
-        try {
-          const cms = JSON.parse(data);
-          
-          // Apply Theme Color Universally via CSS Variable
-          if (cms.themeColor) {
-            document.documentElement.style.setProperty('--theme-color', cms.themeColor);
-          }
+/* =========================================================
+   MAIN RENDER
+   ========================================================= */
+function render() {
+  document.title = CFG.seo.title;
+  $('#meta-desc').setAttribute('content', CFG.seo.description);
+  applyTheme(); applyAnim();
+  renderNav(); renderHero(); renderMarquee(); renderStats(); renderAbout(); renderServices();
+  renderSkills(); renderExperience(); renderEducation(); renderHighlights(); renderContact(); renderFooter(); buildCV();
+  ['hero:home', 'stats:stats', 'about:about', 'services:services', 'skills:skills', 'experience:experience', 'education:education', 'highlights:highlights', 'contact:contact']
+    .forEach(x => { const [k, id] = x.split(':'); document.getElementById(id).style.display = show(k) ? '' : 'none'; });
+  observeIn(); startTyper(); initParticles(); bindCards(); onScroll();
+}
 
-          // Format First & Last Name automatically (No HTML needed from admin)
-          if (cms.firstName || cms.lastName) {
-            const fName = cms.firstName || 'Syed';
-            const lName = cms.lastName || 'Fareed';
-            
-            // Hero Title
-            document.getElementById('live_hero_title').innerHTML = `${fName} <br /> <span class="text-gradient">${lName}</span>`;
-            // Nav Bar Name
-            document.getElementById('live_nav_name').innerHTML = `${fName} <span class="text-brand-orange">${lName.split(' ')[0]}</span>`;
-            // Avatar Placeholder Letters
-            document.getElementById('live_logo_letter').innerText = fName.charAt(0);
-            document.getElementById('live_placeholder_letters').innerText = fName.charAt(0) + (lName.charAt(0) || '');
-            document.getElementById('live_avatar_name').innerText = `${fName} ${lName}`;
-          }
+/* =========================================================
+   INTERACTIONS
+   ========================================================= */
+$('#skills-c').addEventListener('click', e => {
+  const b = e.target.closest('.tab'); if (!b) return;
+  skillFilter = b.dataset.cat;
+  document.querySelectorAll('#skills-c .tab').forEach(t => t.classList.toggle('active', t === b));
+  const g = $('#skills-grid'); g.innerHTML = skillBars(); observeIn(g);
+});
+$('#menu-btn').onclick = () => $('#mobile-menu').classList.toggle('open');
+$('#mobile-menu').addEventListener('click', e => { if (e.target.closest('a')) $('#mobile-menu').classList.remove('open'); });
+$('#toTop').onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
+function onScroll() {
+  const y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
+  $('#nav').classList.toggle('scrolled', y > 30);
+  $('#progress').style.width = (h > 0 ? y / h * 100 : 0) + '%';
+  $('#toTop').classList.toggle('show', y > 600);
+  let cur = 'home';
+  document.querySelectorAll('main > section').forEach(s => { if (s.style.display !== 'none' && s.offsetTop - 140 <= y) cur = s.id; });
+  document.querySelectorAll('#nav-links a').forEach(a => a.classList.toggle('active', a.dataset.sec === cur));
+}
+addEventListener('scroll', onScroll, { passive: true });
+addEventListener('resize', () => { if (cv.style.display !== 'none') sizeCanvas(); });
+addEventListener('mousemove', e => { const g = $('#cursor-glow'); g.style.left = e.clientX + 'px'; g.style.top = e.clientY + 'px'; }, { passive: true });
 
-          // Format Roles automatically (Takes comma-separated list and makes it beautiful)
-          if (cms.roles) {
-            const roleArray = cms.roles.split(',').map(r => r.trim()).filter(r => r);
-            const formattedRoles = roleArray.map(r => `<span>${r}</span>`).join(' <span class="text-brand-orange">•</span> ');
-            document.getElementById('live_hero_roles').innerHTML = formattedRoles;
-          }
+function openCV() {
+  const u = CFG.profile.cvUrl;
+  if (u) { window.open(safeUrl(u), '_blank', 'noopener'); return; }
+  buildCV(); $('#cv-modal').classList.add('open'); document.body.style.overflow = 'hidden';
+}
+function closeCV() { $('#cv-modal').classList.remove('open'); document.body.style.overflow = ''; }
+$('#cv-modal').addEventListener('click', e => { if (e.target.id === 'cv-modal') closeCV(); });
+addEventListener('keydown', e => { if (e.key === 'Escape') closeCV(); });
 
-          // Descriptions and Contact
-          if (cms.heroDesc) document.getElementById('live_hero_desc').innerText = cms.heroDesc;
-          if (cms.aboutText) document.getElementById('live_about_text').innerText = cms.aboutText;
-          
-          if (cms.phone) { 
-            document.getElementById('live_phone').innerText = cms.phone; 
-            document.getElementById('live_phone').href = 'tel:' + cms.phone; 
-          }
-          if (cms.email) { 
-            document.getElementById('live_email').innerText = cms.email; 
-            document.getElementById('live_email').href = 'mailto:' + cms.email; 
-          }
-          if (cms.location) document.getElementById('live_location').innerText = cms.location;
-          if (cms.linkedin) { 
-            document.getElementById('live_linkedin').href = cms.linkedin; 
-            document.getElementById('live_linkedin').innerText = cms.linkedin.replace('https://', '');
-          }
+/* =========================================================
+   CONTACT FORM → SUPABASE + GMAIL
+   ========================================================= */
+function setStatus(type, html) { const s = $('#cf-status'); s.className = 'status show ' + type; s.innerHTML = html; }
+async function submitContact(e) {
+  e.preventDefault();
+  const f = e.target, el = n => f.elements[n];
+  if (el('cf_website').value) return; // spam bot
+  const payload = {
+    name: el('cf_name').value.trim(), email: el('cf_email').value.trim(),
+    phone: el('cf_phone').value.trim(), service: el('cf_service').value, message: el('cf_message').value.trim()
+  };
+  if (!payload.name || !payload.message || !/^\S+@\S+\.\S+$/.test(payload.email)) { setStatus('warn', 'Please fill in your name, a valid email and your message.'); return; }
+  if (IS_PREVIEW) { setStatus('info', 'Preview mode — form submissions are disabled here.'); return; }
+  const C = CFG.contact, btn = $('#cf-submit');
+  btn.disabled = true; btn.querySelector('span').textContent = 'Sending...';
+  let saved = false, mailed = false;
 
-        } catch (e) { console.error("CMS Load Error:", e); }
-      }
-    });
-  </script>
+  if (C.saveToSupabase && sb) {
+    try { const { error } = await sb.from('contact_messages').insert([payload]); if (!error) saved = true; else console.warn(error.message); }
+    catch (x) { console.warn(x); }
+  }
+  if (C.sendGmail && C.gmailTo) {
+    try {
+      const r = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(C.gmailTo), {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ _subject: `New Portfolio Inquiry: ${payload.service} from ${payload.name}`, _template: 'table', _captcha: 'false', _replyto: payload.email,
+          Name: payload.name, Email: payload.email, Phone: payload.phone || 'Not provided', Service: payload.service, Message: payload.message })
+      });
+      const j = await r.json().catch(() => ({}));
+      mailed = r.ok && String(j.success) !== 'false';
+    } catch (x) { console.warn(x); }
+  }
+  btn.disabled = false; btn.querySelector('span').textContent = 'Send Message';
+
+  if (saved || mailed) { setStatus('ok', '✅ ' + esc(C.successMsg)); f.reset(); }
+  else {
+    setStatus('warn', 'Could not send automatically — opening Gmail so you can send it directly.');
+    const body = `Name: ${payload.name}\nEmail: ${payload.email}\nPhone: ${payload.phone}\nService: ${payload.service}\n\n${payload.message}`;
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(C.gmailTo || CFG.profile.email)}&su=${encodeURIComponent('Portfolio Inquiry: ' + payload.service)}&body=${encodeURIComponent(body)}`, '_blank');
+  }
+}
+function sendWhatsApp() {
+  const f = $('#contact-form'), el = n => f.elements[n].value.trim();
+  const text = `Assalam-o-Alaikum ${CFG.profile.firstName} ${CFG.profile.lastName},\n\n*Name:* ${el('cf_name') || 'Visitor'}\n*Inquiry:* ${el('cf_service')}\n*Message:* ${el('cf_message') || 'I would like to connect with you.'}`;
+  window.open(`https://wa.me/${CFG.profile.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+/* =========================================================
+   BOOT: render cached → fetch live settings from Supabase
+   ========================================================= */
+render();
+function hidePreloader() { setTimeout(() => $('#preloader').classList.add('hide'), 500); }
+if (!CFG.animations.preloader || !CFG.animations.enabled || IS_PREVIEW) $('#preloader').classList.add('hide');
+else if (document.readyState === 'complete') hidePreloader(); else addEventListener('load', hidePreloader);
+
+if (IS_PREVIEW) {
+  addEventListener('message', e => {
+    if (e.source !== window.parent || !e.data || e.data.type !== 'sfh-preview') return;
+    CFG = merge(DEFAULTS, e.data.config); render();
+  });
+  window.parent.postMessage({ type: 'sfh-ready' }, '*');
+} else if (sb) {
+  sb.from('site_settings').select('data').eq('id', SETTINGS_ID).maybeSingle().then(({ data, error }) => {
+    if (error) { console.warn('Settings not loaded:', error.message); return; }
+    if (data && data.data) {
+      const fresh = JSON.stringify(data.data);
+      if (fresh !== JSON.stringify(readCache())) { writeCache(data.data); CFG = merge(DEFAULTS, data.data); render(); }
+    }
+  });
+}
+</script>
 </body>
 </html>
