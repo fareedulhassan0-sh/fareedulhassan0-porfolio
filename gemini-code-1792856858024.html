@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Syed Fareed Ul Hassan | Career Expert & Physics Educator</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              orange: '#FF4500',
+              amber: '#FF6B00',
+              dark: '#08080A',
+              card: '#111116',
+              border: '#1F1F28'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #08080A;
+      color: #F3F4F6;
+      overflow-x: hidden;
+    }
+    .glow-orange {
+      box-shadow: 0 0 50px -10px rgba(255, 69, 0, 0.55);
+    }
+    .glow-orange-sm {
+      box-shadow: 0 0 25px -5px rgba(255, 69, 0, 0.4);
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .bg-gradient-brand {
+      background: linear-gradient(135deg, #FF4500 0%, #FF6B00 100%);
+    }
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 69, 0, 0.5);
+      box-shadow: 0 15px 35px -10px rgba(255, 69, 0, 0.2);
+    }
+    .skill-bar {
+      transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #08080A; }
+    ::-webkit-scrollbar-thumb { background: #FF4500; border-radius: 4px; }
+  </style>
+</head>
+<body class="antialiased selection:bg-brand-orange selection:text-white">
+
+  <!-- Ambient Background Glows -->
+  <div class="fixed top-0 left-1/4 w-96 h-96 bg-brand-orange/10 rounded-full blur-[130px] pointer-events-none -z-10"></div>
+  <div class="fixed bottom-10 right-10 w-96 h-96 bg-amber-500/10 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+
+  <!-- Hidden File Input for Live Portrait Upload -->
+  <input type="file" id="photoInput" accept="image/*" class="hidden" />
+
+  <!-- NAVBAR -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/85 backdrop-blur-md border-b border-brand-border">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <a href="#home" class="font-display text-2xl font-bold tracking-tight flex items-center gap-2">
+        <span class="w-9 h-9 rounded-lg bg-gradient-brand flex items-center justify-center text-white font-black shadow-lg shadow-brand-orange/30">S</span>
+        <span>Syed <span class="text-brand-orange">Fareed</span></span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+        <a href="#home" class="hover:text-brand-orange transition">Home</a>
+        <a href="#about" class="hover:text-brand-orange transition">About</a>
+        <a href="#services" class="hover:text-brand-orange transition">Services</a>
+        <a href="#skills" class="hover:text-brand-orange transition">Skills</a>
+        <a href="#experience" class="hover:text-brand-orange transition">Experience & Education</a>
+        <a href="#contact" class="hover:text-brand-orange transition">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button onclick="document.getElementById('photoInput').click()" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-brand-border bg-brand-card hover:border-brand-orange text-xs font-medium text-gray-300 transition">
+          <i data-lucide="camera" class="w-3.5 h-3.5 text-brand-orange"></i>
+          Change Photo
+        </button>
+        <a href="#contact" class="px-5 py-2.5 rounded-full bg-gradient-brand text-white text-sm font-semibold glow-orange-sm hover:opacity-95 transition flex items-center gap-2">
+          <span>Let's Talk</span>
+          <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="home" class="pt-32 pb-20 md:pt-40 md:pb-28 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Left Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-orange/10 border border-brand-orange/30 text-brand-orange text-xs font-semibold tracking-wider uppercase">
+          <span class="w-2 h-2 rounded-full bg-brand-orange animate-ping"></span>
+          Available for Career Consulting & Online Instruction
+        </div>
+
+        <div class="space-y-2">
+          <p class="text-gray-400 font-medium tracking-widest uppercase text-sm">Hello, I'm</p>
+          <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08]">
+            SYED FAREED <br />
+            <span class="text-gradient">UL HASSAN</span>
+          </h1>
+        </div>
+
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-200 flex flex-wrap items-center gap-2">
+          <span>Career Expert</span>
+          <span class="text-brand-orange">•</span>
+          <span>Physics Educator</span>
+          <span class="text-brand-orange">•</span>
+          <span>Online Instructor</span>
+        </h2>
+
+        <p class="text-gray-400 leading-relaxed max-w-2xl text-base sm:text-lg">
+          Career services professional and Physics educator with proven expertise in resume optimization, secondary-level science instruction, and online Quran teaching. Combining a BS in Physics with specialized training in Office Management and Amazon Virtual Assistance to deliver high-impact client and learner outcomes.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap items-center gap-4 pt-2">
+          <a href="#contact" class="px-7 py-3.5 rounded-full bg-gradient-brand text-white font-semibold glow-orange-sm hover:scale-[1.02] transition flex items-center gap-2">
+            <span>Hire Me / Consult</span>
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </a>
+          <button onclick="window.print()" class="px-7 py-3.5 rounded-full border border-brand-border bg-brand-card hover:border-brand-orange text-white font-semibold transition flex items-center gap-2">
+            <span>Download / Print CV</span>
+            <i data-lucide="download" class="w-4 h-4 text-brand-orange"></i>
+          </button>
+        </div>
+
+        <!-- Social Links -->
+        <div class="pt-4 flex items-center gap-4">
+          <span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Find Me On:</span>
+          <a href="https://www.linkedin.com/in/syed-fareed-ul-hassan-898844286" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-brand-border bg-brand-card hover:bg-brand-orange hover:border-brand-orange text-gray-300 hover:text-white flex items-center justify-center transition" title="LinkedIn">
+            <i data-lucide="linkedin" class="w-4 h-4"></i>
+          </a>
+          <a href="mailto:fareedulhassan0@gmail.com" class="w-10 h-10 rounded-full border border-brand-border bg-brand-card hover:bg-brand-orange hover:border-brand-orange text-gray-300 hover:text-white flex items-center justify-center transition" title="Email">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+          </a>
+          <a href="tel:03205335188" class="w-10 h-10 rounded-full border border-brand-border bg-brand-card hover:bg-brand-orange hover:border-brand-orange text-gray-300 hover:text-white flex items-center justify-center transition" title="Call 03205335188">
+            <i data-lucide="phone" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Glowing Orange Portal Avatar -->
+      <div class="lg:col-span-5 flex justify-center relative">
+        <div class="relative w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 flex items-center justify-center">
+          <!-- Glowing Circle Backdrop -->
+          <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-brand-orange via-amber-500 to-orange-600 glow-orange opacity-90 animate-pulse"></div>
+          <div class="absolute inset-2 rounded-full bg-brand-dark border-4 border-brand-orange/60 overflow-hidden flex items-center justify-center group cursor-pointer" onclick="document.getElementById('photoInput').click()" title="Click to upload your photo">
+            
+            <!-- Default Stylized Monogram / Replaceable Image -->
+            <img id="heroProfileImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Syed Fareed Ul Hassan" class="w-full h-full object-cover hidden" />
+            
+            <div id="heroPlaceholder" class="flex flex-col items-center justify-center text-center p-6 select-none">
+              <div class="w-24 h-24 rounded-2xl bg-gradient-brand flex items-center justify-center text-white font-display text-4xl font-black mb-3 shadow-xl">
+                SFH
+              </div>
+              <p class="font-display font-bold text-lg text-white">Syed Fareed Ul Hassan</p>
+              <p class="text-xs text-brand-orange font-medium mt-1">Career Expert & Physicist</p>
+              <span class="mt-4 px-3 py-1 rounded-full bg-white/10 text-[11px] text-gray-300 group-hover:bg-brand-orange group-hover:text-white transition">
+                Click to upload photo
+              </span>
+            </div>
+          </div>
+
+          <!-- Floating Experience Badge -->
+          <div class="absolute -bottom-3 -right-2 bg-brand-card border border-brand-orange/50 rounded-2xl px-4 py-3 shadow-2xl flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-brand-orange/20 flex items-center justify-center text-brand-orange font-bold">
+              <i data-lucide="award" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-lg font-display font-bold text-white leading-none">4+ Years</p>
+              <p class="text-xs text-gray-400">Teaching & Career Prep</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STATS BANNER -->
+  <section class="py-10 border-y border-brand-border bg-brand-card/50">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div>
+        <p class="font-display text-3xl sm:text-4xl font-extrabold text-white">4<span class="text-brand-orange">+</span></p>
+        <p class="text-xs sm:text-sm text-gray-400 mt-1">Years Professional Experience</p>
+      </div>
+      <div>
+        <p class="font-display text-3xl sm:text-4xl font-extrabold text-white">BS</p>
+        <p class="text-xs sm:text-sm text-gray-400 mt-1">Physics (University of Sargodha)</p>
+      </div>
+      <div>
+        <p class="font-display text-3xl sm:text-4xl font-extrabold text-white">3<span class="text-brand-orange">+</span></p>
+        <p class="text-xs sm:text-sm text-gray-400 mt-1">Core Domains Mastered</p>
+      </div>
+      <div>
+        <p class="font-display text-3xl sm:text-4xl font-extrabold text-white">100<span class="text-brand-orange">%</span></p>
+        <p class="text-xs sm:text-sm text-gray-400 mt-1">Client & Learner Dedication</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT ME SECTION -->
+  <section id="about" class="py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <p class="text-brand-orange text-xs font-bold tracking-widest uppercase mb-2">Discover</p>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold">About <span class="text-gradient">Me</span></h2>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-12 items-center bg-brand-card border border-brand-border rounded-3xl p-8 sm:p-12">
+        <div class="lg:col-span-6 space-y-5">
+          <span class="px-3 py-1 rounded-full bg-brand-orange/15 text-brand-orange text-xs font-semibold">Professional Profile</span>
+          <h3 class="font-display text-2xl sm:text-3xl font-bold leading-snug">
+            Empowering job seekers & students with clarity, structure, and analytical precision.
+          </h3>
+          <p class="text-gray-400 leading-relaxed">
+            I am a Career Services Professional and Physics Educator experienced in resume guidance, secondary-level science instruction, and online Quran teaching. With an academic foundation in <strong class="text-gray-200">BS Physics from the University of Sargodha</strong> and specialized certifications in <strong class="text-gray-200">Office Management</strong> and <strong class="text-gray-200">Amazon Virtual Assistance</strong>, I bridge analytical problem-solving with clear, client-focused communication.
+          </p>
+          <p class="text-gray-400 leading-relaxed">
+            At <strong class="text-gray-200">Pixely Careers</strong>, I help job seekers present their qualifications, work history, and skills in targeted career documents aligned with their career goals.
+          </p>
+        </div>
+
+        <div class="lg:col-span-6 grid sm:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl bg-brand-dark border border-brand-border flex items-start gap-3.5">
+            <div class="p-2.5 rounded-xl bg-brand-orange/15 text-brand-orange">
+              <i data-lucide="user" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Full Name</p>
+              <p class="text-sm font-semibold text-white mt-0.5">Syed Fareed Ul Hassan</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-brand-dark border border-brand-border flex items-start gap-3.5">
+            <div class="p-2.5 rounded-xl bg-brand-orange/15 text-brand-orange">
+              <i data-lucide="phone" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Phone / WhatsApp</p>
+              <a href="tel:03205335188" class="text-sm font-semibold text-white hover:text-brand-orange transition mt-0.5 block">03205335188</a>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-brand-dark border border-brand-border flex items-start gap-3.5">
+            <div class="p-2.5 rounded-xl bg-brand-orange/15 text-brand-orange">
+              <i data-lucide="mail" class="w-5 h-5"></i>
+            </div>
+            <div class="overflow-hidden">
+              <p class="text-xs text-gray-500">Email Address</p>
+              <a href="mailto:fareedulhassan0@gmail.com" class="text-sm font-semibold text-white hover:text-brand-orange transition mt-0.5 block truncate">fareedulhassan0@gmail.com</a>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-brand-dark border border-brand-border flex items-start gap-3.5">
+            <div class="p-2.5 rounded-xl bg-brand-orange/15 text-brand-orange">
+              <i data-lucide="map-pin" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Location</p>
+              <p class="text-sm font-semibold text-white mt-0.5">Sargodha, Punjab, Pakistan</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-brand-dark border border-brand-border flex items-start gap-3.5 sm:col-span-2">
+            <div class="p-2.5 rounded-xl bg-brand-orange/15 text-brand-orange">
+              <i data-lucide="linkedin" class="w-5 h-5"></i>
+            </div>
+            <div class="overflow-hidden">
+              <p class="text-xs text-gray-500">LinkedIn Profile</p>
+              <a href="https://www.linkedin.com/in/syed-fareed-ul-hassan-898844286" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-brand-orange hover:underline mt-0.5 block truncate">
+                linkedin.com/in/syed-fareed-ul-hassan-898844286
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES I OFFER -->
+  <section id="services" class="py-20 bg-brand-card/30 border-y border-brand-border">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <p class="text-brand-orange text-xs font-bold tracking-widest uppercase mb-2">What I Do</p>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold">My <span class="text-gradient">Services</span></h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Service 1 -->
+        <div class="bg-brand-card border border-brand-border rounded-2xl p-6 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-gradient-brand flex items-center justify-center text-white mb-6 shadow-lg shadow-brand-orange/25">
+              <i data-lucide="file-check-2" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-display text-xl font-bold text-white mb-3">Resume Review & Career Guidance</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">
+              Targeted resume structuring, clarity optimization, professional wording, and alignment with your specific career goals and target roles.
+            </p>
+          </div>
+          <a href="#contact" class="mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-brand-orange uppercase tracking-wider">
+            Request Review <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="bg-brand-card border border-brand-border rounded-2xl p-6 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-gradient-brand flex items-center justify-center text-white mb-6 shadow-lg shadow-brand-orange/25">
+              <i data-lucide="atom" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-display text-xl font-bold text-white mb-3">Physics Instruction & Exam Prep</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">
+              Secondary & FSc level Physics coaching focused on foundational scientific concepts, numerical problem-solving, and worked exam solutions.
+            </p>
+          </div>
+          <a href="#contact" class="mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-brand-orange uppercase tracking-wider">
+            Book Lesson <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="bg-brand-card border border-brand-border rounded-2xl p-6 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-gradient-brand flex items-center justify-center text-white mb-6 shadow-lg shadow-brand-orange/25">
+              <i data-lucide="book-open" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-display text-xl font-bold text-white mb-3">Online Quran Instruction</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">
+              Personalized one-on-one online Quran lessons guiding recitation, Tajweed pronunciation, and structured practice with supportive feedback.
+            </p>
+          </div>
+          <a href="#contact" class="mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-brand-orange uppercase tracking-wider">
+            Start Learning <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+        <!-- Service 4 -->
+        <div class="bg-brand-card border border-brand-border rounded-2xl p-6 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-gradient-brand flex items-center justify-center text-white mb-6 shadow-lg shadow-brand-orange/25">
+              <i data-lucide="briefcase" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-display text-xl font-bold text-white mb-3">Office Admin & Amazon VA</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">
+              Document preparation, organization, professional correspondence, remote client communication, and virtual assistance operations.
+            </p>
+          </div>
+          <a href="#contact" class="mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-brand-orange uppercase tracking-wider">
+            Inquire Now <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORE COMPETENCIES / SKILLS -->
+  <section id="skills" class="py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <p class="text-brand-orange text-xs font-bold tracking-widest uppercase mb-2">Core Competencies</p>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold">My Work <span class="text-gradient">Skills</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-x-12 gap-y-6 mb-14">
+        <!-- Skill Bar Item -->
+        <div>
+          <div class="flex justify-between text-sm font-semibold mb-2">
+            <span>Resume Review & Career Guidance</span>
+            <span class="text-brand-orange">96%</span>
+          </div>
+          <div class="h-2.5 w-full bg-brand-card rounded-full overflow-hidden border border-brand-border">
+            <div class="h-full bg-gradient-brand rounded-full skill-bar" style="width: 96%"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-sm font-semibold mb-2">
+            <span>Physics Instruction & Numerical Problem-Solving</span>
+            <span class="text-brand-orange">95%</span>
+          </div>
+          <div class="h-2.5 w-full bg-brand-card rounded-full overflow-hidden border border-brand-border">
+            <div class="h-full bg-gradient-brand rounded-full skill-bar" style="width: 95%"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-sm font-semibold mb-2">
+            <span>Online Instruction & Student Support</span>
+            <span class="text-brand-orange">94%</span>
+          </div>
+          <div class="h-2.5 w-full bg-brand-card rounded-full overflow-hidden border border-brand-border">
+            <div class="h-full bg-gradient-brand rounded-full skill-bar" style="width: 94%"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-sm font-semibold mb-2">
+            <span>Office Administration & Document Preparation</span>
+            <span class="text-brand-orange">92%</span>
+          </div>
+          <div class="h-2.5 w-full bg-brand-card rounded-full overflow-hidden border border-brand-border">
+            <div class="h-full bg-gradient-brand rounded-full skill-bar" style="width: 92%"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-sm font-semibold mb-2">
+            <span>Client & Remote Communication</span>
+            <span class="text-brand-orange">95%</span>
+          </div>
+          <div class="h-2.5 w-full bg-brand-card rounded-full overflow-hidden border border-brand-border">
+            <div class="h-full bg-gradient-brand rounded-full skill-bar" style="width: 95%"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-sm font-semibold mb-2">
+            <span>Lesson Planning & Amazon Virtual Assistance</span>
+            <span class="text-brand-orange">90%</span>
+          </div>
+          <div class="h-2.5 w-full bg-brand-card rounded-full overflow-hidden border border-brand-border">
+            <div class="h-full bg-gradient-brand rounded-full skill-bar" style="width: 90%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Competency Pills Grid -->
+      <div class="flex flex-wrap justify-center gap-3">
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Resume Review</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Career Guidance</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Physics Instruction</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Lesson Planning</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Office Administration</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Document Organization</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Client Communication</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Document Preparation</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Problem-Solving</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Student Support</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Online Instruction</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Professional Correspondence</span>
+        <span class="px-4 py-2 rounded-xl bg-brand-card border border-brand-border text-xs sm:text-sm font-medium text-gray-200 hover:border-brand-orange transition">Remote Communication</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE, EDUCATION & CERTIFICATIONS -->
+  <section id="experience" class="py-24 bg-brand-card/30 border-t border-brand-border">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <p class="text-brand-orange text-xs font-bold tracking-widest uppercase mb-2">Career Path</p>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold">Experience & <span class="text-gradient">Education</span></h2>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-12">
+        
+        <!-- Left Column: Professional Experience -->
+        <div>
+          <div class="flex items-center gap-3 mb-8">
+            <div class="w-10 h-10 rounded-xl bg-brand-orange/15 text-brand-orange flex items-center justify-center">
+              <i data-lucide="briefcase" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-display text-2xl font-bold">Professional Experience</h3>
+          </div>
+
+          <div class="space-y-6 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-brand-border">
+            
+            <!-- Exp 1 -->
+            <div class="relative pl-10">
+              <span class="absolute left-2.5 top-1.5 w-3.5 h-3.5 rounded-full bg-brand-orange ring-4 ring-brand-dark"></span>
+              <div class="bg-brand-card border border-brand-border rounded-2xl p-6 card-hover">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                  <h4 class="font-display text-lg font-bold text-white">Career Expert</h4>
+                  <span class="px-3 py-1 rounded-full bg-brand-orange/15 text-brand-orange text-xs font-semibold">June 2026 – Present</span>
+                </div>
+                <p class="text-sm font-medium text-gray-300 mb-3">Pixely Careers</p>
+                <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside">
+                  <li>Help job seekers present qualifications, work history, and relevant skills in clear, targeted career documents.</li>
+                  <li>Review resumes for structure, relevance, clarity, professional wording, and alignment with applicants' career goals.</li>
+                  <li>Discuss career backgrounds and target roles with clients to identify document requirements and improvements.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Exp 2 -->
+            <div class="relative pl-10">
+              <span class="absolute left-2.5 top-1.5 w-3.5 h-3.5 rounded-full bg-brand-orange ring-4 ring-brand-dark"></span>
+              <div class="bg-brand-card border border-brand-border rounded-2xl p-6 card-hover">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                  <h4 class="font-display text-lg font-bold text-white">Online Quran Teacher</h4>
+                  <span class="px-3 py-1 rounded-full bg-brand-orange/15 text-brand-orange text-xs font-semibold">2024 – 2026</span>
+                </div>
+                <p class="text-sm font-medium text-gray-300 mb-3">Remote / Online Instruction</p>
+                <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside">
+                  <li>Delivered online Quran lessons and adapted explanations to individual learning needs and progress.</li>
+                  <li>Guided recitation, pronunciation, and regular practice with structured feedback to support learning.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Exp 3 -->
+            <div class="relative pl-10">
+              <span class="absolute left-2.5 top-1.5 w-3.5 h-3.5 rounded-full bg-brand-orange ring-4 ring-brand-dark"></span>
+              <div class="bg-brand-card border border-brand-border rounded-2xl p-6 card-hover">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                  <h4 class="font-display text-lg font-bold text-white">Physics Teacher</h4>
+                  <span class="px-3 py-1 rounded-full bg-brand-orange/15 text-brand-orange text-xs font-semibold">2023 – 2024</span>
+                </div>
+                <p class="text-sm font-medium text-gray-300 mb-3">Islamic Suffah High School</p>
+                <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside">
+                  <li>Taught secondary-level Physics, emphasizing scientific concepts, foundational principles, and numerical problem-solving.</li>
+                  <li>Developed lesson explanations, examples, and classroom activities aligned with Physics topics.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Exp 4 -->
+            <div class="relative pl-10">
+              <span class="absolute left-2.5 top-1.5 w-3.5 h-3.5 rounded-full bg-brand-orange ring-4 ring-brand-dark"></span>
+              <div class="bg-brand-card border border-brand-border rounded-2xl p-6 card-hover">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                  <h4 class="font-display text-lg font-bold text-white">Physics Teacher</h4>
+                  <span class="px-3 py-1 rounded-full bg-brand-orange/15 text-brand-orange text-xs font-semibold">2022 – 2023</span>
+                </div>
+                <p class="text-sm font-medium text-gray-300 mb-3">Ahmed Science Academy</p>
+                <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside">
+                  <li>Delivered Physics instruction covering theory, calculations, and examination-focused problem-solving.</li>
+                  <li>Supported topic revision with guided examples, worked solutions, and learner feedback.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Column: Education & Certifications -->
+        <div class="space-y-12">
+          <div>
+            <div class="flex items-center gap-3 mb-8">
+              <div class="w-10 h-10 rounded-xl bg-brand-orange/15 text-brand-orange flex items-center justify-center">
+                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-display text-2xl font-bold">Academic Education</h3>
+            </div>
+
+            <div class="space-y-6 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-brand-border">
+              
+              <div class="relative pl-10">
+                <span class="absolute left-2.5 top-1.5 w-3.5 h-3.5 rounded-full bg-brand-orange ring-4 ring-brand-dark"></span>
+                <div class="bg-brand-card border border-brand-border rounded-2xl p-6 card-hover">
+                  <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
+                    <h4 class="font-display text-lg font-bold text-white">Bachelor of Science (BS) in Physics</h4>
+                    <span class="px-3 py-1 rounded-full bg-brand-orange/15 text-brand-orange text-xs font-semibold">2022 – 2026</span>
+                  </div>
+                  <p class="text-sm text-gray-400">University of Sargodha</p>
+                </div>
+              </div>
+
+              <div class="relative pl-10">
+                <span class="absolute left-2.5 top-1.5 w-3.5 h-3.5 rounded-full bg-brand-orange ring-4 ring-brand-dark"></span>
+                <div class="bg-brand-card border border-brand-border rounded-2xl p-6 card-hover">
+                  <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
+                    <h4 class="font-display text-lg font-bold text-white">FSc (Pre-Engineering)</h4>
+                    <span class="px-3 py-1 rounded-full bg-brand-orange/15 text-brand-orange text-xs font-semibold">2020 – 2022</span>
+                  </div>
+                  <p class="text-sm text-gray-400">Government Central Model Higher Secondary School, Sargodha</p>
+                </div>
+              </div>
+
+              <div class="relative pl-10">
+                <span class="absolute left-2.5 top-1.5 w-3.5 h-3.5 rounded-full bg-brand-orange ring-4 ring-brand-dark"></span>
+                <div class="bg-brand-card border border-brand-border rounded-2xl p-6 card-hover">
+                  <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
+                    <h4 class="font-display text-lg font-bold text-white">Secondary School Certificate (Matriculation)</h4>
+                    <span class="px-3 py-1 rounded-full bg-brand-orange/15 text-brand-orange text-xs font-semibold">2018 – 2020</span>
+                  </div>
+                  <p class="text-sm text-gray-400">Government High School, Sultanabad, Sargodha</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Certifications -->
+          <div>
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 rounded-xl bg-brand-orange/15 text-brand-orange flex items-center justify-center">
+                <i data-lucide="badge-check" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-display text-2xl font-bold">Training & Certifications</h3>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="bg-brand-card border border-brand-border rounded-2xl p-5 card-hover">
+                <span class="text-xs font-bold text-brand-orange uppercase">2021</span>
+                <h4 class="font-display font-bold text-white mt-1">Office Management Course</h4>
+                <p class="text-xs text-gray-400 mt-1">I-CET Academy</p>
+              </div>
+
+              <div class="bg-brand-card border border-brand-border rounded-2xl p-5 card-hover">
+                <span class="text-xs font-bold text-brand-orange uppercase">Certified Training</span>
+                <h4 class="font-display font-bold text-white mt-1">Amazon Virtual Assistant Course</h4>
+                <p class="text-xs text-gray-400 mt-1">University of Sargodha</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION (SUPABASE + GMAIL INTEGRATED) -->
+  <section id="contact" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <p class="text-brand-orange text-xs font-bold tracking-widest uppercase mb-2">Let's Work Together</p>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold">Get In <span class="text-gradient">Touch</span></h2>
+        <p class="text-sm text-gray-400 mt-3">
+          Every message sent below is saved directly to my <span class="text-brand-orange font-semibold">Supabase Database</span> and forwarded to <span class="text-brand-orange font-semibold">fareedulhassan0@gmail.com</span>.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-10">
+        <!-- Left Contact Info -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="bg-brand-card border border-brand-border rounded-3xl p-8 space-y-6">
+            <h3 class="font-display text-2xl font-bold">Contact Information</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">
+              Reach out for professional resume reviews, career consulting, Physics coaching, or online Quran classes.
+            </p>
+
+            <div class="space-y-4 pt-2">
+              <a href="mailto:fareedulhassan0@gmail.com" class="flex items-center gap-4 p-4 rounded-2xl bg-brand-dark border border-brand-border hover:border-brand-orange transition">
+                <div class="w-11 h-11 rounded-xl bg-brand-orange/15 text-brand-orange flex items-center justify-center shrink-0">
+                  <i data-lucide="mail" class="w-5 h-5"></i>
+                </div>
+                <div class="overflow-hidden">
+                  <p class="text-xs text-gray-500">Direct Gmail</p>
+                  <p class="text-sm font-semibold text-white truncate">fareedulhassan0@gmail.com</p>
+                </div>
+              </a>
+
+              <a href="tel:03205335188" class="flex items-center gap-4 p-4 rounded-2xl bg-brand-dark border border-brand-border hover:border-brand-orange transition">
+                <div class="w-11 h-11 rounded-xl bg-brand-orange/15 text-brand-orange flex items-center justify-center shrink-0">
+                  <i data-lucide="phone-call" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500">Phone / WhatsApp</p>
+                  <p class="text-sm font-semibold text-white">03205335188</p>
+                </div>
+              </a>
+
+              <a href="https://www.linkedin.com/in/syed-fareed-ul-hassan-898844286" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-4 rounded-2xl bg-brand-dark border border-brand-border hover:border-brand-orange transition">
+                <div class="w-11 h-11 rounded-xl bg-brand-orange/15 text-brand-orange flex items-center justify-center shrink-0">
+                  <i data-lucide="linkedin" class="w-5 h-5"></i>
+                </div>
+                <div class="overflow-hidden">
+                  <p class="text-xs text-gray-500">LinkedIn</p>
+                  <p class="text-sm font-semibold text-white truncate">Syed Fareed Ul Hassan</p>
+                </div>
+              </a>
+
+              <div class="flex items-center gap-4 p-4 rounded-2xl bg-brand-dark border border-brand-border">
+                <div class="w-11 h-11 rounded-xl bg-brand-orange/15 text-brand-orange flex items-center justify-center shrink-0">
+                  <i data-lucide="map-pin" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500">Location</p>
+                  <p class="text-sm font-semibold text-white">Sargodha, Punjab, Pakistan</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Backend Connection Badge -->
+            <div class="pt-2 flex items-center justify-between text-xs text-gray-400 border-t border-brand-border">
+              <span class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Supabase Connected (`pxlpfhagbkbafxgcpcyl`)
+              </span>
+              <button onclick="document.getElementById('sqlModal').classList.remove('hidden')" class="text-brand-orange hover:underline font-medium">
+                SQL Setup Help
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Contact Form -->
+        <div class="lg:col-span-7">
+          <form id="contactForm" class="bg-brand-card border border-brand-border rounded-3xl p-8 sm:p-10 space-y-5">
+            <h3 class="font-display text-2xl font-bold mb-2">Send a Message</h3>
+
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Your Name *</label>
+                <input type="text" id="senderName" required placeholder="Enter your full name" class="w-full px-4 py-3.5 rounded-xl bg-brand-dark border border-brand-border text-white text-sm focus:outline-none focus:border-brand-orange transition" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Your Email *</label>
+                <input type="email" id="senderEmail" required placeholder="you@example.com" class="w-full px-4 py-3.5 rounded-xl bg-brand-dark border border-brand-border text-white text-sm focus:outline-none focus:border-brand-orange transition" />
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Phone / WhatsApp</label>
+                <input type="tel" id="senderPhone" placeholder="+92 300 0000000" class="w-full px-4 py-3.5 rounded-xl bg-brand-dark border border-brand-border text-white text-sm focus:outline-none focus:border-brand-orange transition" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Service Needed *</label>
+                <select id="senderService" required class="w-full px-4 py-3.5 rounded-xl bg-brand-dark border border-brand-border text-white text-sm focus:outline-none focus:border-brand-orange transition">
+                  <option value="Resume Review & Career Guidance">Resume Review & Career Guidance</option>
+                  <option value="Physics Coaching / Tutoring">Physics Coaching / Tutoring</option>
+                  <option value="Online Quran Classes">Online Quran Classes</option>
+                  <option value="Office Admin / Amazon VA">Office Admin / Amazon VA</option>
+                  <option value="General Inquiry">General Inquiry</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Your Message *</label>
+              <textarea id="senderMessage" rows="4" required placeholder="Tell me about your career goals, tutoring needs, or project requirements..." class="w-full px-4 py-3.5 rounded-xl bg-brand-dark border border-brand-border text-white text-sm focus:outline-none focus:border-brand-orange transition"></textarea>
+            </div>
+
+            <!-- Status Alert Box -->
+            <div id="formStatus" class="hidden rounded-xl p-4 text-sm font-medium"></div>
+
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+              <button type="submit" id="submitBtn" class="px-8 py-4 rounded-xl bg-gradient-brand text-white font-semibold text-sm glow-orange-sm hover:opacity-95 transition flex items-center gap-2">
+                <span id="submitBtnText">Save to Supabase & Send to Gmail</span>
+                <i data-lucide="send" class="w-4 h-4"></i>
+              </button>
+
+              <a id="directGmailCompose" href="https://mail.google.com/mail/?view=cm&fs=1&to=fareedulhassan0@gmail.com&su=Portfolio%20Inquiry%20-%20Syed%20Fareed%20Ul%20Hassan" target="_blank" rel="noopener noreferrer" class="px-5 py-4 rounded-xl border border-brand-border bg-brand-dark hover:border-brand-orange text-xs font-semibold text-gray-300 hover:text-white transition flex items-center gap-2">
+                <i data-lucide="external-link" class="w-4 h-4 text-brand-orange"></i>
+                Open Directly in Gmail Web
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPABASE SQL TABLE HELPER MODAL -->
+  <div id="sqlModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-brand-card border border-brand-border rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-display text-xl font-bold text-white flex items-center gap-2">
+          <i data-lucide="database" class="w-5 h-5 text-brand-orange"></i>
+          1-Click Supabase Table Setup SQL
+        </h3>
+        <button onclick="document.getElementById('sqlModal').classList.add('hidden')" class="text-gray-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <p class="text-xs sm:text-sm text-gray-400">
+        To make sure your Supabase project (<code class="text-brand-orange">pxlpfhagbkbafxgcpcyl</code>) accepts messages from your website, open your <strong>Supabase Dashboard → SQL Editor → New Query</strong>, paste the SQL below, and click <strong>Run</strong>:
+      </p>
+      <pre id="sqlCode" class="bg-brand-dark border border-brand-border rounded-xl p-4 text-xs text-emerald-400 overflow-x-auto leading-relaxed">create table if not exists public.contact_messages (
+  id bigint generated by default as identity primary key,
+  name text not null,
+  email text not null,
+  phone text,
+  service text,
+  message text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.contact_messages enable row level security;
+
+create policy "Allow anonymous inserts"
+on public.contact_messages for insert
+to anon
+with check (true);</pre>
+      <div class="flex justify-end gap-3 pt-2">
+        <button onclick="navigator.clipboard.writeText(document.getElementById('sqlCode').innerText); this.innerText='Copied SQL!';" class="px-4 py-2 rounded-xl bg-brand-orange text-white text-xs font-semibold">
+          Copy SQL Command
+        </button>
+        <button onclick="document.getElementById('sqlModal').classList.add('hidden')" class="px-4 py-2 rounded-xl border border-brand-border text-gray-300 text-xs font-semibold">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="py-10 border-t border-brand-border bg-brand-dark text-center text-xs text-gray-500">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p>© 2026 <strong class="text-gray-300">Syed Fareed Ul Hassan</strong>. All Rights Reserved.</p>
+      <div class="flex items-center gap-6">
+        <a href="mailto:fareedulhassan0@gmail.com" class="hover:text-brand-orange transition">fareedulhassan0@gmail.com</a>
+        <a href="tel:03205335188" class="hover:text-brand-orange transition">03205335188</a>
+        <a href="https://www.linkedin.com/in/syed-fareed-ul-hassan-898844286" target="_blank" rel="noopener noreferrer" class="hover:text-brand-orange transition">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- INITIALIZE ICONS, PHOTO UPLOAD, SUPABASE & GMAIL -->
+  <script>
+    lucide.createIcons();
+
+    // 1. Live Portrait Upload Preview (Persisted in Browser LocalStorage)
+    const photoInput = document.getElementById('photoInput');
+    const heroProfileImg = document.getElementById('heroProfileImg');
+    const heroPlaceholder = document.getElementById('heroPlaceholder');
+
+    const savedPhoto = localStorage.getItem('sfh_profile_photo');
+    if (savedPhoto) {
+      heroProfileImg.src = savedPhoto;
+      heroProfileImg.classList.remove('hidden');
+      heroPlaceholder.classList.add('hidden');
+    }
+
+    photoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        heroProfileImg.src = event.target.result;
+        heroProfileImg.classList.remove('hidden');
+        heroPlaceholder.classList.add('hidden');
+        try { localStorage.setItem('sfh_profile_photo', event.target.result); } catch (err) {}
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // 2. Initialize Supabase Client with your exact Project URL & Anon Key
+    const SUPABASE_URL = 'https://pxlpfhagbkbafxgcpcyl.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4bHBmaGFnYmtiYWZ4Z2NwY3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDcxMjEsImV4cCI6MjEwODQyMzEyMX0.fLsjVzsqy16qe9wsYsF9KStaVKNm9cZDiInf5gsM3ek';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 3. Handle Contact Form Submission (Saves to Supabase + Sends Email to Gmail)
+    const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('formStatus');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitBtnText = document.getElementById('submitBtnText');
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        name: document.getElementById('senderName').value.trim(),
+        email: document.getElementById('senderEmail').value.trim(),
+        phone: document.getElementById('senderPhone').value.trim(),
+        service: document.getElementById('senderService').value,
+        message: document.getElementById('senderMessage').value.trim()
+      };
+
+      submitBtn.disabled = true;
+      submitBtnText.textContent = 'Saving & Sending...';
+      formStatus.className = 'hidden';
+
+      let supabaseSaved = false;
+      let supabaseErrorMsg = '';
+
+      // Step A: Insert into Supabase table `contact_messages`
+      try {
+        const { error } = await supabaseClient
+          .from('contact_messages')
+          .insert([payload]);
+
+        if (error) {
+          supabaseErrorMsg = error.message;
+        } else {
+          supabaseSaved = true;
+        }
+      } catch (err) {
+        supabaseErrorMsg = err.message || 'Network error';
+      }
+
+      // Step B: Forward directly to Gmail (fareedulhassan0@gmail.com) via FormSubmit AJAX
+      let gmailSent = false;
+      try {
+        const emailResponse = await fetch('https://formsubmit.co/ajax/fareedulhassan0@gmail.com', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            _subject: `New Portfolio Inquiry: ${payload.service} from ${payload.name}`,
+            Name: payload.name,
+            Email: payload.email,
+            Phone: payload.phone || 'Not provided',
+            Service: payload.service,
+            Message: payload.message
+          })
+        });
+        if (emailResponse.ok) {
+          gmailSent = true;
+        }
+      } catch (err) {
+        // Fallback mailto if blocked
+      }
+
+      // Show Status Feedback
+      formStatus.classList.remove('hidden');
+      if (supabaseSaved && gmailSent) {
+        formStatus.className = 'rounded-xl p-4 text-sm font-medium bg-emerald-500/15 border border-emerald-500/40 text-emerald-300';
+        formStatus.innerHTML = '✅ <strong>Success!</strong> Your message was saved to the Supabase database and sent to <strong>fareedulhassan0@gmail.com</strong>.';
+        contactForm.reset();
+      } else if (supabaseSaved && !gmailSent) {
+        formStatus.className = 'rounded-xl p-4 text-sm font-medium bg-emerald-500/15 border border-emerald-500/40 text-emerald-300';
+        formStatus.innerHTML = '✅ <strong>Saved to Supabase!</strong> Opening your email client to also deliver a copy to Gmail...';
+        window.location.href = `mailto:fareedulhassan0@gmail.com?subject=${encodeURIComponent('Portfolio Inquiry: ' + payload.service)}&body=${encodeURIComponent(`Name: ${payload.name}\nEmail: ${payload.email}\nPhone: ${payload.phone}\n\n${payload.message}`)}`;
+        contactForm.reset();
+      } else if (!supabaseSaved && gmailSent) {
+        formStatus.className = 'rounded-xl p-4 text-sm font-medium bg-amber-500/15 border border-amber-500/40 text-amber-300';
+        formStatus.innerHTML = `✅ <strong>Sent to Gmail (fareedulhassan0@gmail.com)!</strong><br/><span class="text-xs">Note: To also save rows in Supabase, click "SQL Setup Help" on the left to create the <code>contact_messages</code> table (${supabaseErrorMsg}).</span>`;
+        contactForm.reset();
+      } else {
+        formStatus.className = 'rounded-xl p-4 text-sm font-medium bg-amber-500/15 border border-amber-500/40 text-amber-300';
+        formStatus.innerHTML = `Opening Gmail directly to send your message. <button type="button" onclick="document.getElementById('sqlModal').classList.remove('hidden')" class="underline font-bold ml-1">Click here for Supabase SQL Table Setup</button>`;
+        window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=fareedulhassan0@gmail.com&su=${encodeURIComponent('Portfolio Inquiry: ' + payload.service)}&body=${encodeURIComponent(`Name: ${payload.name}\nEmail: ${payload.email}\nPhone: ${payload.phone}\n\n${payload.message}`)}`, '_blank');
+      }
+
+      submitBtn.disabled = false;
+      submitBtnText.textContent = 'Save to Supabase & Send to Gmail';
+    });
+  </script>
+</body>
+</html>
