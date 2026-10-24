@@ -17,7 +17,7 @@
 <body class="antialiased min-h-screen flex items-center justify-center p-6">
 
   <!-- LOGIN SCREEN -->
-  <div id="loginScreen" class="bg-brand-card border border-brand-border rounded-3xl p-8 max-w-md w-full shadow-2xl">
+  <div id="loginScreen" class="bg-brand-card border border-brand-border rounded-3xl p-8 max-w-md w-full shadow-2xl transition-all duration-300">
     <div class="flex items-center gap-4 mb-8">
       <div class="w-12 h-12 rounded-xl bg-brand-orange flex items-center justify-center text-white font-bold text-xl">S</div>
       <div>
@@ -28,17 +28,18 @@
     <div class="space-y-5">
       <div>
         <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Admin Passcode</label>
-        <input type="password" id="passcode" placeholder="Enter secure passcode" class="w-full px-4 py-3 rounded-xl bg-brand-dark border border-brand-border focus:border-brand-orange outline-none text-white" />
+        <!-- Added onkeydown for Enter Key support -->
+        <input type="password" id="passcode" onkeydown="if(event.key === 'Enter') attemptLogin()" placeholder="Enter secure passcode (fareed2026)" class="w-full px-4 py-3 rounded-xl bg-brand-dark border border-brand-border focus:border-brand-orange outline-none text-white transition-colors" />
       </div>
-      <button onclick="attemptLogin()" class="w-full py-3 rounded-xl bg-brand-orange text-white font-semibold hover:opacity-90 transition">
+      <button id="loginBtn" onclick="attemptLogin()" class="w-full py-3 rounded-xl bg-brand-orange text-white font-semibold hover:bg-orange-600 transition-colors">
         Access Admin Dashboard
       </button>
-      <p id="loginError" class="text-red-500 text-sm hidden text-center">Incorrect passcode.</p>
+      <p id="loginError" class="text-red-500 text-sm hidden text-center bg-red-500/10 py-2 rounded-lg border border-red-500/20">Incorrect passcode. Please try again.</p>
     </div>
   </div>
 
   <!-- DASHBOARD SCREEN -->
-  <div id="dashboardScreen" class="hidden w-full max-w-6xl h-[90vh] flex flex-col">
+  <div id="dashboardScreen" class="hidden w-full max-w-6xl h-[90vh] flex flex-col transition-opacity duration-500">
     <!-- Top Nav -->
     <div class="flex items-center justify-between mb-6 pb-4 border-b border-brand-border">
       <div>
@@ -47,7 +48,7 @@
       </div>
       <div class="flex gap-3">
         <a href="index.html" class="px-4 py-2 bg-brand-dark border border-brand-border rounded-lg text-sm hover:border-brand-orange transition">View Live Site</a>
-        <button onclick="fetchMessages()" class="px-4 py-2 border border-brand-border rounded-lg text-sm flex items-center gap-2 hover:bg-brand-dark"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh</button>
+        <button onclick="fetchMessagesSafe()" class="px-4 py-2 border border-brand-border rounded-lg text-sm flex items-center gap-2 hover:bg-brand-dark"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh</button>
         <button onclick="logout()" class="px-4 py-2 bg-red-500/10 text-red-500 rounded-lg text-sm hover:bg-red-500/20">Logout</button>
       </div>
     </div>
@@ -85,7 +86,7 @@
           </div>
 
           <button onclick="saveCMSData()" class="w-full py-3 bg-brand-orange text-white rounded-xl font-bold hover:bg-orange-600 transition">Save Changes to Website</button>
-          <p id="saveStatus" class="text-emerald-400 text-xs hidden text-center">✅ Saved to homepage!</p>
+          <p id="saveStatus" class="text-emerald-400 text-xs hidden text-center font-semibold mt-2">✅ Changes saved! Open live site to see.</p>
         </div>
       </div>
 
@@ -115,78 +116,116 @@
   </div>
 
   <script>
-    lucide.createIcons();
+    // Safe Icon Loading
+    try { lucide.createIcons(); } catch (e) { console.log("Lucide icons error", e); }
 
-    // Supabase Initialization
-    const SUPABASE_URL = 'https://pxlpfhagbkbafxgcpcyl.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4bHBmaGFnYmtiYWZ4Z2NwY3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDcxMjEsImV4cCI6MjEwODQyMzEyMX0.fLsjVzsqy16qe9wsYsF9KStaVKNm9cZDiInf5gsM3ek';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Login Logic
+    // --- CORE LOGIC (SAFE FROM NETWORK ERRORS) ---
+    
     function attemptLogin() {
       const pass = document.getElementById('passcode').value;
-      if (pass === 'fareed2026') {
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('dashboardScreen').classList.remove('hidden');
-        loadCMSData();
-        fetchMessages();
-      } else {
-        document.getElementById('loginError').classList.remove('hidden');
-      }
+      const btn = document.getElementById('loginBtn');
+      const err = document.getElementById('loginError');
+
+      // Visual feedback
+      btn.innerText = "Checking...";
+      btn.classList.add("opacity-75");
+      err.classList.add('hidden');
+
+      setTimeout(() => {
+        if (pass === 'fareed2026') {
+          document.getElementById('loginScreen').classList.add('hidden');
+          document.getElementById('dashboardScreen').classList.remove('hidden');
+          loadCMSData();
+          fetchMessagesSafe();
+        } else {
+          err.classList.remove('hidden');
+          btn.innerText = "Access Admin Dashboard";
+          btn.classList.remove("opacity-75");
+        }
+      }, 300); // 300ms delay to feel natural
     }
 
     function logout() {
       document.getElementById('dashboardScreen').classList.add('hidden');
       document.getElementById('loginScreen').classList.remove('hidden');
       document.getElementById('passcode').value = '';
+      
+      const btn = document.getElementById('loginBtn');
+      btn.innerText = "Access Admin Dashboard";
+      btn.classList.remove("opacity-75");
     }
 
-    // --- CMS (Website Editor) Logic ---
+    // --- CMS EDITOR LOGIC ---
     document.getElementById('cmsPhotoUpload').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = (event) => { localStorage.setItem('sfh_profile_photo', event.target.result); };
+      reader.onload = (event) => { 
+        try { localStorage.setItem('sfh_profile_photo', event.target.result); } catch(err){}
+      };
       reader.readAsDataURL(file);
     });
 
     function loadCMSData() {
-      const data = localStorage.getItem('portfolio_cms_data');
-      if (data) {
-        const parsed = JSON.parse(data);
-        if(parsed.hero_title) document.getElementById('cms_hero_title').value = parsed.hero_title;
-        if(parsed.hero_roles) document.getElementById('cms_hero_roles').value = parsed.hero_roles;
-        if(parsed.hero_desc) document.getElementById('cms_hero_desc').value = parsed.hero_desc;
-        if(parsed.about_text) document.getElementById('cms_about_text').value = parsed.about_text;
-      }
+      try {
+        const data = localStorage.getItem('portfolio_cms_data');
+        if (data) {
+          const parsed = JSON.parse(data);
+          if(parsed.hero_title) document.getElementById('cms_hero_title').value = parsed.hero_title;
+          if(parsed.hero_roles) document.getElementById('cms_hero_roles').value = parsed.hero_roles;
+          if(parsed.hero_desc) document.getElementById('cms_hero_desc').value = parsed.hero_desc;
+          if(parsed.about_text) document.getElementById('cms_about_text').value = parsed.about_text;
+        }
+      } catch (e) { console.log("Localstorage error", e); }
     }
 
     function saveCMSData() {
-      const newData = {
-        hero_title: document.getElementById('cms_hero_title').value,
-        hero_roles: document.getElementById('cms_hero_roles').value,
-        hero_desc: document.getElementById('cms_hero_desc').value,
-        about_text: document.getElementById('cms_about_text').value
-      };
-      localStorage.setItem('portfolio_cms_data', JSON.stringify(newData));
-      
-      const status = document.getElementById('saveStatus');
-      status.classList.remove('hidden');
-      setTimeout(() => status.classList.add('hidden'), 3000);
+      try {
+        const newData = {
+          hero_title: document.getElementById('cms_hero_title').value,
+          hero_roles: document.getElementById('cms_hero_roles').value,
+          hero_desc: document.getElementById('cms_hero_desc').value,
+          about_text: document.getElementById('cms_about_text').value
+        };
+        localStorage.setItem('portfolio_cms_data', JSON.stringify(newData));
+        
+        const status = document.getElementById('saveStatus');
+        status.classList.remove('hidden');
+        setTimeout(() => status.classList.add('hidden'), 3500);
+      } catch (e) { alert("Error saving data"); }
     }
 
-    // --- Supabase Messages Logic ---
-    async function fetchMessages() {
+
+    // --- SUPABASE & DATABASE LOGIC ---
+    let supabaseClient = null;
+    const SUPABASE_URL = 'https://pxlpfhagbkbafxgcpcyl.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4bHBmaGFnYmtiYWZ4Z2NwY3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDcxMjEsImV4cCI6MjEwODQyMzEyMX0.fLsjVzsqy16qe9wsYsF9KStaVKNm9cZDiInf5gsM3ek';
+    
+    // Safely try to connect to database without breaking the whole page if it fails
+    try {
+      if (window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.warn("Could not connect to database on load.");
+    }
+
+    async function fetchMessagesSafe() {
       const tbody = document.getElementById('messagesTableBody');
-      tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-brand-orange animate-pulse">Fetching messages...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-brand-orange animate-pulse">Fetching messages from database...</td></tr>';
+      
+      if (!supabaseClient) {
+        tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-red-500">Database connection failed. Please check internet or turn off Ad-Blocker.</td></tr>';
+        return;
+      }
       
       try {
-        const { data, error } = await supabase.from('contact_messages').select('*').order('created_at', { ascending: false });
+        const { data, error } = await supabaseClient.from('contact_messages').select('*').order('created_at', { ascending: false });
         
         if (error) throw error;
 
-        if (data.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">No messages found yet.</td></tr>';
+        if (!data || data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">No messages found yet. Submit a message on the live site!</td></tr>';
           return;
         }
 
@@ -194,7 +233,11 @@
         data.forEach(msg => {
           const date = new Date(msg.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
           const tr = document.createElement('tr');
-          tr.className = 'hover:bg-brand-card/50 transition';
+          tr.className = 'hover:bg-brand-card/50 transition border-b border-brand-border/50 last:border-0';
+          
+          // Using strict replace to avoid quotes breaking the alert
+          const safeMsg = msg.message ? msg.message.replace(/'/g, "\\'").replace(/"/g, "&quot;").replace(/\n/g, "\\n") : "No message provided";
+          
           tr.innerHTML = `
             <td class="px-4 py-3 whitespace-nowrap text-gray-400">${date}</td>
             <td class="px-4 py-3">
@@ -202,10 +245,10 @@
               <div class="text-xs text-brand-orange">${msg.email}</div>
               ${msg.phone ? `<div class="text-xs text-gray-500">${msg.phone}</div>` : ''}
             </td>
-            <td class="px-4 py-3 text-gray-300"><span class="px-2 py-1 bg-brand-card rounded-md text-xs border border-brand-border">${msg.service}</span></td>
+            <td class="px-4 py-3 text-gray-300"><span class="px-2 py-1 bg-brand-dark rounded-md text-xs border border-brand-border">${msg.service}</span></td>
             <td class="px-4 py-3"><div class="max-w-xs truncate text-gray-400" title="${msg.message}">${msg.message}</div></td>
             <td class="px-4 py-3 text-right">
-              <button onclick='alert("Message:\\n\\n${msg.message.replace(/'/g, "\\'")}")' class="px-3 py-1.5 bg-brand-dark border border-brand-border rounded hover:border-brand-orange text-xs text-white">Read</button>
+              <button onclick="alert('Message from ${msg.name}:\\n\\n' + '${safeMsg}')" class="px-3 py-1.5 bg-brand-dark border border-brand-border rounded hover:border-brand-orange text-xs text-white transition-colors">Read</button>
             </td>
           `;
           tbody.appendChild(tr);
