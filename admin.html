@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>Admin Dashboard | Syed Fareed Ul Hassan</title>
+  <title>Admin Dashboard | Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="site-config.js"></script>
   <style>
     :root{--a:#ff5500;--a2:#ff8a00;--bg:#090a0f;--panel:#11131a;--panel2:#171a24;--line:#242838;--tx:#e8eaf0;--mu:#8b91a5;--ok:#22c55e;--err:#ef4444;--warn:#f59e0b}
     *{box-sizing:border-box;margin:0;padding:0}
@@ -16,6 +17,7 @@
     a{color:inherit;text-decoration:none}
     button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
     input,select,textarea{font:inherit;color:inherit}
+    code{background:var(--panel2);padding:1px 6px;border-radius:6px;font-size:12.5px;color:#ffb38a}
     ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#2c3142;border-radius:8px}
     .hidden{display:none!important}
 
@@ -26,7 +28,7 @@
     .login-card h1{font-size:22px}
     .login-card p{color:var(--mu);margin:4px 0 22px}
 
-    /* App layout */
+    /* Layout */
     #app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
     #app.with-preview{grid-template-columns:250px minmax(0,1fr) 470px}
     .side{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--panel);border-right:1px solid var(--line);padding:18px 14px;display:flex;flex-direction:column}
@@ -34,33 +36,37 @@
     .side-brand .logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;font-weight:900;color:#fff}
     .side-brand b{display:block;font-size:14px}.side-brand small{color:var(--mu);font-size:11.5px}
     .nav-group{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#5d6377;padding:14px 10px 6px}
-    .nav-item{display:flex;align-items:center;gap:11px;width:100%;padding:9px 11px;border-radius:10px;color:var(--mu);font-weight:500;transition:.2s;text-align:left}
+    .nav-item{display:flex;align-items:center;gap:11px;width:100%;padding:8px 11px;border-radius:10px;color:var(--mu);font-weight:500;transition:.2s;text-align:left}
     .nav-item i{width:18px;text-align:center}
+    .nav-item span.t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .nav-item:hover{background:var(--panel2);color:var(--tx)}
     .nav-item.active{background:linear-gradient(90deg,rgba(255,85,0,.18),rgba(255,85,0,.04));color:#fff;box-shadow:inset 3px 0 0 var(--a)}
     .nav-item.active i{color:var(--a)}
     .nav-item .badge{margin-left:auto;background:var(--a);color:#fff;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px}
+    .nav-item.add{color:#ffb38a;border:1px dashed #3a3f55;margin-top:4px}
+    .nav-item.off{opacity:.55}
     .side-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--mu)}
     .side-foot .user{display:flex;align-items:center;gap:9px;padding:8px}
     .side-foot .av{width:32px;height:32px;border-radius:50%;background:var(--panel2);display:grid;place-items:center;color:var(--a)}
     .main{min-width:0;display:flex;flex-direction:column}
     .topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;padding:12px 24px;background:rgba(9,10,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-    .topbar h2{font-size:17px;font-weight:700;margin-right:auto;display:flex;align-items:center;gap:10px}
+    .topbar h2{font-size:17px;font-weight:700;margin-right:auto;display:flex;align-items:center;gap:10px;min-width:0}
     .topbar h2 i{color:var(--a)}
-    .dirty-pill{font-size:12px;padding:4px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mu);display:flex;align-items:center;gap:6px}
+    .topbar h2 span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .dirty-pill{font-size:12px;padding:4px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mu);display:flex;align-items:center;gap:6px;white-space:nowrap}
     .dirty-pill.on{border-color:rgba(245,158,11,.5);color:#fcd34d;background:rgba(245,158,11,.08)}
     .dirty-pill .d{width:7px;height:7px;border-radius:50%;background:var(--ok)}
     .dirty-pill.on .d{background:var(--warn)}
-    .menu-toggle{display:none}
+    .menu-toggle{display:none!important}
     .content{padding:24px;width:100%;max-width:1100px}
     .preview{position:sticky;top:0;height:100vh;border-left:1px solid var(--line);background:#05060a;display:flex;flex-direction:column}
     .preview-bar{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--panel)}
     .preview-bar b{margin-right:auto;font-size:13px}
-    .preview-frame{flex:1;display:flex;justify-content:center;overflow:hidden;background:#05060a}
+    .preview-frame{flex:1;display:flex;justify-content:center;overflow:hidden}
     .preview iframe{border:0;width:100%;height:100%;background:#000;transition:width .3s}
     .preview.mobile iframe{width:390px;max-width:100%;border-left:1px solid var(--line);border-right:1px solid var(--line)}
     @media(max-width:1250px){#app.with-preview{grid-template-columns:250px minmax(0,1fr)}.preview{position:fixed;right:0;top:0;width:min(470px,100%);z-index:80;box-shadow:-20px 0 60px rgba(0,0,0,.6)}}
-    @media(max-width:880px){#app,#app.with-preview{grid-template-columns:minmax(0,1fr)}.side{position:fixed;left:-270px;width:260px;z-index:90;transition:left .3s}.side.open{left:0;box-shadow:20px 0 60px rgba(0,0,0,.6)}.menu-toggle{display:inline-flex}.content{padding:16px}.topbar{padding:10px 14px;flex-wrap:wrap}.hide-sm{display:none}}
+    @media(max-width:880px){#app,#app.with-preview{grid-template-columns:minmax(0,1fr)}.side{position:fixed;left:-270px;width:260px;z-index:90;transition:left .3s}.side.open{left:0;box-shadow:20px 0 60px rgba(0,0,0,.6)}.menu-toggle{display:inline-flex!important}.content{padding:16px}.topbar{padding:10px 14px;flex-wrap:wrap}.hide-sm{display:none}}
 
     /* Components */
     .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px}
@@ -73,55 +79,59 @@
     .full{grid-column:1/-1}
     @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}.grid4{grid-template-columns:repeat(2,1fr)}}
     .f label{display:block;font-size:12px;font-weight:600;color:var(--mu);margin-bottom:6px}
-    .f .help{font-size:11.5px;color:#666d82;margin-top:4px}
-    .f input[type=text],.f input[type=email],.f input[type=url],.f input[type=number],.f input[type=password],.f textarea,.f select,.inp{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s}
+    .f .help{font-size:11.5px;color:#6d7489;margin-top:5px}
+    .f input[type=text],.f input[type=number],.f input[type=password],.f input[type=email],.f textarea,.f select,.inp{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s}
     .f textarea{resize:vertical;min-height:84px}
     .f input:focus,.f textarea:focus,.f select:focus,.inp:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(255,85,0,.12)}
-    .f select option{background:var(--panel)}
+    select option{background:var(--panel)}
     .color-row{display:flex;gap:8px;align-items:center}
     .color-row input[type=color]{width:46px;height:42px;padding:3px;border-radius:10px;border:1px solid var(--line);background:var(--bg);cursor:pointer;flex-shrink:0}
-    .icon-row{display:flex;gap:8px;align-items:center}
-    .icon-row .ip{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;background:rgba(255,85,0,.1);color:var(--a);border:1px solid rgba(255,85,0,.3);font-size:17px}
+    .icon-row,.img-row{display:flex;gap:8px;align-items:center}
+    .icon-row .ip,.img-row .thumb{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;background:rgba(255,85,0,.1);color:var(--a);border:1px solid rgba(255,85,0,.3);font-size:17px;overflow:hidden}
+    .img-row .thumb img{width:100%;height:100%;object-fit:cover}
+    .img-row label.btn{flex-shrink:0}
     .range-row{display:flex;align-items:center;gap:12px}
     .range-row input{flex:1;accent-color:var(--a)}
     .range-row output{min-width:52px;text-align:right;font-weight:700;color:var(--a);font-size:13px}
     .switch{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--line);border-radius:10px;cursor:pointer}
     .switch span{font-weight:600;font-size:13.5px}
     .switch small{display:block;color:var(--mu);font-weight:400;font-size:12px}
-    .switch input{appearance:none;width:42px;height:24px;border-radius:99px;background:#2a2f40;position:relative;cursor:pointer;flex-shrink:0;transition:.25s}
-    .switch input::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.25s}
-    .switch input:checked{background:var(--a)}
-    .switch input:checked::after{left:21px}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 15px;border-radius:10px;font-weight:600;font-size:13px;border:1px solid var(--line);background:var(--panel2);transition:.2s;white-space:nowrap}
+    .tgl,.switch input{appearance:none;-webkit-appearance:none;width:42px;height:24px;border-radius:99px;background:#2a2f40;position:relative;cursor:pointer;flex-shrink:0;transition:.25s;border:0}
+    .tgl::after,.switch input::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.25s}
+    .tgl:checked,.switch input:checked{background:var(--a)}
+    .tgl:checked::after,.switch input:checked::after{left:21px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 15px;border-radius:10px;font-weight:600;font-size:13px;border:1px solid var(--line);background:var(--panel2);transition:.2s;white-space:nowrap;cursor:pointer}
     .btn:hover{border-color:#3a4058;background:#1d2130}
     .btn.pri{background:linear-gradient(90deg,#ff3b00,#ff7a00);border:0;color:#fff;box-shadow:0 8px 20px -8px rgba(255,85,0,.7)}
     .btn.pri:hover{filter:brightness(1.08)}
     .btn.danger{color:#fca5a5;border-color:#5b1f1f}.btn.danger:hover{background:#2a1212}
     .btn.sm{padding:6px 10px;font-size:12px}
     .btn.icon{width:32px;height:32px;padding:0}
-    .btn:disabled{opacity:.55;cursor:not-allowed}
-    .btn-row{display:flex;flex-wrap:wrap;gap:10px}
+    .btn:disabled{opacity:.4;cursor:not-allowed}
+    .btn-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 
     /* List editor */
-    .li-card{border:1px solid var(--line);border-radius:12px;background:var(--panel2);margin-bottom:10px;transition:border-color .2s}
+    .li-card{border:1px solid var(--line);border-radius:12px;background:var(--panel2);margin-bottom:10px}
     .li-card.open{border-color:#3a3f55}
     .li-head{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;user-select:none}
     .li-num{width:26px;height:26px;border-radius:8px;background:rgba(255,85,0,.12);color:var(--a);display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .li-thumb{width:34px;height:34px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--bg);display:grid;place-items:center;color:var(--mu)}
+    .li-thumb img{width:100%;height:100%;object-fit:cover}
     .li-title{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .li-actions{display:flex;gap:4px}
+    .li-actions{display:flex;gap:4px;flex-shrink:0}
     .li-chev{color:var(--mu);transition:transform .2s}
     .li-card.open .li-chev{transform:rotate(180deg)}
-    .li-body{display:none;padding:4px 14px 16px;border-top:1px solid var(--line)}
-    .li-card.open .li-body{display:block;padding-top:14px}
+    .li-body{display:none;padding:14px;border-top:1px solid var(--line)}
+    .li-card.open .li-body{display:block}
 
     /* Dashboard */
     .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px}
     .kpi .ki{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:18px;background:rgba(255,85,0,.12);color:var(--a)}
-    .kpi b{font-size:24px;display:block;line-height:1.1}
+    .kpi b{font-size:22px;display:block;line-height:1.1}
     .kpi small{color:var(--mu);font-size:12px}
     .welcome{background:linear-gradient(120deg,rgba(255,85,0,.22),rgba(255,85,0,.03) 60%),var(--panel);border:1px solid rgba(255,85,0,.3);border-radius:16px;padding:24px;margin-bottom:18px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
     .welcome h3{font-size:20px}.welcome p{color:var(--mu)}
-    .quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+    .quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
     .quick button{padding:14px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);text-align:left;transition:.2s}
     .quick button:hover{border-color:var(--a);transform:translateY(-2px)}
     .quick i{color:var(--a);font-size:18px;margin-bottom:8px;display:block}
@@ -138,8 +148,8 @@
     .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:rgba(255,85,0,.12);color:#ffb38a;border:1px solid rgba(255,85,0,.25)}
     .tag.new{background:var(--a);color:#fff;border-color:var(--a)}
     .msg-body{margin:12px 0;color:#c9ccd6;white-space:pre-wrap;word-break:break-word;font-size:13.5px;background:var(--bg);border-radius:10px;padding:12px}
-    .empty{text-align:center;color:var(--mu);padding:40px 20px}
-    .empty i{font-size:34px;color:#3a3f55;margin-bottom:10px;display:block}
+    .empty{text-align:center;color:var(--mu);padding:30px 20px}
+    .empty i{font-size:30px;color:#3a3f55;margin-bottom:10px;display:block}
 
     /* Theme presets */
     .presets{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
@@ -150,15 +160,66 @@
     .preset .sw i{flex:1}
     .preset span{font-size:12.5px;font-weight:600}
 
+    /* Socials */
+    .plat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:18px}
+    .plat{background:var(--panel);border:1px solid var(--line);border-radius:14px;transition:border-color .2s}
+    .plat.on{border-color:color-mix(in srgb,var(--pc) 45%,var(--line))}
+    .plat.wide{grid-column:1/-1}
+    .plat-head{display:flex;align-items:center;gap:12px;padding:14px 16px}
+    .plat-ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:18px;color:#fff;background:var(--pc);flex-shrink:0}
+    .plat:not(.on) .plat-ic{background:#2a2f40;color:#9aa0b4}
+    .plat-name{flex:1;min-width:0}
+    .plat-name b{display:block}
+    .plat-name small{color:var(--mu);font-size:12px}
+    .st{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
+    .st.off{background:#1f2230;color:#7d8399}
+    .st.warn{background:rgba(245,158,11,.12);color:#fcd34d}
+    .st.on{background:rgba(34,197,94,.12);color:#86efac}
+    .st.live{background:rgba(255,85,0,.15);color:#ffb38a}
+    .plat-body{padding:0 16px 16px;border-top:1px solid var(--line);padding-top:14px}
+    .plat-body .grid2{gap:12px}
+    details.how{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:12px}
+    details.how summary{cursor:pointer;font-weight:600;font-size:13px;color:#ffb38a}
+    details.how ol{padding-left:20px;margin-top:10px;color:#c9ccd6;display:grid;gap:6px;font-size:13px}
+    details.how a{color:var(--a);text-decoration:underline}
+    .test-out{margin-top:10px;font-size:13px;color:var(--mu)}
+    .test-out.ok{color:#86efac}.test-out.err{color:#fca5a5}
+    .test-thumbs{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+    .test-thumbs img{width:58px;height:58px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+
+    /* Page builder */
+    .pb-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);margin-bottom:8px;flex-wrap:wrap}
+    .pb-row.fixed{opacity:.75}
+    .pb-ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(255,85,0,.1);color:var(--a);flex-shrink:0}
+    .pb-row.custom .pb-ic{background:rgba(139,92,246,.15);color:#c4b5fd}
+    .pb-name{flex:1;min-width:150px}
+    .pb-name b{display:block;font-size:13.5px}
+    .pb-name small{color:var(--mu);font-size:11.5px}
+    .pb-nav{width:170px!important;padding:7px 10px!important;font-size:12.5px!important}
+    .pb-row .li-actions{width:140px;justify-content:flex-end}
+    .pb-row.hid .pb-name b{text-decoration:line-through;color:var(--mu)}
+    .tpl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+    .tpl{padding:14px;border-radius:12px;background:var(--bg);border:1px solid var(--line);text-align:left;transition:.2s}
+    .tpl:hover{border-color:var(--a);transform:translateY(-2px)}
+    .tpl i{font-size:20px;color:var(--a);margin-bottom:8px;display:block}
+    .tpl b{display:block;font-size:13.5px;margin-bottom:3px}
+    .tpl small{color:var(--mu);font-size:12px;line-height:1.4;display:block}
+    @media(max-width:760px){.pb-nav{width:100%!important;order:5}}
+
     .photo-box{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
     .photo-prev{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;overflow:hidden;font-weight:900;font-size:30px;color:#fff;border:3px solid rgba(255,140,0,.5);flex-shrink:0}
     .photo-prev img{width:100%;height:100%;object-fit:cover}
-    pre.code{background:#05060a;border:1px solid var(--line);border-radius:12px;padding:16px;font-size:12px;color:#86efac;overflow-x:auto;max-height:420px;line-height:1.6}
-    ol.steps{padding-left:20px;color:#c9ccd6;display:grid;gap:8px}
+    pre.code{background:#05060a;border:1px solid var(--line);border-radius:12px;padding:16px;font-size:12px;color:#86efac;overflow:auto;max-height:380px;line-height:1.6}
+    ol.steps{padding-left:20px;color:#c9ccd6;display:grid;gap:9px}
     ol.steps b{color:#fff}
+    ol.steps a{color:var(--a);text-decoration:underline}
     .note{padding:12px 14px;border-radius:10px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);color:#fcd34d;font-size:13px;margin-bottom:14px}
     .note.ok{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3);color:#86efac}
     .note.err{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3);color:#fca5a5}
+    .note.info{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.3);color:#93c5fd}
+    .chk{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+    .chk:last-child{border:0}
+    .chk i{width:18px}
 
     #toasts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
     .toast{background:#1b1f2b;border:1px solid var(--line);border-left:4px solid var(--ok);padding:11px 16px;border-radius:10px;box-shadow:0 14px 40px rgba(0,0,0,.5);font-size:13.5px;animation:tin .3s;max-width:90vw}
@@ -181,15 +242,15 @@
     <div class="f" style="margin-bottom:18px"><label>Password</label><input type="password" id="lg-pass" required placeholder="••••••••" autocomplete="current-password"></div>
     <button class="btn pri" style="width:100%;padding:12px" id="lg-btn"><i class="fa-solid fa-right-to-bracket"></i> Sign In</button>
     <div id="lg-msg" style="margin-top:14px;font-size:13px;color:#fca5a5"></div>
-    <p style="font-size:12px;margin:18px 0 0">First time? Create your admin user in <b>Supabase → Authentication → Users → Add user</b>, then run the SQL from the Setup page (shown after login, or open <code>admin.html#setup</code>).</p>
-    <button type="button" class="btn sm" style="margin-top:10px" onclick="showSetupPublic()"><i class="fa-solid fa-database"></i> View Setup SQL</button>
+    <p style="font-size:12px;margin:18px 0 0">First time? Run the setup SQL and create your admin user in Supabase first.</p>
+    <button type="button" class="btn sm" style="margin-top:10px" onclick="showSetupPublic()"><i class="fa-solid fa-database"></i> View Setup Guide</button>
   </form>
 </div>
 
 <!-- ================= APP ================= -->
 <div id="app" class="hidden">
   <aside class="side" id="side">
-    <div class="side-brand"><div class="logo">S</div><div><b>Portfolio Admin</b><small>Syed Fareed Ul Hassan</small></div></div>
+    <div class="side-brand"><div class="logo">S</div><div><b>Portfolio Admin</b><small id="side-name"></small></div></div>
     <div id="side-nav"></div>
     <div class="side-foot">
       <div class="user"><div class="av"><i class="fa-solid fa-user-shield"></i></div><div style="overflow:hidden"><div style="color:#fff;font-weight:600;font-size:12.5px">Signed in</div><div id="user-email" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div></div></div>
@@ -202,7 +263,7 @@
     <div class="topbar">
       <button class="btn icon menu-toggle" onclick="toggleSide()"><i class="fa-solid fa-bars"></i></button>
       <h2 id="page-title"></h2>
-      <span class="dirty-pill" id="dirty-pill"><span class="d"></span><span id="dirty-text">All changes saved</span></span>
+      <span class="dirty-pill" id="dirty-pill"><span class="d"></span><span id="dirty-text">All changes published</span></span>
       <a class="btn hide-sm" href="index.html" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> View Site</a>
       <button class="btn" onclick="togglePreview()"><i class="fa-solid fa-eye"></i> <span class="hide-sm">Live Preview</span></button>
       <button class="btn pri" id="save-btn" onclick="save()"><i class="fa-solid fa-cloud-arrow-up"></i> Publish</button>
@@ -226,100 +287,15 @@
 
 <script>
 /* =========================================================
-   CONFIG
+   Supabase keys, admin email and default content come from
+   site-config.js (shared with index.html).
    ========================================================= */
-const SUPABASE_URL = 'https://pxlpfhagbkbafxgcpcyl.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4bHBmaGFnYmtiYWZ4Z2NwY3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDcxMjEsImV4cCI6MjEwODQyMzEyMX0.fLsjVzsqy16qe9wsYsF9KStaVKNm9cZDiInf5gsM3ek';
-const ADMIN_EMAIL = 'fareedulhassan0@gmail.com';   // only this Supabase user can edit the site
-const SETTINGS_ID = 'main';
-const STORAGE_BUCKET = 'portfolio';
 const DRAFT_KEY = 'sfh_admin_draft';
-
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* =========================================================
-   DEFAULT CONTENT (keep in sync with index.html)
-   ========================================================= */
-const DEFAULTS = {
-  seo: { title: 'Syed Fareed Ul Hassan | Career Expert & Physics Educator', description: 'Portfolio of Syed Fareed Ul Hassan — Career Expert, Physics Educator and Online Instructor based in Sargodha, Punjab, Pakistan.' },
-  theme: { preset: 'flame', primary: '#ff5500', secondary: '#ff9900', bg: '#060609', bg2: '#0c0c12', card: '#13131c', text: '#f3f4f6', muted: '#9ca3af', radius: 18, glow: 40, fontHeading: 'Outfit', fontBody: 'Inter' },
-  animations: { enabled: true, reveal: 'fade-up', speed: 0.8, stagger: 0.08, typewriter: true, typeSpeed: 90, particles: true, particleCount: 60, orbit: true, float: true, cursorGlow: true, tilt: true, marquee: true, marqueeSpeed: 30, counters: true, preloader: true, scrollProgress: true },
-  nav: { cta: "Let's Talk" },
-  profile: {
-    firstName: 'Syed Fareed', lastName: 'Ul Hassan', brand: 'Syed Fareed', initials: 'SFH',
-    hello: "Hello, I'm", badge: 'Available for Career Consulting & Online Instruction',
-    roles: ['Career Expert', 'Physics Educator', 'Online Quran Instructor', 'Resume & Document Specialist'],
-    intro: 'Career services professional and Physics educator with experience in resume guidance, secondary-level science instruction, and online Quran teaching. Combining a BS in Physics with specialized training in Office Management and Amazon Virtual Assistance.',
-    photoUrl: '', cvUrl: '',
-    yearsExp: '4+', yearsLabel: 'Years of Experience', floatBadge: 'BS Physics',
-    email: 'fareedulhassan0@gmail.com', phone: '03205335188', whatsapp: '923205335188',
-    linkedin: 'https://www.linkedin.com/in/syed-fareed-ul-hassan-898844286',
-    location: 'Sargodha, Punjab, Pakistan', availability: 'Available On-Site & Remote Worldwide',
-    aboutTag: 'Career Expert | Physics Educator | Online Instructor',
-    aboutTitle: 'Helping job seekers build targeted career documents and guiding students toward excellence in Physics & Quranic studies.',
-    aboutText1: 'I am a career services professional and Physics educator with hands-on experience in resume guidance, secondary-level science instruction, and online Quran teaching. I hold a BS in Physics from the University of Sargodha, complemented by certified training in Office Management and Amazon Virtual Assistance.',
-    aboutText2: 'At Pixely Careers, I help job seekers present their qualifications, work history, and skills in clear, targeted career documents aligned with their goals — combining clear communication, individualized support, and client-focused review.',
-    cvSummary: 'Career services professional and Physics educator with experience in resume guidance, secondary-level science instruction, and online Quran teaching. Holds an academic background in Physics with training in office management and Amazon virtual assistance. Combines professional communication, learner support, and client-focused document review across education and career services.'
-  },
-  sections: {
-    hero: { show: true, nav: 'Home' },
-    marquee: { show: true },
-    stats: { show: true },
-    about: { show: true, nav: 'About', kicker: 'Discover My Profile', title: 'About', accent: 'Me', sub: '' },
-    services: { show: true, nav: 'Services', kicker: 'What I Do', title: 'My', accent: 'Services', sub: 'Professional solutions across career development, science instruction, online education, and virtual office administration.' },
-    skills: { show: true, nav: 'Skills', kicker: 'Core Competencies', title: 'My Work', accent: 'Skills', sub: 'Combining analytical Physics training with professional career consulting and administrative precision.' },
-    experience: { show: true, nav: 'Experience', kicker: 'Career Journey', title: 'Professional', accent: 'Experience', sub: '' },
-    education: { show: true, nav: 'Education', kicker: 'Academic Credentials', title: 'Education &', accent: 'Certifications', sub: '' },
-    highlights: { show: true, nav: '', kicker: 'Value Delivered', title: 'Why Clients & Learners', accent: 'Work With Me', sub: '' },
-    contact: { show: true, nav: 'Contact', kicker: "Let's Work Together", title: 'Get In', accent: 'Touch', sub: 'Have a resume project, need a Physics or Quran tutor, or looking for a dedicated professional? Reach out below.' }
-  },
-  marquee: ['Resume Review', 'Career Guidance', 'Physics Instruction', 'Online Quran Teaching', 'Lesson Planning', 'Office Administration', 'Amazon Virtual Assistance', 'Client Communication'],
-  stats: [
-    { icon: 'fa-solid fa-briefcase', value: '4', suffix: '+', label: 'Years Professional Experience' },
-    { icon: 'fa-solid fa-chalkboard-user', value: '4', suffix: '', label: 'Professional Roles' },
-    { icon: 'fa-solid fa-layer-group', value: '3', suffix: '', label: 'Core Domains' },
-    { icon: 'fa-solid fa-certificate', value: '2', suffix: '', label: 'Certified Trainings' }
-  ],
-  services: [
-    { icon: 'fa-solid fa-file-pen', title: 'Resume Review & Career Guidance', desc: 'Targeted resume structuring, clarity optimization, professional wording, and alignment with your specific career goals and target roles.', tag: 'Pixely Careers Expertise' },
-    { icon: 'fa-solid fa-atom', title: 'Physics Instruction & Exam Prep', desc: 'Secondary & FSc level Physics coaching focused on foundational concepts, numerical problem-solving, and worked exam solutions.', tag: 'Theory & Exam Prep' },
-    { icon: 'fa-solid fa-book-quran', title: 'Online Quran Instruction', desc: 'Personalized one-on-one online Quran lessons guiding recitation, Tajweed pronunciation, and structured practice with supportive feedback.', tag: '1-on-1 Remote Learning' },
-    { icon: 'fa-solid fa-laptop-file', title: 'Office Admin & Amazon VA', desc: 'Document preparation and organization, professional correspondence, remote client communication, and virtual assistance operations.', tag: 'Certified Operations' }
-  ],
-  skills: [
-    { name: 'Resume Review & Optimization', percent: 96, category: 'Career Services' },
-    { name: 'Career Guidance & Role Alignment', percent: 94, category: 'Career Services' },
-    { name: 'Client Communication', percent: 95, category: 'Career Services' },
-    { name: 'Physics Instruction & Numericals', percent: 95, category: 'Education' },
-    { name: 'Online Quran Teaching & Tajweed', percent: 94, category: 'Education' },
-    { name: 'Lesson Planning & Student Support', percent: 92, category: 'Education' },
-    { name: 'Office Administration & Documents', percent: 92, category: 'Admin & VA' },
-    { name: 'Amazon Virtual Assistance', percent: 90, category: 'Admin & VA' }
-  ],
-  competencies: ['Resume Review', 'Career Guidance', 'Client Communication', 'Document Preparation', 'Physics Instruction', 'Lesson Planning', 'Problem-Solving', 'Student Support', 'Online Instruction', 'Office Administration', 'Document Organization', 'Professional Correspondence', 'Remote Communication', 'Amazon Virtual Assistance'],
-  experience: [
-    { role: 'Career Expert', company: 'Pixely Careers', period: 'June 2026 – Present', type: 'Career Services', icon: 'fa-solid fa-briefcase', current: true, points: ['Help job seekers present qualifications, work history, and relevant skills in clear, targeted career documents.', "Review resumes for structure, relevance, clarity, professional wording, and alignment with applicants' career goals.", 'Discuss career backgrounds and target roles with clients to identify document requirements and improvements.'] },
-    { role: 'Online Quran Teacher', company: 'Remote / Online Instruction', period: '2024 – 2026', type: 'Online Instruction', icon: 'fa-solid fa-globe', current: false, points: ['Delivered online Quran lessons and adapted explanations to individual learning needs and progress.', 'Guided recitation, pronunciation, and regular practice with structured feedback to support learning.'] },
-    { role: 'Physics Teacher', company: 'Islamic Suffah High School', period: '2023 – 2024', type: 'Secondary Education', icon: 'fa-solid fa-school', current: false, points: ['Taught secondary-level Physics, emphasizing scientific concepts, foundational principles, and numerical problem-solving.', 'Developed lesson explanations, examples, and classroom activities aligned with Physics topics.'] },
-    { role: 'Physics Teacher', company: 'Ahmed Science Academy', period: '2022 – 2023', type: 'Science Academy', icon: 'fa-solid fa-flask', current: false, points: ['Delivered Physics instruction covering theory, calculations, and examination-focused problem-solving.', 'Supported topic revision with guided examples, worked solutions, and learner feedback.'] }
-  ],
-  education: [
-    { degree: 'Bachelor of Science (BS) in Physics', institute: 'University of Sargodha', period: '2022 – 2026', location: 'Sargodha, Pakistan', desc: 'Training in classical & modern physics, mathematical methods, analytical problem-solving, and scientific instruction.' },
-    { degree: 'FSc (Pre-Engineering)', institute: 'Government Central Model Higher Secondary School, Sargodha', period: '2020 – 2022', location: 'Sargodha, Pakistan', desc: '' },
-    { degree: 'Secondary School Certificate (Matriculation)', institute: 'Government High School, Sultanabad, Sargodha', period: '2018 – 2020', location: 'Sargodha, Pakistan', desc: '' }
-  ],
-  certifications: [
-    { title: 'Amazon Virtual Assistant Course', org: 'University of Sargodha', year: 'Certified Course', icon: 'fa-brands fa-amazon', desc: 'Training in e-commerce store operations, client management, product research, and remote virtual assistance workflows.' },
-    { title: 'Office Management Course', org: 'I-CET Academy', year: '2021', icon: 'fa-solid fa-folder-tree', desc: 'Foundation in office administration, document preparation, record organization, and professional correspondence.' }
-  ],
-  highlights: [
-    { icon: 'fa-solid fa-bullseye', title: 'Targeted Career Documents', text: "Turns work history and qualifications into clear, focused resumes aligned with each applicant's target roles and goals." },
-    { icon: 'fa-solid fa-square-root-variable', title: 'Clear Step-by-Step Physics', text: 'Breaks complex Physics principles and numericals into structured, worked solutions that build exam confidence.' },
-    { icon: 'fa-solid fa-hands-holding-child', title: 'Patient, Personalized Teaching', text: "Online Quran instruction tailored to each learner's pace, with steady feedback on pronunciation and recitation." }
-  ],
-  contact: { formTitle: 'Send a Direct Message', formSub: 'Your message is saved securely and delivered straight to my Gmail inbox.', gmailTo: 'fareedulhassan0@gmail.com', saveToSupabase: true, sendGmail: true, whatsappButton: true, successMsg: "Thank you! Your message has been received — I'll get back to you soon." },
-  footer: { tagline: 'Career Expert | Physics Educator | Online Instructor', text: 'All Rights Reserved.' }
-};
+/* Setup code (also saved as files in the /supabase folder of the repo) */
+const SETUP_SQL = "-- =====================================================================\n-- Portfolio website \u2014 Supabase setup (safe to run again any time)\n-- Supabase Dashboard \u2192 SQL Editor \u2192 New query \u2192 paste \u2192 Run\n-- =====================================================================\n\n-- ===== 1. Website settings (all editable content) =====\ncreate table if not exists public.site_settings (\n  id text primary key,\n  data jsonb not null default '{}'::jsonb,\n  updated_at timestamptz not null default now()\n);\nalter table public.site_settings enable row level security;\n\ndrop policy if exists \"Public can read settings\" on public.site_settings;\ncreate policy \"Public can read settings\" on public.site_settings\n  for select to anon, authenticated using (true);\n\ndrop policy if exists \"Admin can write settings\" on public.site_settings;\ncreate policy \"Admin can write settings\" on public.site_settings\n  for all to authenticated\n  using ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com')\n  with check ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\n-- ===== 2. Contact form messages =====\ncreate table if not exists public.contact_messages (\n  id bigint generated by default as identity primary key,\n  name text not null,\n  email text not null,\n  phone text,\n  service text,\n  message text not null,\n  is_read boolean not null default false,\n  created_at timestamptz not null default now()\n);\nalter table public.contact_messages add column if not exists is_read boolean not null default false;\nalter table public.contact_messages enable row level security;\n\ndrop policy if exists \"Allow anonymous inserts\" on public.contact_messages;\ncreate policy \"Allow anonymous inserts\" on public.contact_messages\n  for insert to anon, authenticated with check (true);\n\ndrop policy if exists \"Admin can read messages\" on public.contact_messages;\ncreate policy \"Admin can read messages\" on public.contact_messages\n  for select to authenticated using ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\ndrop policy if exists \"Admin can update messages\" on public.contact_messages;\ncreate policy \"Admin can update messages\" on public.contact_messages\n  for update to authenticated using ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\ndrop policy if exists \"Admin can delete messages\" on public.contact_messages;\ncreate policy \"Admin can delete messages\" on public.contact_messages\n  for delete to authenticated using ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\n-- ===== 3. Social media tokens (PRIVATE \u2014 admin only, never public) =====\ncreate table if not exists public.social_secrets (\n  id text primary key,\n  value text not null,\n  updated_at timestamptz not null default now()\n);\nalter table public.social_secrets enable row level security;\n\ndrop policy if exists \"Admin manages social secrets\" on public.social_secrets;\ncreate policy \"Admin manages social secrets\" on public.social_secrets\n  for all to authenticated\n  using ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com')\n  with check ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\n-- ===== 4. Social feed cache (used only by the social-feed function) =====\ncreate table if not exists public.social_cache (\n  platform text primary key,\n  source text,\n  data jsonb not null default '[]'::jsonb,\n  fetched_at timestamptz not null default now()\n);\nalter table public.social_cache enable row level security;\n-- no policies on purpose: only the Edge Function (service role) can read/write it\n\n-- ===== 5. Storage bucket for photos, videos & CV =====\ninsert into storage.buckets (id, name, public)\nvalues ('portfolio', 'portfolio', true)\non conflict (id) do update set public = true;\n\ndrop policy if exists \"Public read portfolio files\" on storage.objects;\ncreate policy \"Public read portfolio files\" on storage.objects\n  for select using (bucket_id = 'portfolio');\n\ndrop policy if exists \"Admin upload portfolio files\" on storage.objects;\ncreate policy \"Admin upload portfolio files\" on storage.objects\n  for insert to authenticated\n  with check (bucket_id = 'portfolio' and (auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\ndrop policy if exists \"Admin update portfolio files\" on storage.objects;\ncreate policy \"Admin update portfolio files\" on storage.objects\n  for update to authenticated\n  using (bucket_id = 'portfolio' and (auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\ndrop policy if exists \"Admin delete portfolio files\" on storage.objects;\ncreate policy \"Admin delete portfolio files\" on storage.objects\n  for delete to authenticated\n  using (bucket_id = 'portfolio' and (auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n";
+const FEED_FN_CODE = "// =====================================================================\n// Supabase Edge Function: social-feed\n// Fetches your latest YouTube videos, Instagram posts and Facebook Page\n// posts so they appear on the portfolio website automatically.\n//\n// Deploy ONCE (no CLI needed):\n//   Supabase Dashboard \u2192 Edge Functions \u2192 \"Deploy a new function\" \u2192 \"Via Editor\"\n//   \u2192 name it exactly:  social-feed   \u2192 replace the sample code with this file \u2192 Deploy\n//\n// Secrets (Instagram / Facebook tokens) are saved from admin.html into the\n// private \"social_secrets\" table \u2014 never exposed on the public website.\n// Results are cached for 30 minutes in \"social_cache\".\n// =====================================================================\nimport { createClient } from 'npm:@supabase/supabase-js@2';\n\nconst ADMIN_EMAIL = 'fareedulhassan0@gmail.com';\nconst SETTINGS_ID = 'main';\nconst CACHE_MINUTES = 30;\n\nconst cors = {\n  'Access-Control-Allow-Origin': '*',\n  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',\n  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',\n};\nconst json = (body: unknown) =>\n  new Response(JSON.stringify(body), { headers: { ...cors, 'Content-Type': 'application/json' } });\n\nconst db = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {\n  auth: { persistSession: false },\n});\n\ntype Item = {\n  id: string; platform: string; type: string; title: string; text: string;\n  thumb: string; media: string; url: string; date: string; album?: boolean;\n};\n\nasync function getSecret(id: string) {\n  const { data } = await db.from('social_secrets').select('value,updated_at').eq('id', id).maybeSingle();\n  return data as { value: string; updated_at: string } | null;\n}\nasync function setSecret(id: string, value: string) {\n  await db.from('social_secrets').upsert({ id, value, updated_at: new Date().toISOString() });\n}\n\nconst decode = (s: string) =>\n  s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#39;/g, \"'\");\nconst tag = (xml: string, name: string) => {\n  const m = xml.match(new RegExp(`<${name}[^>]*>([\\\\s\\\\S]*?)</${name}>`));\n  return m ? decode(m[1].trim()) : '';\n};\nconst BROWSER = {\n  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',\n  'Accept-Language': 'en-US,en;q=0.9',\n  'Cookie': 'CONSENT=YES+cb; SOCS=CAI',\n};\n\n/* ---------------- YouTube (no API key needed) ---------------- */\nasync function resolveChannel(input: string): Promise<string> {\n  const v = String(input || '').trim();\n  if (/^UC[\\w-]{22}$/.test(v)) return v;\n  let m = v.match(/channel\\/(UC[\\w-]{22})/);\n  if (m) return m[1];\n  if (!v) throw new Error('Add your YouTube channel link or Channel ID.');\n  const url = /^https?:\\/\\//.test(v) ? v : 'https://www.youtube.com/' + (v.startsWith('@') ? v : '@' + v);\n  const r = await fetch(url, { headers: BROWSER });\n  const html = await r.text();\n  m = html.match(/<link rel=\"canonical\" href=\"https:\\/\\/www\\.youtube\\.com\\/channel\\/(UC[\\w-]{22})\"/) ||\n      html.match(/\"externalId\":\"(UC[\\w-]{22})\"/) ||\n      html.match(/\"channelId\":\"(UC[\\w-]{22})\"/);\n  if (!m) throw new Error('Could not find this YouTube channel. Paste the Channel ID (starts with UC) instead.');\n  return m[1];\n}\n\nasync function youtube(p: Record<string, string>) {\n  const channelId = await resolveChannel(p.channelId || p.url);\n  const r = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`, { headers: BROWSER });\n  if (!r.ok) throw new Error(`YouTube returned ${r.status}. Check the Channel ID.`);\n  const xml = await r.text();\n  const items: Item[] = xml.split('<entry>').slice(1).map((e) => {\n    const id = tag(e, 'yt:videoId');\n    const link = (e.match(/<link[^>]*href=\"([^\"]+)\"/) || [])[1] || `https://www.youtube.com/watch?v=${id}`;\n    return {\n      id, platform: 'youtube', type: 'video', title: tag(e, 'title'),\n      text: tag(e, 'media:description').slice(0, 280),\n      thumb: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`, media: '', url: decode(link), date: tag(e, 'published'),\n    };\n  });\n  return { items, channelId };\n}\n\n/* ---------------- Instagram (Professional account + token) ---------------- */\nasync function instagram(): Promise<Item[]> {\n  const s = await getSecret('instagram_token');\n  if (!s?.value) throw new Error('Instagram access token is not saved yet (Admin \u2192 Social Media \u2192 Instagram).');\n  let token = s.value;\n  // Long-lived tokens last 60 days \u2014 refresh weekly so it never expires\n  if (Date.now() - new Date(s.updated_at).getTime() > 7 * 86400000) {\n    try {\n      const r = await fetch(`https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${encodeURIComponent(token)}`);\n      const j = await r.json();\n      if (j.access_token) { token = j.access_token; await setSecret('instagram_token', token); }\n    } catch { /* keep the current token */ }\n  }\n  const qs = new URLSearchParams({\n    fields: 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp', limit: '30', access_token: token,\n  });\n  const r = await fetch(`https://graph.instagram.com/me/media?${qs}`);\n  const j = await r.json();\n  if (j.error) throw new Error('Instagram: ' + (j.error.message || 'request failed'));\n  // deno-lint-ignore no-explicit-any\n  return (j.data || []).map((m: any): Item => ({\n    id: m.id, platform: 'instagram', type: m.media_type === 'VIDEO' ? 'video' : 'image', title: '',\n    text: String(m.caption || '').slice(0, 280),\n    thumb: m.media_type === 'VIDEO' ? (m.thumbnail_url || '') : (m.media_url || ''),\n    media: m.media_url || '', url: m.permalink, date: m.timestamp, album: m.media_type === 'CAROUSEL_ALBUM',\n  }));\n}\n\n/* ---------------- Facebook Page (Page access token) ---------------- */\nasync function facebook(p: Record<string, string>): Promise<Item[]> {\n  const s = await getSecret('facebook_token');\n  if (!s?.value) throw new Error('Facebook Page access token is not saved yet (Admin \u2192 Social Media \u2192 Facebook).');\n  const page = String(p.pageId || '').trim() || 'me';\n  const qs = new URLSearchParams({\n    fields: 'id,message,full_picture,permalink_url,created_time,attachments{media_type}', limit: '30', access_token: s.value,\n  });\n  const r = await fetch(`https://graph.facebook.com/${encodeURIComponent(page)}/posts?${qs}`);\n  const j = await r.json();\n  if (j.error) throw new Error('Facebook: ' + (j.error.message || 'request failed'));\n  // deno-lint-ignore no-explicit-any\n  return (j.data || []).filter((x: any) => x.full_picture || x.message).map((x: any): Item => {\n    const mt = String(x.attachments?.data?.[0]?.media_type || '');\n    return {\n      id: x.id, platform: 'facebook', type: mt.includes('video') ? 'video' : x.full_picture ? 'image' : 'text', title: '',\n      text: String(x.message || '').slice(0, 280), thumb: x.full_picture || '', media: x.full_picture || '',\n      url: x.permalink_url, date: x.created_time,\n    };\n  });\n}\n\n/* ---------------- Handler ---------------- */\nDeno.serve(async (req) => {\n  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });\n  try {\n    // deno-lint-ignore no-explicit-any\n    let body: any = {};\n    if (req.method === 'POST') { try { body = await req.json(); } catch { body = {}; } }\n    const q = new URL(req.url).searchParams;\n    const platform = String(body.platform || q.get('platform') || '').toLowerCase();\n    if (platform === 'ping') return json({ ok: true, pong: true });\n    if (!['youtube', 'instagram', 'facebook'].includes(platform)) return json({ ok: false, error: 'Unknown platform' });\n\n    // The admin \"Test\" button forces a refresh and may test unsaved settings\n    let isAdmin = false;\n    if (body.force) {\n      const jwt = (req.headers.get('Authorization') || '').replace(/^Bearer\\s+/i, '');\n      const { data } = await db.auth.getUser(jwt);\n      isAdmin = (data?.user?.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase();\n      if (!isAdmin) return json({ ok: false, error: 'Only the admin can run a test. Please log in again.' });\n    }\n\n    const { data: st } = await db.from('site_settings').select('data').eq('id', SETTINGS_ID).maybeSingle();\n    let p = st?.data?.socials?.platforms?.[platform] || {};\n    if (isAdmin && body.settings) p = { ...p, ...body.settings };\n    if (!isAdmin && !(p.enabled && p.feed)) return json({ ok: false, error: `${platform} feed is turned off in the admin panel` });\n\n    const source = platform === 'youtube' ? String(p.channelId || p.url || '') : platform === 'facebook' ? String(p.pageId || '') : 'me';\n    const { data: cache } = await db.from('social_cache').select('data,source,fetched_at').eq('platform', platform).maybeSingle();\n    const sameSource = cache && cache.source === source;\n    if (!isAdmin && sameSource && Date.now() - new Date(cache.fetched_at).getTime() < CACHE_MINUTES * 60000) {\n      return json({ ok: true, cached: true, items: cache.data });\n    }\n\n    try {\n      let items: Item[] = [];\n      let extra: Record<string, unknown> = {};\n      if (platform === 'youtube') { const r = await youtube(p); items = r.items; extra = { channelId: r.channelId }; }\n      else if (platform === 'instagram') items = await instagram();\n      else items = await facebook(p);\n      await db.from('social_cache').upsert({ platform, source, data: items, fetched_at: new Date().toISOString() });\n      return json({ ok: true, items, ...extra });\n    } catch (e) {\n      const msg = e instanceof Error ? e.message : String(e);\n      if (!isAdmin && sameSource) return json({ ok: true, stale: true, items: cache.data, error: msg });\n      return json({ ok: false, error: msg });\n    }\n  } catch (e) {\n    return json({ ok: false, error: e instanceof Error ? e.message : String(e) });\n  }\n});\n";
 
 const FONTS = ['Outfit', 'Inter', 'Poppins', 'Montserrat', 'Space Grotesk', 'Sora', 'Plus Jakarta Sans', 'Manrope', 'Raleway', 'Playfair Display', 'DM Sans', 'Urbanist', 'Lexend', 'Rubik', 'Nunito', 'Lora', 'Roboto', 'Open Sans', 'Syne', 'Bebas Neue'];
 const PRESETS = {
@@ -331,32 +307,95 @@ const PRESETS = {
   gold:    { name: 'Luxury Gold', primary: '#d4a017', secondary: '#f5d76e', bg: '#0a0906', bg2: '#13110b', card: '#1a1710', text: '#fdf8ec', muted: '#aaa189' },
   cyber:   { name: 'Cyber Neon', primary: '#00e5ff', secondary: '#ff00c8', bg: '#05040a', bg2: '#0b0a16', card: '#110f20', text: '#f0f9ff', muted: '#9ba3c4' },
   light:   { name: 'Clean Light', primary: '#ff5500', secondary: '#ff9900', bg: '#f8f7f4', bg2: '#efede8', card: '#ffffff', text: '#16161d', muted: '#5f6372' },
-  lightblue:{ name: 'Light Corporate', primary: '#2563eb', secondary: '#0ea5e9', bg: '#f6f8fc', bg2: '#eaf0f8', card: '#ffffff', text: '#0f172a', muted: '#55627a' }
+  lightblue: { name: 'Light Corporate', primary: '#2563eb', secondary: '#0ea5e9', bg: '#f6f8fc', bg2: '#eaf0f8', card: '#ffffff', text: '#0f172a', muted: '#55627a' }
 };
-const ICONS = ['fa-solid fa-briefcase','fa-solid fa-atom','fa-solid fa-book-quran','fa-solid fa-file-pen','fa-solid fa-laptop-file','fa-solid fa-graduation-cap','fa-solid fa-certificate','fa-solid fa-award','fa-solid fa-star','fa-solid fa-chalkboard-user','fa-solid fa-school','fa-solid fa-flask','fa-solid fa-globe','fa-solid fa-compass','fa-solid fa-comments','fa-solid fa-user-graduate','fa-solid fa-folder-tree','fa-solid fa-headset','fa-solid fa-bullseye','fa-solid fa-rocket','fa-solid fa-lightbulb','fa-solid fa-square-root-variable','fa-solid fa-layer-group','fa-solid fa-hands-holding-child','fa-solid fa-microscope','fa-solid fa-pen-nib','fa-solid fa-chart-line','fa-solid fa-handshake','fa-solid fa-users','fa-solid fa-envelope-open-text','fa-brands fa-amazon','fa-brands fa-linkedin-in','fa-brands fa-whatsapp'];
+const ICONS = ['fa-solid fa-briefcase','fa-solid fa-atom','fa-solid fa-book-quran','fa-solid fa-file-pen','fa-solid fa-laptop-file','fa-solid fa-graduation-cap','fa-solid fa-certificate','fa-solid fa-award','fa-solid fa-trophy','fa-solid fa-medal','fa-solid fa-star','fa-solid fa-chalkboard-user','fa-solid fa-school','fa-solid fa-flask','fa-solid fa-globe','fa-solid fa-compass','fa-solid fa-comments','fa-solid fa-user-graduate','fa-solid fa-folder-tree','fa-solid fa-headset','fa-solid fa-bullseye','fa-solid fa-rocket','fa-solid fa-lightbulb','fa-solid fa-square-root-variable','fa-solid fa-layer-group','fa-solid fa-hands-holding-child','fa-solid fa-microscope','fa-solid fa-pen-nib','fa-solid fa-chart-line','fa-solid fa-handshake','fa-solid fa-users','fa-solid fa-flag','fa-solid fa-heart','fa-solid fa-code','fa-solid fa-camera','fa-solid fa-video','fa-solid fa-envelope-open-text','fa-brands fa-amazon','fa-brands fa-linkedin-in','fa-brands fa-whatsapp','fa-brands fa-youtube'];
+const BUILTIN_ICONS = { hero: 'fa-house', marquee: 'fa-arrows-left-right', stats: 'fa-chart-simple', about: 'fa-id-card', services: 'fa-briefcase', skills: 'fa-bars-progress', experience: 'fa-timeline', education: 'fa-graduation-cap', highlights: 'fa-star', social: 'fa-share-nodes', contact: 'fa-envelope' };
+const BUILTIN_PAGE = { hero: 'hero', marquee: 'hero', stats: 'stats', about: 'profile', services: 'services', skills: 'skills', experience: 'experience', education: 'education', highlights: 'highlights', social: 'socials', contact: 'settings' };
+
+/* ---------- Custom section types (Page Builder templates) ---------- */
+const CS_TYPES = {
+  cards: { name: 'Projects / Cards', icon: 'fa-diagram-project', cols: 3, desc: 'Image cards with tags & buttons — projects, portfolio work, case studies.',
+    preset: { nav: 'Projects', kicker: 'Portfolio', title: 'Featured', accent: 'Projects', sub: 'A selection of work I am proud of.' },
+    blank: { image: '', title: 'New Project', subtitle: '2026', text: 'Short description of this project.', tags: ['Tag'], link: '', linkText: 'View Project' },
+    f: [{ k: 'image', l: 'Image or video (upload, or paste an image / YouTube link)', t: 'media', full: true }, { k: 'title', l: 'Title' }, { k: 'subtitle', l: 'Small label (date / category / client)' }, { k: 'text', l: 'Description', t: 'textarea', full: true }, { k: 'tags', l: 'Tags (comma separated)', t: 'tags', full: true }, { k: 'link', l: 'Button link (optional)' }, { k: 'linkText', l: 'Button text' }] },
+  achievements: { name: 'Achievements / Awards', icon: 'fa-trophy', cols: 3, desc: 'Icon or badge cards with an optional animated number.',
+    preset: { nav: 'Achievements', kicker: 'Milestones', title: 'My', accent: 'Achievements', sub: '' },
+    blank: { icon: 'fa-solid fa-trophy', image: '', value: '', suffix: '', title: 'New Achievement', subtitle: '2026', text: '', link: '', linkText: 'View Certificate' },
+    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'image', l: 'Badge / certificate image (optional — replaces icon)', t: 'image' }, { k: 'value', l: 'Big number (optional, animates)' }, { k: 'suffix', l: 'Number suffix (+, %, K)' }, { k: 'title', l: 'Title' }, { k: 'subtitle', l: 'Year / issued by' }, { k: 'text', l: 'Description', t: 'textarea', full: true }, { k: 'link', l: 'Link (optional)' }, { k: 'linkText', l: 'Link text' }] },
+  featured: { name: 'Featured Spotlight', icon: 'fa-star', desc: 'Large alternating image + text rows for your most important work.',
+    preset: { nav: 'Featured', kicker: 'Spotlight', title: 'Featured', accent: 'Work', sub: '' },
+    blank: { image: '', subtitle: 'Featured', title: 'Spotlight title', text: 'Describe what makes this special. **Bold**, *italic* and [links](https://example.com) work.', link: '', linkText: 'Learn More' },
+    f: [{ k: 'image', l: 'Image or video (upload, or paste YouTube / Instagram link)', t: 'media', full: true }, { k: 'subtitle', l: 'Small label' }, { k: 'title', l: 'Title' }, { k: 'text', l: 'Text (supports **bold**, *italic*, [link](url), "- " lists)', t: 'textarea', full: true, rows: 5 }, { k: 'link', l: 'Button link' }, { k: 'linkText', l: 'Button text' }] },
+  gallery: { name: 'Photo & Video Gallery', icon: 'fa-images', cols: 4, desc: 'Grid of photos/videos that open full-screen when clicked.',
+    preset: { nav: 'Gallery', kicker: 'Moments', title: 'Photo', accent: 'Gallery', sub: '' },
+    blank: { image: '', title: '' },
+    f: [{ k: 'image', l: 'Photo or video (upload, or paste an image / YouTube link)', t: 'media', full: true }, { k: 'title', l: 'Caption', full: true }] },
+  videos: { name: 'Videos', icon: 'fa-circle-play', cols: 2, desc: 'Embedded videos from YouTube, Vimeo, Facebook, Instagram, TikTok or uploads.',
+    preset: { nav: 'Videos', kicker: 'Watch', title: 'My', accent: 'Videos', sub: '' },
+    blank: { image: '', title: 'Video title', text: '' },
+    f: [{ k: 'image', l: 'Video link or upload (YouTube, Vimeo, Facebook, Instagram, TikTok, MP4)', t: 'media', full: true }, { k: 'title', l: 'Title' }, { k: 'text', l: 'Description', t: 'textarea', full: true }] },
+  timeline: { name: 'Timeline / Journey', icon: 'fa-timeline', desc: 'Milestones in order — the first one is highlighted.',
+    preset: { nav: 'Journey', kicker: 'My Story', title: 'My', accent: 'Journey', sub: '' },
+    blank: { subtitle: '2026', icon: 'fa-solid fa-flag', title: 'Milestone', text: '', link: '', linkText: '' },
+    f: [{ k: 'subtitle', l: 'Date / period' }, { k: 'icon', l: 'Icon', t: 'icon' }, { k: 'title', l: 'Title', full: true }, { k: 'text', l: 'Description', t: 'textarea', full: true }, { k: 'link', l: 'Link (optional)' }, { k: 'linkText', l: 'Link text' }] },
+  testimonials: { name: 'Testimonials / Reviews', icon: 'fa-quote-left', cols: 3, desc: 'Quotes from clients, students or colleagues with star ratings.',
+    preset: { nav: 'Reviews', kicker: 'Kind Words', title: 'What People', accent: 'Say', sub: '' },
+    blank: { text: 'Write the testimonial here.', title: 'Client Name', subtitle: 'Role, Company', image: '', rating: 5 },
+    f: [{ k: 'text', l: 'Testimonial', t: 'textarea', full: true }, { k: 'title', l: 'Name' }, { k: 'subtitle', l: 'Role / company' }, { k: 'image', l: 'Photo (optional)', t: 'image' }, { k: 'rating', l: 'Stars', t: 'range', min: 0, max: 5, unit: ' ★' }] },
+  faq: { name: 'FAQ', icon: 'fa-circle-question', desc: 'Expandable questions & answers.',
+    preset: { nav: 'FAQ', kicker: 'Questions', title: 'Frequently Asked', accent: 'Questions', sub: '' },
+    blank: { title: 'Your question?', text: 'The answer.' },
+    f: [{ k: 'title', l: 'Question', full: true }, { k: 'text', l: 'Answer (supports **bold**, [link](url))', t: 'textarea', full: true }] },
+  text: { name: 'Text / Information Block', icon: 'fa-align-left', noItems: true, desc: 'Free text with an optional image and button — for any custom information.',
+    preset: { nav: '', kicker: 'Info', title: 'New', accent: 'Section', sub: '', body: 'Write anything here.\n\n**Bold**, *italic*, [links](https://example.com) and lists:\n- point one\n- point two', image: '', buttonText: '', buttonUrl: '' },
+    sf: [{ k: 'body', l: 'Content', t: 'textarea', rows: 10, full: true, help: 'Formatting: **bold**, *italic*, [text](https://link), lines starting with "- " become a list, an empty line starts a new paragraph, "## " makes a sub-heading.' }, { k: 'image', l: 'Side image / video (optional)', t: 'media', full: true }, { k: 'buttonText', l: 'Button text' }, { k: 'buttonUrl', l: 'Button link' }] },
+  cta: { name: 'Call-to-Action Banner', icon: 'fa-bullhorn', noItems: true, desc: 'Bold colored banner with one or two buttons.',
+    preset: { nav: '', kicker: '', title: 'Ready to work', accent: 'together?', sub: '', body: "Let's discuss how I can help you reach your goals.", buttonText: 'Contact Me', buttonUrl: '#contact', button2Text: '', button2Url: '' },
+    sf: [{ k: 'body', l: 'Text', t: 'textarea', full: true }, { k: 'buttonText', l: 'Button 1 text' }, { k: 'buttonUrl', l: 'Button 1 link (#contact = contact form)' }, { k: 'button2Text', l: 'Button 2 text' }, { k: 'button2Url', l: 'Button 2 link' }] },
+  logos: { name: 'Logos / Clients / Partners', icon: 'fa-handshake', desc: 'Row of logos — grey, turning colored on hover.',
+    preset: { nav: '', kicker: 'Trusted By', title: 'Clients &', accent: 'Partners', sub: '' },
+    blank: { image: '', title: 'Company', link: '' },
+    f: [{ k: 'image', l: 'Logo', t: 'image', full: true }, { k: 'title', l: 'Name' }, { k: 'link', l: 'Website (optional)' }] }
+};
+
+/* ---------- Built-in list schemas ---------- */
+const SCHEMA = {
+  stats: { label: x => `${x.value}${x.suffix} — ${x.label}`, blank: { icon: 'fa-solid fa-star', value: '1', suffix: '+', label: 'New stat' },
+    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'label', l: 'Label' }, { k: 'value', l: 'Number / Value', help: 'Numbers animate as a counter' }, { k: 'suffix', l: 'Suffix (e.g. + or %)' }] },
+  services: { label: x => x.title, blank: { icon: 'fa-solid fa-star', title: 'New Service', desc: '', tag: '' },
+    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'title', l: 'Title' }, { k: 'desc', l: 'Description', t: 'textarea', full: true }, { k: 'tag', l: 'Footer tag' }] },
+  skills: { label: x => `${x.name} (${x.percent}%)`, blank: { name: 'New Skill', percent: 80, category: 'Career Services' },
+    f: [{ k: 'name', l: 'Skill name' }, { k: 'category', l: 'Category (filter tab)' }, { k: 'percent', l: 'Proficiency', t: 'range', min: 0, max: 100, unit: '%', full: true }] },
+  experience: { label: x => `${x.role} — ${x.company}`, blank: { role: 'New Role', company: 'Company', period: '2026 – Present', type: 'Category', icon: 'fa-solid fa-briefcase', current: false, points: [] },
+    f: [{ k: 'role', l: 'Job title' }, { k: 'company', l: 'Company / Organization' }, { k: 'period', l: 'Period' }, { k: 'type', l: 'Category label' }, { k: 'icon', l: 'Icon', t: 'icon' }, { k: 'current', l: 'Current job (highlighted)', t: 'toggle' }, { k: 'points', l: 'Responsibilities (one per line)', t: 'lines', full: true }] },
+  education: { label: x => x.degree, blank: { degree: 'New Degree', institute: 'Institute', period: '', location: '', desc: '' },
+    f: [{ k: 'degree', l: 'Degree' }, { k: 'institute', l: 'Institute' }, { k: 'period', l: 'Period' }, { k: 'location', l: 'Location' }, { k: 'desc', l: 'Description (optional)', t: 'textarea', full: true }] },
+  certifications: { label: x => x.title, blank: { title: 'New Certification', org: '', year: '', icon: 'fa-solid fa-certificate', desc: '' },
+    f: [{ k: 'title', l: 'Title' }, { k: 'org', l: 'Issued by' }, { k: 'year', l: 'Year / Label' }, { k: 'icon', l: 'Icon', t: 'icon' }, { k: 'desc', l: 'Description', t: 'textarea', full: true }] },
+  highlights: { label: x => x.title, blank: { icon: 'fa-solid fa-star', title: 'New Highlight', text: '' },
+    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'title', l: 'Title' }, { k: 'text', l: 'Text', t: 'textarea', full: true }] },
+  posts: { label: x => x.title || x.caption || x.url || 'New post', blank: { url: '', title: '', caption: '' },
+    f: [{ k: 'url', l: 'Post link or upload — YouTube, Instagram, Facebook, LinkedIn, TikTok, Vimeo, or your own photo/video', t: 'media', full: true }, { k: 'title', l: 'Title (optional)' }, { k: 'caption', l: 'Caption (optional)' }] }
+};
 
 /* =========================================================
    STATE + HELPERS
    ========================================================= */
 let cfg = JSON.parse(JSON.stringify(DEFAULTS));
 let savedJSON = '', dirty = false, page = 'dashboard', messages = [], msgFilter = 'all', msgSearch = '';
-let lastSaved = null, settingsError = '', msgError = '', openItems = new Set(), pvReady = false, pvTimer = null;
+let lastSaved = null, settingsError = '', msgError = '', openItems = new Set(), pvReady = false, pvTimer = null, SECRETS = {};
+const LIST_REG = {};
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const clone = o => JSON.parse(JSON.stringify(o));
-function merge(base, over) {
-  if (over === undefined || over === null) return base;
-  if (Array.isArray(over)) return over;
-  if (typeof over === 'object' && base && typeof base === 'object' && !Array.isArray(base)) {
-    const out = { ...base }; for (const k in over) out[k] = merge(base[k], over[k]); return out;
-  }
-  return over;
-}
 const getPath = (o, p) => p.split('.').reduce((a, k) => a == null ? a : a[k], o);
 function setPath(o, p, v) { const ks = p.split('.'); let t = o; ks.slice(0, -1).forEach(k => { if (t[k] == null || typeof t[k] !== 'object') t[k] = {}; t = t[k]; }); t[ks.at(-1)] = v; }
-function toast(msg, type = 'ok') { const t = document.createElement('div'); t.className = 'toast ' + type; t.textContent = msg; $('#toasts').appendChild(t); setTimeout(() => t.remove(), 3800); }
+function toast(msg, type = 'ok') { const t = document.createElement('div'); t.className = 'toast ' + type; t.textContent = msg; $('#toasts').appendChild(t); setTimeout(() => t.remove(), 4200); }
 const fmtDate = d => new Date(d).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+const csIndex = id => (cfg.customSections || []).findIndex(c => c.id === id);
+const csName = cs => (cs.nav || [cs.title, cs.accent].filter(Boolean).join(' ') || 'Untitled section').trim();
 
 /* =========================================================
    AUTH
@@ -364,7 +403,7 @@ const fmtDate = d => new Date(d).toLocaleString(undefined, { dateStyle: 'medium'
 async function boot() {
   const { data: { session } } = await sb.auth.getSession();
   session ? enter(session) : showLogin();
-  sb.auth.onAuthStateChange((ev, s) => { if (ev === 'SIGNED_OUT') showLogin(); });
+  sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_OUT') showLogin(); });
 }
 function showLogin() { $('#app').classList.add('hidden'); $('#login').classList.remove('hidden'); }
 $('#login-form').addEventListener('submit', async e => {
@@ -383,7 +422,7 @@ async function enter(session) {
   $('#user-email').textContent = session.user.email;
   if (session.user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) toast('Note: only ' + ADMIN_EMAIL + ' can publish changes (database rule).', 'warn');
   renderNav(); go(location.hash.slice(1) || 'dashboard');
-  await loadConfig(); loadMessages();
+  await loadConfig(); loadMessages(); loadSecrets();
 }
 
 /* =========================================================
@@ -394,13 +433,15 @@ async function loadConfig() {
   const { data, error } = await sb.from('site_settings').select('data,updated_at').eq('id', SETTINGS_ID).maybeSingle();
   if (error) settingsError = error.message;
   cfg = merge(clone(DEFAULTS), data?.data || null);
+  cfg.order = orderList(cfg);
   savedJSON = JSON.stringify(cfg);
   lastSaved = data?.updated_at ? new Date(data.updated_at) : null;
   setDirty(false); go(page); sendPreview();
-  if (error) toast('Could not load settings: ' + error.message + ' — see Setup page', 'err');
+  if (error) toast('Could not load settings: ' + error.message + ' — see Supabase Setup', 'err');
 }
 async function save() {
   const btn = $('#save-btn'); btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner spin"></i> Publishing...';
+  cfg.order = orderList(cfg);
   const { error } = await sb.from('site_settings').upsert({ id: SETTINGS_ID, data: cfg, updated_at: new Date().toISOString() });
   btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Publish';
   if (error) { toast('Publish failed: ' + error.message, 'err'); return; }
@@ -414,6 +455,22 @@ async function loadMessages() {
   const { data, error } = await sb.from('contact_messages').select('*').order('created_at', { ascending: false });
   if (error) { msgError = error.message; messages = []; } else messages = data || [];
   renderNav(); if (page === 'messages' || page === 'dashboard') go(page);
+}
+async function loadSecrets() {
+  const { data } = await sb.from('social_secrets').select('id,value,updated_at');
+  SECRETS = {}; (data || []).forEach(r => { SECRETS[r.id] = { tail: String(r.value).slice(-4), updated_at: r.updated_at }; });
+  if (page === 'socials') go(page);
+}
+async function saveSecret(id) {
+  const v = ($('#sec-' + id)?.value || '').trim();
+  if (!v) return toast('Paste the token first', 'warn');
+  const { error } = await sb.from('social_secrets').upsert({ id, value: v, updated_at: new Date().toISOString() });
+  if (error) return toast('Could not save: ' + error.message + ' — run the Setup SQL', 'err');
+  toast('Token saved securely ✓'); await loadSecrets();
+}
+async function deleteSecret(id) {
+  if (!confirm('Remove this token? The automatic feed will stop until you add a new one.')) return;
+  await sb.from('social_secrets').delete().eq('id', id); await loadSecrets(); toast('Token removed');
 }
 async function msgAction(act, id) {
   const m = messages.find(x => String(x.id) === String(id)); if (!m) return;
@@ -443,8 +500,8 @@ function download(name, text, type = 'application/json') {
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 async function uploadFile(file, folder) {
-  const ext = (file.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '');
-  const path = `${folder}/${folder}-${Date.now()}.${ext}`;
+  const ext = (file.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '') || 'bin';
+  const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 7)}.${ext}`;
   const { error } = await sb.storage.from(STORAGE_BUCKET).upload(path, file, { upsert: true, contentType: file.type });
   if (error) throw error;
   return sb.storage.from(STORAGE_BUCKET).getPublicUrl(path).data.publicUrl;
@@ -459,7 +516,7 @@ async function handleUpload(input, target) {
     if (target === 'profile.photoUrl' && file.size < 400000) {
       const r = new FileReader(); r.onload = e => { setPath(cfg, target, e.target.result); markDirty(); go(page); };
       r.readAsDataURL(file); toast('Storage upload failed (' + err.message + '). Embedded the small image instead.', 'warn');
-    } else toast('Upload failed: ' + err.message + ' — run the Storage SQL on the Setup page.', 'err');
+    } else toast('Upload failed: ' + err.message + ' — run the Setup SQL.', 'err');
   }
 }
 
@@ -497,6 +554,7 @@ const PAGES = [
   { id: 'dashboard', i: 'fa-gauge-high', l: 'Dashboard' },
   { id: 'messages', i: 'fa-inbox', l: 'Messages' },
   { g: 'Content' },
+  { id: 'builder', i: 'fa-layer-group', l: 'Page Builder' },
   { id: 'profile', i: 'fa-id-card', l: 'Profile & Bio' },
   { id: 'hero', i: 'fa-house', l: 'Hero Section' },
   { id: 'stats', i: 'fa-chart-simple', l: 'Stats Counter' },
@@ -505,8 +563,9 @@ const PAGES = [
   { id: 'experience', i: 'fa-timeline', l: 'Experience' },
   { id: 'education', i: 'fa-graduation-cap', l: 'Education & Certs' },
   { id: 'highlights', i: 'fa-star', l: 'Highlights' },
-  { id: 'sections', i: 'fa-table-cells-large', l: 'Sections & Menu' },
-  { g: 'Design' },
+  { g: 'Custom Sections', custom: true },
+  { g: 'Social & Design' },
+  { id: 'socials', i: 'fa-share-nodes', l: 'Social Media' },
   { id: 'theme', i: 'fa-palette', l: 'Theme & Colors' },
   { id: 'animations', i: 'fa-wand-magic-sparkles', l: 'Animations' },
   { g: 'System' },
@@ -516,73 +575,88 @@ const PAGES = [
 ];
 function renderNav() {
   const unread = messages.filter(m => !m.is_read).length;
-  $('#side-nav').innerHTML = PAGES.map(p => p.g ? `<div class="nav-group">${p.g}</div>` :
-    `<button class="nav-item ${p.id === page ? 'active' : ''}" onclick="go('${p.id}')"><i class="fa-solid ${p.i}"></i>${p.l}${p.id === 'messages' && unread ? `<span class="badge">${unread}</span>` : ''}</button>`).join('');
+  $('#side-name').textContent = (cfg.profile.firstName + ' ' + cfg.profile.lastName).trim();
+  $('#side-nav').innerHTML = PAGES.map(p => {
+    if (p.custom) {
+      return `<div class="nav-group">Custom Sections</div>` + (cfg.customSections || []).map(cs =>
+        `<button class="nav-item ${page === 'cs:' + cs.id ? 'active' : ''} ${cs.show === false ? 'off' : ''}" onclick="go('cs:${cs.id}')"><i class="fa-solid ${(CS_TYPES[cs.type] || CS_TYPES.cards).icon}"></i><span class="t">${esc(csName(cs))}</span></button>`).join('') +
+        `<button class="nav-item add" onclick="go('builder');setTimeout(()=>document.getElementById('add-sec')?.scrollIntoView({behavior:'smooth'}),50)"><i class="fa-solid fa-plus"></i><span class="t">Add new section</span></button>`;
+    }
+    if (p.g) return `<div class="nav-group">${p.g}</div>`;
+    return `<button class="nav-item ${p.id === page ? 'active' : ''}" onclick="go('${p.id}')"><i class="fa-solid ${p.i}"></i><span class="t">${p.l}</span>${p.id === 'messages' && unread ? `<span class="badge">${unread}</span>` : ''}</button>`;
+  }).join('');
 }
 function go(id) {
-  const p = PAGES.find(x => x.id === id) || PAGES[1];
-  page = p.id; history.replaceState(null, '', '#' + page);
+  let title, icon, html;
+  if (String(id).startsWith('cs:')) {
+    const cs = (cfg.customSections || []).find(c => c.id === id.slice(3));
+    if (!cs) return go('builder');
+    page = id; title = csName(cs); icon = (CS_TYPES[cs.type] || CS_TYPES.cards).icon; html = customView(cs.id);
+  } else {
+    const p = PAGES.find(x => x.id === id) || PAGES[1];
+    page = p.id; title = p.l; icon = p.i; html = (VIEWS[page] || VIEWS.dashboard)();
+  }
+  history.replaceState(null, '', '#' + page);
   const y = page === go._last ? scrollY : 0; go._last = page;
-  $('#page-title').innerHTML = `<i class="fa-solid ${p.i}"></i>${p.l}`;
-  $('#content').innerHTML = (VIEWS[page] || VIEWS.dashboard)();
+  $('#page-title').innerHTML = `<i class="fa-solid ${icon}"></i><span>${esc(title)}</span>`;
+  $('#content').innerHTML = html;
   renderNav(); toggleSide(false); scrollTo(0, y);
 }
 
 /* =========================================================
    FIELD BUILDERS
    ========================================================= */
+function mediaThumb(v) {
+  if (!v) return '<i class="fa-regular fa-image"></i>';
+  const m = parseMedia(v);
+  if (m && (m.thumb || m.kind === 'image')) return `<img src="${esc(m.thumb || m.src)}" alt="" referrerpolicy="no-referrer">`;
+  if (m && m.kind === 'video') return '<i class="fa-solid fa-film"></i>';
+  if (m && m.kind === 'iframe') return `<i class="${(SOCIAL_PLATFORMS[m.pl] || {}).icon || 'fa-solid fa-code'}"></i>`;
+  return '<i class="fa-solid fa-link"></i>';
+}
 function input(attrs, f, v) {
   const t = f.t || 'text';
   if (t === 'textarea' || t === 'lines') return `<textarea ${attrs} data-t="${t}" rows="${f.rows || (t === 'lines' ? 4 : 3)}" placeholder="${esc(f.ph || '')}">${esc(t === 'lines' ? (v || []).join('\n') : v)}</textarea>`;
   if (t === 'color') return `<div class="color-row"><input type="color" ${attrs} data-t="color" value="${esc(/^#[0-9a-f]{6}$/i.test(v) ? v : '#000000')}"><input type="text" class="inp" ${attrs} data-t="colortext" value="${esc(v)}"></div>`;
   if (t === 'icon') return `<div class="icon-row"><span class="ip"><i class="${esc(v)}"></i></span><input type="text" class="inp" list="icon-list" ${attrs} data-t="icon" value="${esc(v)}" placeholder="fa-solid fa-star"></div>`;
-  if (t === 'range') return `<div class="range-row"><input type="range" ${attrs} data-t="range" data-unit="${f.unit || ''}" min="${f.min}" max="${f.max}" step="${f.step || 1}" value="${esc(v)}"><output>${esc(v)}${f.unit || ''}</output></div>`;
+  if (t === 'range') return `<div class="range-row"><input type="range" ${attrs} data-t="range" data-unit="${esc(f.unit || '')}" min="${f.min}" max="${f.max}" step="${f.step || 1}" value="${esc(v ?? f.min)}"><output>${esc(v ?? f.min)}${esc(f.unit || '')}</output></div>`;
   if (t === 'select') return `<select ${attrs} data-t="select">${f.opts.map(o => { const [val, lab] = Array.isArray(o) ? o : [o, o]; return `<option value="${esc(val)}" ${String(val) === String(v) ? 'selected' : ''}>${esc(lab)}</option>`; }).join('')}</select>`;
+  if (t === 'tags') return `<input type="text" ${attrs} data-t="tags" value="${esc((Array.isArray(v) ? v : []).join(', '))}" placeholder="${esc(f.ph || 'e.g. Physics, Teaching')}">`;
+  if (t === 'image' || t === 'media') return `<div class="img-row"><span class="thumb">${mediaThumb(v)}</span>
+      <input type="text" class="inp" ${attrs} data-t="text" value="${esc(v)}" placeholder="${esc(f.ph || (t === 'media' ? 'Paste a link or upload →' : 'Paste image URL or upload →'))}">
+      <label class="btn sm" title="Upload from your device"><i class="fa-solid fa-upload"></i> Upload<input type="file" hidden accept="${t === 'media' ? 'image/*,video/*' : 'image/*'}" ${attrs} data-t="file"></label></div>`;
   if (t === 'toggle') return '';
   return `<input type="${t === 'number' ? 'number' : 'text'}" ${attrs} data-t="${t}" value="${esc(v)}" placeholder="${esc(f.ph || '')}">`;
 }
 function wrap(f, inner, attrs, v) {
   if (f.t === 'toggle') return `<label class="switch ${f.full ? 'full' : ''}"><span>${esc(f.l)}${f.help ? `<small>${esc(f.help)}</small>` : ''}</span><input type="checkbox" ${attrs} data-t="toggle" ${v ? 'checked' : ''}></label>`;
-  return `<div class="f ${f.full ? 'full' : ''}"><label>${esc(f.l)}</label>${inner}${f.help ? `<div class="help">${esc(f.help)}</div>` : ''}</div>`;
+  return `<div class="f ${f.full ? 'full' : ''}"><label>${esc(f.l)}</label>${inner}${f.help ? `<div class="help">${f.helpHtml ? f.help : esc(f.help)}</div>` : ''}</div>`;
 }
-function field(f) { const v = getPath(cfg, f.p), a = `data-p="${f.p}"`; return wrap(f, input(a, f, v), a, v); }
+function field(f) { const v = getPath(cfg, f.p), a = `data-p="${f.p}"${f.rr ? ' data-rr="1"' : ''}`; return wrap(f, input(a, f, v), a, v); }
 function fields(list, cls = 'grid2') { return `<div class="${cls}">${list.map(field).join('')}</div>`; }
-function panel(title, icon, sub, body) { return `<div class="panel"><h3><i class="fa-solid ${icon}"></i>${title}</h3>${sub ? `<div class="sub">${sub}</div>` : '<div style="height:12px"></div>'}${body}</div>`; }
+function panel(title, icon, sub, body, id) { return `<div class="panel" ${id ? `id="${id}"` : ''}><h3><i class="fa-solid ${icon}"></i>${title}</h3>${sub ? `<div class="sub">${sub}</div>` : '<div style="height:12px"></div>'}${body}</div>`; }
 
-/* List editor */
-const LISTS = {
-  stats: { label: x => `${x.value}${x.suffix} — ${x.label}`, blank: { icon: 'fa-solid fa-star', value: '1', suffix: '+', label: 'New stat' },
-    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'label', l: 'Label' }, { k: 'value', l: 'Number / Value', help: 'Numbers animate as a counter' }, { k: 'suffix', l: 'Suffix (e.g. + or %)' }] },
-  services: { label: x => x.title, blank: { icon: 'fa-solid fa-star', title: 'New Service', desc: '', tag: '' },
-    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'title', l: 'Title' }, { k: 'desc', l: 'Description', t: 'textarea', full: true }, { k: 'tag', l: 'Footer tag' }] },
-  skills: { label: x => `${x.name} (${x.percent}%)`, blank: { name: 'New Skill', percent: 80, category: 'Career Services' },
-    f: [{ k: 'name', l: 'Skill name' }, { k: 'category', l: 'Category (filter tab)' }, { k: 'percent', l: 'Proficiency', t: 'range', min: 0, max: 100, unit: '%', full: true }] },
-  experience: { label: x => `${x.role} — ${x.company}`, blank: { role: 'New Role', company: 'Company', period: '2026 – Present', type: 'Category', icon: 'fa-solid fa-briefcase', current: false, points: [] },
-    f: [{ k: 'role', l: 'Job title' }, { k: 'company', l: 'Company / Organization' }, { k: 'period', l: 'Period' }, { k: 'type', l: 'Category label' }, { k: 'icon', l: 'Icon', t: 'icon' }, { k: 'current', l: 'Current job (highlighted)', t: 'toggle' }, { k: 'points', l: 'Responsibilities (one per line)', t: 'lines', full: true }] },
-  education: { label: x => x.degree, blank: { degree: 'New Degree', institute: 'Institute', period: '', location: '', desc: '' },
-    f: [{ k: 'degree', l: 'Degree' }, { k: 'institute', l: 'Institute' }, { k: 'period', l: 'Period' }, { k: 'location', l: 'Location' }, { k: 'desc', l: 'Description (optional)', t: 'textarea', full: true }] },
-  certifications: { label: x => x.title, blank: { title: 'New Certification', org: '', year: '', icon: 'fa-solid fa-certificate', desc: '' },
-    f: [{ k: 'title', l: 'Title' }, { k: 'org', l: 'Issued by' }, { k: 'year', l: 'Year / Label' }, { k: 'icon', l: 'Icon', t: 'icon' }, { k: 'desc', l: 'Description', t: 'textarea', full: true }] },
-  highlights: { label: x => x.title, blank: { icon: 'fa-solid fa-star', title: 'New Highlight', text: '' },
-    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'title', l: 'Title' }, { k: 'text', l: 'Text', t: 'textarea', full: true }] }
-};
-function listEditor(key) {
-  const L = LISTS[key], arr = cfg[key] || [];
-  return `<div data-listwrap="${key}">${arr.length ? '' : '<div class="empty"><i class="fa-regular fa-folder-open"></i>No items yet.</div>'}${arr.map((it, i) => {
-    const open = openItems.has(key + ':' + i);
+/* Generic list editor — works with any array path, e.g. "services" or "customSections.2.items" */
+function listEditor(path, schema, addLabel = 'Add item') {
+  LIST_REG[path] = schema;
+  const arr = getPath(cfg, path) || [];
+  const thumbKey = schema.f.find(f => f.t === 'image' || f.t === 'media')?.k;
+  return `<div>${arr.length ? '' : '<div class="empty"><i class="fa-regular fa-folder-open"></i>No items yet — add your first one below.</div>'}${arr.map((it, i) => {
+    const open = openItems.has(path + ':' + i), a = `data-a="${path}" data-i="${i}"`;
     return `<div class="li-card ${open ? 'open' : ''}">
-      <div class="li-head" data-act="toggle" data-l="${key}" data-i="${i}">
-        <span class="li-num">${i + 1}</span><span class="li-title" id="lt-${key}-${i}">${esc(L.label(it) || 'Untitled')}</span>
+      <div class="li-head" data-act="toggle" ${a}>
+        <span class="li-num">${i + 1}</span>${thumbKey ? `<span class="li-thumb">${mediaThumb(it[thumbKey])}</span>` : ''}
+        <span class="li-title" id="lt-${path}-${i}">${esc(schema.label(it) || 'Untitled')}</span>
         <span class="li-actions">
-          <button class="btn icon sm" title="Move up" data-act="up" data-l="${key}" data-i="${i}"><i class="fa-solid fa-arrow-up"></i></button>
-          <button class="btn icon sm" title="Move down" data-act="down" data-l="${key}" data-i="${i}"><i class="fa-solid fa-arrow-down"></i></button>
-          <button class="btn icon sm" title="Duplicate" data-act="dup" data-l="${key}" data-i="${i}"><i class="fa-regular fa-copy"></i></button>
-          <button class="btn icon sm danger" title="Delete" data-act="del" data-l="${key}" data-i="${i}"><i class="fa-solid fa-trash"></i></button>
+          <button class="btn icon sm" title="Move up" data-act="up" ${a} ${i === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+          <button class="btn icon sm" title="Move down" data-act="down" ${a} ${i === arr.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+          <button class="btn icon sm" title="Duplicate" data-act="dup" ${a}><i class="fa-regular fa-copy"></i></button>
+          <button class="btn icon sm danger" title="Delete" data-act="del" ${a}><i class="fa-solid fa-trash"></i></button>
         </span><i class="fa-solid fa-chevron-down li-chev"></i>
       </div>
-      <div class="li-body"><div class="grid2">${L.f.map(f => { const a = `data-l="${key}" data-i="${i}" data-k="${f.k}"`; return wrap(f, input(a, f, it[f.k]), a, it[f.k]); }).join('')}</div></div>
+      <div class="li-body"><div class="grid2">${schema.f.map(f => { const at = `${a} data-k="${f.k}"`; return wrap(f, input(at, f, it[f.k]), at, it[f.k]); }).join('')}</div></div>
     </div>`;
-  }).join('')}<button class="btn pri" data-act="add" data-l="${key}"><i class="fa-solid fa-plus"></i> Add item</button></div>`;
+  }).join('')}<button class="btn pri" data-act="add" data-a="${path}"><i class="fa-solid fa-plus"></i> ${addLabel}</button></div>`;
 }
 
 /* =========================================================
@@ -592,11 +666,12 @@ const VIEWS = {
   dashboard() {
     const unread = messages.filter(m => !m.is_read).length;
     const recent = messages.slice(0, 4);
+    const socOn = Object.values(cfg.socials.platforms).filter(p => p.enabled && p.url).length;
     return `${settingsError ? `<div class="note err"><b>Database not ready:</b> ${esc(settingsError)} — open <a href="#" onclick="go('setup');return false" style="text-decoration:underline">Supabase Setup</a> and run the SQL.</div>` : ''}
     <div class="welcome"><div><h3>Assalam-o-Alaikum, ${esc(cfg.profile.firstName)} 👋</h3><p>Edit any part of your website, preview it live, then press <b>Publish</b>.</p></div>
       <div class="btn-row"><button class="btn" onclick="togglePreview(true)"><i class="fa-solid fa-eye"></i> Live Preview</button><a class="btn pri" href="index.html" target="_blank"><i class="fa-solid fa-globe"></i> Open Website</a></div></div>
     <div class="grid4" style="margin-bottom:18px">
-      ${[['fa-inbox', messages.length, 'Total Messages'], ['fa-envelope', unread, 'Unread Messages'], ['fa-briefcase', cfg.services.length, 'Services'], ['fa-clock-rotate-left', lastSaved ? lastSaved.toLocaleDateString() : '—', 'Last Published']]
+      ${[['fa-envelope', `${unread} / ${messages.length}`, 'Unread / Total Messages'], ['fa-share-nodes', socOn, 'Social Platforms Connected'], ['fa-layer-group', (cfg.customSections || []).length, 'Custom Sections'], ['fa-clock-rotate-left', lastSaved ? lastSaved.toLocaleDateString() : '—', 'Last Published']]
         .map(k => `<div class="kpi"><div class="ki"><i class="fa-solid ${k[0]}"></i></div><div><b>${esc(k[1])}</b><small>${k[2]}</small></div></div>`).join('')}
     </div>
     <div class="grid2">
@@ -609,8 +684,8 @@ const VIEWS = {
     if (msgFilter === 'unread') list = list.filter(m => !m.is_read);
     if (msgSearch) { const q = msgSearch.toLowerCase(); list = list.filter(m => [m.name, m.email, m.service, m.message, m.phone].join(' ').toLowerCase().includes(q)); }
     return `${msgError ? `<div class="note err">${esc(msgError)} — run the SQL on the Setup page.</div>` : ''}
-    <div class="panel"><div class="btn-row" style="align-items:center">
-      <input class="inp" style="max-width:280px" placeholder="Search messages..." value="${esc(msgSearch)}" oninput="msgSearch=this.value;clearTimeout(window._ms);window._ms=setTimeout(()=>{go('messages');const i=document.querySelector('.content .inp');i.focus();i.setSelectionRange(i.value.length,i.value.length)},300)">
+    <div class="panel"><div class="btn-row">
+      <input class="inp" id="msg-search" style="max-width:280px" placeholder="Search messages..." value="${esc(msgSearch)}" oninput="msgSearch=this.value;clearTimeout(window._ms);window._ms=setTimeout(()=>{go('messages');const i=document.getElementById('msg-search');i.focus();i.setSelectionRange(i.value.length,i.value.length)},300)">
       <button class="btn ${msgFilter === 'all' ? 'pri' : ''}" onclick="msgFilter='all';go('messages')">All (${messages.length})</button>
       <button class="btn ${msgFilter === 'unread' ? 'pri' : ''}" onclick="msgFilter='unread';go('messages')">Unread (${messages.filter(m => !m.is_read).length})</button>
       <span style="flex:1"></span>
@@ -618,6 +693,37 @@ const VIEWS = {
       <button class="btn" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
     </div></div>
     ${list.length ? list.map(msgCard).join('') : `<div class="panel empty"><i class="fa-regular fa-envelope-open"></i>No messages found.</div>`}`;
+  },
+  builder() {
+    const ids = orderList(cfg);
+    const row = (id, i) => {
+      const ci = csIndex(id), cs = ci >= 0 ? cfg.customSections[ci] : null;
+      const name = cs ? csName(cs) : SECTION_LABELS[id];
+      const typeLabel = cs ? 'Custom · ' + (CS_TYPES[cs.type] || CS_TYPES.cards).name : 'Built-in section';
+      const showPath = cs ? `customSections.${ci}.show` : `sections.${id}.show`;
+      const navPath = cs ? `customSections.${ci}.nav` : (['marquee', 'stats'].includes(id) ? null : `sections.${id}.nav`);
+      const visible = getPath(cfg, showPath) !== false;
+      return `<div class="pb-row ${cs ? 'custom' : ''} ${visible ? '' : 'hid'}">
+        <span class="li-num">${i + 1}</span><span class="pb-ic"><i class="fa-solid ${cs ? (CS_TYPES[cs.type] || CS_TYPES.cards).icon : BUILTIN_ICONS[id]}"></i></span>
+        <div class="pb-name"><b>${esc(name)}</b><small>${typeLabel}</small></div>
+        ${navPath ? `<input class="inp pb-nav" data-p="${navPath}" data-t="text" value="${esc(getPath(cfg, navPath) || '')}" placeholder="Menu label (empty = hidden)" title="Menu label">` : '<span class="pb-nav" style="color:var(--mu);font-size:12px;padding:0 10px">not in menu</span>'}
+        <input type="checkbox" class="tgl" title="Show / hide on website" data-p="${showPath}" data-t="toggle" data-rr="1" ${visible ? 'checked' : ''}>
+        <span class="li-actions">
+          <button class="btn icon sm" title="Move up" data-act="ord" data-dir="-1" data-id="${id}" ${i === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+          <button class="btn icon sm" title="Move down" data-act="ord" data-dir="1" data-id="${id}" ${i === ids.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+          <button class="btn icon sm" title="Edit content" data-act="edit-sec" data-id="${id}"><i class="fa-solid fa-pen"></i></button>
+          ${cs ? `<button class="btn icon sm danger" title="Delete section" data-act="del-sec" data-id="${id}"><i class="fa-solid fa-trash"></i></button>` : ''}
+        </span></div>`;
+    };
+    return `<div class="note info"><i class="fa-solid fa-circle-info"></i> Arrange the order of every section on your website, show/hide them, rename menu items — and add brand-new sections (Projects, Achievements, Gallery, anything) below.</div>` +
+      panel('Website Layout', 'fa-layer-group', 'Top to bottom, exactly as it appears on your website',
+        `<div class="pb-row fixed"><span class="li-num"><i class="fa-solid fa-lock" style="font-size:10px"></i></span><span class="pb-ic"><i class="fa-solid fa-house"></i></span><div class="pb-name"><b>Hero</b><small>Always first</small></div>
+          <input class="inp pb-nav" data-p="sections.hero.nav" data-t="text" value="${esc(cfg.sections.hero.nav || '')}" placeholder="Menu label">
+          <input type="checkbox" class="tgl" data-p="sections.hero.show" data-t="toggle" data-rr="1" ${cfg.sections.hero.show !== false ? 'checked' : ''}>
+          <span class="li-actions"><button class="btn icon sm" data-act="edit-sec" data-id="hero"><i class="fa-solid fa-pen"></i></button></span></div>` +
+        ids.map(row).join('')) +
+      panel('Add a New Section', 'fa-plus', 'Pick a layout — you can change the type, texts and items any time afterwards',
+        `<div class="tpl-grid">${Object.entries(CS_TYPES).map(([k, t]) => `<button class="tpl" data-act="new-sec" data-type="${k}"><i class="fa-solid ${t.icon}"></i><b>${t.name}</b><small>${t.desc}</small></button>`).join('')}</div>`, 'add-sec');
   },
   profile() {
     const p = cfg.profile;
@@ -634,10 +740,10 @@ const VIEWS = {
       { p: 'profile.aboutTag', l: 'Small tag line', full: true }, { p: 'profile.aboutTitle', l: 'Headline', t: 'textarea', full: true, rows: 2 },
       { p: 'profile.aboutText1', l: 'Paragraph 1', t: 'textarea', full: true, rows: 4 }, { p: 'profile.aboutText2', l: 'Paragraph 2', t: 'textarea', full: true, rows: 4 },
       { p: 'profile.cvSummary', l: 'CV professional profile (printable CV)', t: 'textarea', full: true, rows: 4 }])) +
-    panel('Contact Details', 'fa-phone', '', fields([
+    panel('Contact Details', 'fa-phone', 'LinkedIn, Facebook, Instagram and other links are managed in <a href="#" onclick="go(\'socials\');return false" style="color:var(--a)">Social Media</a>.', fields([
       { p: 'profile.email', l: 'Email' }, { p: 'profile.phone', l: 'Phone' },
-      { p: 'profile.whatsapp', l: 'WhatsApp number (international, digits only)', ph: '923205335188' }, { p: 'profile.linkedin', l: 'LinkedIn URL' },
-      { p: 'profile.location', l: 'Location' }, { p: 'profile.availability', l: 'Availability note' }])) +
+      { p: 'profile.whatsapp', l: 'WhatsApp number (international, digits only)', ph: '923205335188' },
+      { p: 'profile.location', l: 'Location' }, { p: 'profile.availability', l: 'Availability note', full: true }])) +
     panel('CV / Resume File', 'fa-file-pdf', 'Optional — if set, "View CV" buttons open this file instead of the built-in printable CV.', `
       <div class="btn-row" style="margin-bottom:12px"><label class="btn"><i class="fa-solid fa-upload"></i> Upload PDF<input type="file" accept="application/pdf" hidden onchange="handleUpload(this,'profile.cvUrl')"></label>
       ${p.cvUrl ? `<a class="btn" href="${esc(p.cvUrl)}" target="_blank"><i class="fa-solid fa-eye"></i> Open</a><button class="btn danger" onclick="cfg.profile.cvUrl='';markDirty();go('profile')">Remove</button>` : ''}</div>
@@ -652,17 +758,24 @@ const VIEWS = {
       { p: 'profile.yearsExp', l: 'Big number', ph: '4+' }, { p: 'profile.yearsLabel', l: 'Number label' }, { p: 'profile.floatBadge', l: 'Pill badge text' }], 'grid3')) +
     panel('Scrolling Ticker', 'fa-arrows-left-right', 'Animated strip below the hero', fields([{ p: 'sections.marquee.show', l: 'Show ticker strip', t: 'toggle', full: true }, { p: 'marquee', l: 'Ticker items (one per line)', t: 'lines', full: true, rows: 6 }]));
   },
-  stats() { return panel('Stats Counter', 'fa-chart-simple', 'Animated numbers below the hero', fields([{ p: 'sections.stats.show', l: 'Show stats section', t: 'toggle', full: true }]) + '<div style="height:14px"></div>' + listEditor('stats')); },
-  services() { return sectionHeadPanel('services') + panel('Service Cards', 'fa-briefcase', 'Also used as options in the contact form', listEditor('services')); },
-  skills() { return sectionHeadPanel('skills') + panel('Skill Bars', 'fa-bars-progress', 'Categories automatically become filter tabs', listEditor('skills')) + panel('Competency Tags', 'fa-tags', 'Shown below the bars and in the printable CV', fields([{ p: 'competencies', l: 'One per line', t: 'lines', full: true, rows: 8 }])); },
-  experience() { return sectionHeadPanel('experience') + panel('Jobs Timeline', 'fa-timeline', 'Top item appears first', listEditor('experience')); },
-  education() { return sectionHeadPanel('education') + panel('Academic Degrees', 'fa-graduation-cap', '', listEditor('education')) + panel('Training & Certifications', 'fa-certificate', '', listEditor('certifications')); },
-  highlights() { return sectionHeadPanel('highlights') + panel('Highlight Cards', 'fa-star', '', listEditor('highlights')); },
-  sections() {
-    const keys = ['hero', 'about', 'services', 'skills', 'experience', 'education', 'highlights', 'contact'];
-    return panel('Navigation Menu', 'fa-bars', 'Menu labels — leave empty to hide a section from the menu', fields(keys.map(k => ({ p: `sections.${k}.nav`, l: k[0].toUpperCase() + k.slice(1) + ' menu label' })), 'grid4')) +
-      panel('Show / Hide Sections', 'fa-eye', '', fields(['hero', 'marquee', 'stats', ...keys.slice(1)].map(k => ({ p: `sections.${k}.show`, l: k[0].toUpperCase() + k.slice(1) + ' section', t: 'toggle' })), 'grid3')) +
-      keys.slice(1).map(k => sectionHeadPanel(k)).join('');
+  stats() { return panel('Stats Counter', 'fa-chart-simple', 'Animated numbers below the hero', fields([{ p: 'sections.stats.show', l: 'Show stats section', t: 'toggle', full: true }]) + '<div style="height:14px"></div>' + listEditor('stats', SCHEMA.stats)); },
+  services() { return sectionHeadPanel('services') + panel('Service Cards', 'fa-briefcase', 'Also used as options in the contact form', listEditor('services', SCHEMA.services)); },
+  skills() { return sectionHeadPanel('skills') + panel('Skill Bars', 'fa-bars-progress', 'Categories automatically become filter tabs', listEditor('skills', SCHEMA.skills)) + panel('Competency Tags', 'fa-tags', 'Shown below the bars and in the printable CV', fields([{ p: 'competencies', l: 'One per line', t: 'lines', full: true, rows: 8 }])); },
+  experience() { return sectionHeadPanel('experience') + panel('Jobs Timeline', 'fa-timeline', 'Top item appears first', listEditor('experience', SCHEMA.experience)); },
+  education() { return sectionHeadPanel('education') + panel('Academic Degrees', 'fa-graduation-cap', '', listEditor('education', SCHEMA.education)) + panel('Training & Certifications', 'fa-certificate', '', listEditor('certifications', SCHEMA.certifications)); },
+  highlights() { return sectionHeadPanel('highlights') + panel('Highlight Cards', 'fa-star', '', listEditor('highlights', SCHEMA.highlights)); },
+  socials() {
+    const keys = Object.keys(SOCIAL_PLATFORMS);
+    return `<div class="note ok"><i class="fa-solid fa-plug"></i> Every platform starts <b>inactive</b>. Switch one on and paste your profile link — its icon appears on your website. Platforms marked <b>Auto-feed</b> can also show your newest videos & photos automatically: once connected, whatever you post there shows up on your website by itself.</div>` +
+      `<div class="plat-grid">${keys.map(platCard).join('')}</div>` +
+      panel('Where to show social icons', 'fa-eye', '', fields([{ p: 'socials.showHero', l: 'Hero (top of page)', t: 'toggle' }, { p: 'socials.showFooter', l: 'Footer', t: 'toggle' }, { p: 'socials.showContact', l: 'Contact section', t: 'toggle' }, { p: 'socials.floatingBar', l: 'Floating side bar', t: 'toggle', help: 'Desktop only' }], 'grid4')) +
+      panel('Social Feed Section', 'fa-rss', 'The website section that shows your latest posts (appears automatically when an auto-feed or featured post exists)', fields([
+        { p: 'sections.social.show', l: 'Show the social feed section', t: 'toggle', full: true },
+        { p: 'sections.social.nav', l: 'Menu label (empty = not in menu)', ph: 'e.g. Updates' }, { p: 'sections.social.kicker', l: 'Small label' },
+        { p: 'sections.social.title', l: 'Title (plain part)' }, { p: 'sections.social.accent', l: 'Title (gradient part)' },
+        { p: 'sections.social.sub', l: 'Subtitle', full: true },
+        { p: 'sections.social.maxItems', l: 'Posts shown before "Load more"', t: 'range', min: 3, max: 30, step: 3, full: true }])) +
+      panel('Featured Posts & Uploads', 'fa-thumbtack', 'Pin any post to your website — paste a link from YouTube, Instagram, Facebook, LinkedIn, TikTok or Vimeo, or upload your own photo/video. Featured posts always show first. <b>Tip:</b> this is how to show LinkedIn posts (LinkedIn does not allow automatic feeds).', listEditor('socials.posts', SCHEMA.posts, 'Add post'));
   },
   theme() {
     const t = cfg.theme;
@@ -694,12 +807,13 @@ const VIEWS = {
       `<button class="btn" onclick="togglePreview(true);reloadPreview()"><i class="fa-solid fa-rotate"></i> Replay animations in preview</button>`;
   },
   settings() {
-    return panel('Contact Form', 'fa-envelope', 'Where form messages go', fields([
-      { p: 'contact.saveToSupabase', l: 'Save messages to Supabase', t: 'toggle', help: 'Appears in Messages inbox' },
-      { p: 'contact.sendGmail', l: 'Forward to Gmail', t: 'toggle', help: 'Via FormSubmit — confirm the first activation email' },
-      { p: 'contact.gmailTo', l: 'Gmail address to receive messages' }, { p: 'contact.whatsappButton', l: 'Show "Send via WhatsApp" button', t: 'toggle' },
-      { p: 'contact.formTitle', l: 'Form title' }, { p: 'contact.formSub', l: 'Form subtitle' },
-      { p: 'contact.successMsg', l: 'Success message', full: true }])) +
+    return sectionHeadPanel('contact') +
+      panel('Contact Form', 'fa-envelope', 'Where form messages go', fields([
+        { p: 'contact.saveToSupabase', l: 'Save messages to Supabase', t: 'toggle', help: 'Appears in Messages inbox' },
+        { p: 'contact.sendGmail', l: 'Forward to Gmail', t: 'toggle', help: 'Via FormSubmit — confirm the first activation email' },
+        { p: 'contact.gmailTo', l: 'Gmail address to receive messages' }, { p: 'contact.whatsappButton', l: 'Show "Send via WhatsApp" button', t: 'toggle' },
+        { p: 'contact.formTitle', l: 'Form title' }, { p: 'contact.formSub', l: 'Form subtitle' },
+        { p: 'contact.successMsg', l: 'Success message', full: true }])) +
       panel('SEO', 'fa-magnifying-glass', 'How your site appears on Google', fields([{ p: 'seo.title', l: 'Page title', full: true }, { p: 'seo.description', l: 'Meta description', t: 'textarea', full: true }])) +
       panel('Footer', 'fa-shoe-prints', '', fields([{ p: 'footer.tagline', l: 'Footer tagline' }, { p: 'footer.text', l: 'Copyright text' }]));
   },
@@ -713,24 +827,146 @@ const VIEWS = {
       <button class="btn danger" onclick="if(confirm('Reset ALL content to the original defaults? (You still need to Publish)')){cfg=clone(DEFAULTS);markDirty();go('backup');toast('Defaults loaded — click Publish to apply')}"><i class="fa-solid fa-triangle-exclamation"></i> Reset to defaults</button></div>`);
   },
   setup() {
-    return `<div class="note ok">Run this <b>once</b>. It creates the tables, security rules and photo storage your website needs.</div>` +
-      panel('Steps', 'fa-list-check', '', `<ol class="steps">
-        <li>Open <a href="https://supabase.com/dashboard/project/pxlpfhagbkbafxgcpcyl/sql/new" target="_blank" style="color:var(--a)">Supabase → SQL Editor → New query</a>.</li>
-        <li>Copy the SQL below, paste it and press <b>Run</b>.</li>
-        <li>Go to <b>Authentication → Users → Add user</b> and create a user with email <b>${esc(ADMIN_EMAIL)}</b> and a strong password (tick “Auto confirm”).</li>
-        <li>Optional but recommended: <b>Authentication → Sign In / Providers</b> → turn off “Allow new users to sign up”.</li>
-        <li>Log in here, edit your content and click <b>Publish</b>.</li>
-        <li>Gmail: submit the website contact form once — FormSubmit sends an activation email to <b>${esc(cfg.contact.gmailTo)}</b>. Click “Activate” and all future messages arrive in Gmail.</li>
-      </ol>`) +
-      panel('Setup SQL', 'fa-database', '', `<pre class="code" id="sql">${esc(SETUP_SQL)}</pre><div class="btn-row" style="margin-top:12px"><button class="btn pri" onclick="navigator.clipboard.writeText(SETUP_SQL).then(()=>toast('SQL copied'))"><i class="fa-regular fa-copy"></i> Copy SQL</button></div>`);
+    return `<div class="note ok">Do steps 1–2 <b>once</b>. Step 3 is only needed for automatic YouTube / Instagram / Facebook feeds.</div>` +
+      panel('Check Status', 'fa-stethoscope', 'Tests your database, storage and social-feed function', `<div id="chk-out"><div class="empty" style="padding:10px">Click the button to run a check.</div></div><button class="btn pri" onclick="checkSetup()" style="margin-top:10px"><i class="fa-solid fa-play"></i> Run check</button>`) +
+      panel('Step 1 — Database (SQL)', 'fa-database', '', `<ol class="steps">
+        <li>Open <a href="https://supabase.com/dashboard/project/${SUPABASE_URL.split('//')[1].split('.')[0]}/sql/new" target="_blank">Supabase → SQL Editor → New query</a>.</li>
+        <li>Click <b>Copy SQL</b> below, paste it and press <b>Run</b>. (Safe to run again whenever this file is updated.)</li></ol>
+        <pre class="code" style="margin-top:12px">${esc(SETUP_SQL)}</pre><div class="btn-row" style="margin-top:12px"><button class="btn pri" onclick="copyText(SETUP_SQL,'SQL copied')"><i class="fa-regular fa-copy"></i> Copy SQL</button></div>`) +
+      panel('Step 2 — Admin user', 'fa-user-shield', '', `<ol class="steps">
+        <li>Supabase → <b>Authentication → Users → Add user</b>. Email <b>${esc(ADMIN_EMAIL)}</b>, choose a strong password, tick “Auto confirm”.</li>
+        <li>Recommended: <b>Authentication → Sign In / Providers</b> → turn off “Allow new users to sign up”.</li>
+        <li>Gmail: submit your website contact form once — FormSubmit emails <b>${esc(cfg.contact.gmailTo)}</b> an activation link. Click “Activate”.</li></ol>`) +
+      panel('Step 3 — Social feed function (for auto-feeds)', 'fa-bolt', 'Lets your website show your newest YouTube videos, Instagram posts and Facebook posts automatically.', `<ol class="steps">
+        <li>Supabase → <b>Edge Functions</b> → <b>Deploy a new function</b> → <b>Via Editor</b>.</li>
+        <li>Name it exactly <code>${FEED_FUNCTION}</code>.</li>
+        <li>Delete the sample code, click <b>Copy function code</b> below and paste it.</li>
+        <li>Click <b>Deploy function</b>. Done — no other settings needed.</li></ol>
+        <pre class="code" style="margin-top:12px;max-height:260px">${esc(FEED_FN_CODE)}</pre><div class="btn-row" style="margin-top:12px"><button class="btn pri" onclick="copyText(FEED_FN_CODE,'Function code copied')"><i class="fa-regular fa-copy"></i> Copy function code</button></div>`);
   }
 };
 function sectionHeadPanel(k) {
-  return panel(k[0].toUpperCase() + k.slice(1) + ' — Section Heading', 'fa-heading', '', fields([
+  return panel((SECTION_LABELS[k] || k) + ' — Section Heading', 'fa-heading', '', fields([
     { p: `sections.${k}.show`, l: 'Show this section', t: 'toggle', full: true },
-    { p: `sections.${k}.kicker`, l: 'Small label above title' }, { p: `sections.${k}.title`, l: 'Title (plain part)' },
-    { p: `sections.${k}.accent`, l: 'Title (gradient part)' }, { p: `sections.${k}.sub`, l: 'Subtitle' }]));
+    { p: `sections.${k}.kicker`, l: 'Small label above title' }, { p: `sections.${k}.nav`, l: 'Menu label (empty = not in menu)' },
+    { p: `sections.${k}.title`, l: 'Title (plain part)' }, { p: `sections.${k}.accent`, l: 'Title (gradient part)' },
+    { p: `sections.${k}.sub`, l: 'Subtitle', full: true }]));
 }
+
+/* ---------- Custom section editor ---------- */
+function customView(id) {
+  const idx = csIndex(id), cs = cfg.customSections[idx], T = CS_TYPES[cs.type] || CS_TYPES.cards, P = `customSections.${idx}`;
+  return `<div class="btn-row" style="margin-bottom:16px">
+      <button class="btn" onclick="go('builder')"><i class="fa-solid fa-arrow-left"></i> Page Builder</button><span style="flex:1"></span>
+      <button class="btn" onclick="togglePreview(true)"><i class="fa-solid fa-eye"></i> Preview</button>
+      <button class="btn" data-act="dup-sec" data-id="${id}"><i class="fa-regular fa-copy"></i> Duplicate</button>
+      <button class="btn danger" data-act="del-sec" data-id="${id}"><i class="fa-solid fa-trash"></i> Delete section</button></div>` +
+    panel('Section Settings', 'fa-sliders', `<b>${T.name}</b> — ${T.desc}`, fields([
+      { p: P + '.show', l: 'Show this section on the website', t: 'toggle', full: true, rr: true },
+      { p: P + '.type', l: 'Layout type', t: 'select', opts: Object.entries(CS_TYPES).map(([k, v]) => [k, v.name]), rr: true },
+      { p: P + '.nav', l: 'Menu label (empty = not in menu)' },
+      { p: P + '.kicker', l: 'Small label above title' }, { p: P + '.title', l: 'Title (plain part)' },
+      { p: P + '.accent', l: 'Title (gradient part)' }, ...(cs.type === 'cta' ? [] : [{ p: P + '.sub', l: 'Subtitle' }]),
+      ...(T.cols ? [{ p: P + '.columns', l: 'Columns on desktop', t: 'select', opts: [['1', '1 column'], ['2', '2 columns'], ['3', '3 columns'], ['4', '4 columns']] }] : [])
+    ])) +
+    (T.sf ? panel('Content', 'fa-pen', '', fields(T.sf.map(f => ({ ...f, p: P + '.' + f.k })))) : '') +
+    (T.noItems ? '' : panel('Items', 'fa-list', 'Click an item to edit it. Use the arrows to reorder.', listEditor(P + '.items', { label: it => it.title || it.subtitle || 'Item', blank: T.blank, f: T.f })));
+}
+function addSection(type) {
+  const T = CS_TYPES[type];
+  const id = 'cs-' + Math.random().toString(36).slice(2, 8);
+  const cs = { id, type, show: true, columns: String(T.cols || 3), ...clone(T.preset), items: T.noItems ? [] : [clone(T.blank), clone(T.blank)] };
+  cfg.customSections = [...(cfg.customSections || []), cs];
+  cfg.order = orderList(cfg);
+  openItems.add(`customSections.${cfg.customSections.length - 1}.items:0`);
+  markDirty(); go('cs:' + id);
+  toast(T.name + ' section added — edit it, then Publish');
+}
+
+/* ---------- Social platform cards ---------- */
+function platCard(k) {
+  const D = SOCIAL_PLATFORMS[k], P = cfg.socials.platforms[k] || {}, base = `socials.platforms.${k}`;
+  const status = !P.enabled ? '<span class="st off">Inactive</span>' : !P.url && !(k === 'youtube' && P.channelId) ? '<span class="st warn">Add link</span>' : P.feed ? '<span class="st live">Auto-feed on</span>' : '<span class="st on">Connected</span>';
+  let body = '';
+  if (P.enabled) {
+    body = fields([{ p: base + '.url', l: `${D.name} link`, ph: D.ph, full: true }]);
+    if (D.feed) body += feedSettings(k);
+  }
+  return `<div class="plat ${P.enabled ? 'on' : ''} ${P.enabled && D.feed ? 'wide' : ''}" style="--pc:${D.color}">
+    <div class="plat-head"><span class="plat-ic"><i class="${D.icon}"></i></span><div class="plat-name"><b>${D.name}</b><small>${D.feed ? 'Link + Auto-feed' : 'Profile link'}</small></div>${status}
+      <input type="checkbox" class="tgl" title="Activate" data-p="${base}.enabled" data-t="toggle" data-rr="1" ${P.enabled ? 'checked' : ''}></div>
+    ${body ? `<div class="plat-body">${body}</div>` : ''}</div>`;
+}
+const testBtn = k => `<div class="btn-row" style="margin-top:12px"><button class="btn pri" onclick="testFeed('${k}')"><i class="fa-solid fa-plug-circle-check"></i> Test connection</button><span style="font-size:12px;color:var(--mu)">After a successful test, click <b>Publish</b>.</span></div><div class="test-out" id="test-${k}"></div>`;
+function secretBox(id, label) {
+  const s = SECRETS[id];
+  return `<div class="f full"><label>${label}</label><div class="color-row"><input type="password" class="inp" id="sec-${id}" autocomplete="off" placeholder="${s ? 'Saved ••••' + esc(s.tail) + ' — paste a new one to replace' : 'Paste your access token here'}">
+    <button class="btn pri" onclick="saveSecret('${id}')">Save</button>${s ? `<button class="btn danger" onclick="deleteSecret('${id}')">Remove</button>` : ''}</div>
+    <div class="help">${s ? `✓ Saved ${new Date(s.updated_at).toLocaleDateString()} — stored privately in Supabase, never shown on your website.${id === 'instagram_token' ? ' Renewed automatically every week.' : ''}` : 'Stored privately in your Supabase database — never visible on your website.'}</div></div>`;
+}
+function feedSettings(k) {
+  const P = cfg.socials.platforms[k], base = `socials.platforms.${k}`;
+  const toggle = (l, help) => fields([{ p: base + '.feed', l, t: 'toggle', help, full: true, rr: true }]);
+  if (k === 'youtube') return `<div style="height:12px"></div>` + toggle('Show my latest YouTube videos on the website', 'New uploads appear automatically (refreshed every 30 minutes)') +
+    (P.feed ? `<div style="height:12px"></div>` + fields([{ p: base + '.channelId', l: 'Channel ID (optional)', ph: 'UCxxxxxxxxxxxxxxxxxxxxxx', full: true, help: 'Leave empty — "Test connection" finds it from your channel link automatically.' }]) + testBtn('youtube') +
+      `<details class="how"><summary>How it works</summary><ol><li>Paste your channel link above (e.g. https://youtube.com/@yourname).</li><li>Make sure the function from <a href="#" onclick="go('setup');return false">Supabase Setup → Step 3</a> is deployed.</li><li>Click <b>Test connection</b>, then <b>Publish</b>. That's it — every new video shows up on your website by itself.</li></ol></details>` : '');
+  if (k === 'instagram') return `<div style="height:12px"></div>` + toggle('Show my latest Instagram posts & reels on the website', 'Requires an Instagram Professional (Business/Creator) account + a free access token') +
+    (P.feed ? `<div style="height:12px"></div><div class="grid2">${secretBox('instagram_token', 'Instagram access token')}</div>` + testBtn('instagram') +
+      `<details class="how"><summary>How to get your Instagram token (one time, ~10 minutes)</summary><ol>
+        <li>Instagram app → Settings → <b>Account type and tools</b> → switch to a <b>Professional account</b> (Creator or Business — free).</li>
+        <li>Go to <a href="https://developers.facebook.com/apps" target="_blank">developers.facebook.com/apps</a> → <b>Create app</b> → use case “Other” → type <b>Business</b>.</li>
+        <li>In the app dashboard, add the <b>Instagram</b> product → open <b>API setup with Instagram login</b>.</li>
+        <li>Under “Generate access tokens” click <b>Add account</b>, log in to your Instagram and allow access.</li>
+        <li>Click <b>Generate token</b>, copy it, paste it above and click <b>Save</b>.</li>
+        <li>Make sure the function from <a href="#" onclick="go('setup');return false">Supabase Setup → Step 3</a> is deployed, then <b>Test connection</b> → <b>Publish</b>.</li></ol></details>` : '');
+  if (k === 'facebook') return `<div style="height:12px"></div>` + toggle('Show my Facebook Page posts on the website', 'Works with Facebook Pages (public). Personal profiles cannot be embedded by Facebook.') +
+    (P.feed ? `<div style="height:12px"></div>` + fields([{ p: base + '.mode', l: 'Display style', t: 'select', rr: true, full: true, opts: [['plugin', 'Page timeline widget — easiest, no token needed'], ['api', 'Photo grid in my website style — needs Page token']] }]) +
+      (P.mode === 'api' ? `<div style="height:12px"></div><div class="grid2">${field({ p: base + '.pageId', l: 'Facebook Page ID', ph: 'e.g. 1234567890' })}${secretBox('facebook_token', 'Page access token')}</div>` + testBtn('facebook') +
+        `<details class="how"><summary>How to get your Page ID and token</summary><ol>
+          <li>Your Page → <b>About</b> → <b>Page transparency</b> shows the Page ID.</li>
+          <li>Go to <a href="https://developers.facebook.com/apps" target="_blank">developers.facebook.com/apps</a> → <b>Create app</b> (type Business).</li>
+          <li>Open <a href="https://developers.facebook.com/tools/explorer" target="_blank">Graph API Explorer</a> → choose your app → add permissions <code>pages_show_list</code> and <code>pages_read_engagement</code> → <b>Generate Access Token</b>.</li>
+          <li>Click the “i” next to the token → <b>Open in Access Token Tool</b> → <b>Extend Access Token</b>.</li>
+          <li>Back in the Explorer, paste the extended token, run <code>me/accounts</code> and copy the <code>access_token</code> of your Page (this Page token does not expire).</li>
+          <li>Paste it above → <b>Save</b> → <b>Test connection</b> → <b>Publish</b>.</li></ol></details>`
+        : `<div class="note info" style="margin:12px 0 0">Uses the Facebook Page link above. Just <b>Publish</b> — your Page timeline appears in the Social Feed section.</div>`) : '');
+  if (k === 'tiktok') return `<div style="height:12px"></div>` + toggle('Show my TikTok profile & latest videos on the website', "Uses TikTok's official profile embed — no token needed. Just make sure your link above looks like https://tiktok.com/@username");
+  return '';
+}
+async function testFeed(k) {
+  const out = $('#test-' + k); out.className = 'test-out'; out.innerHTML = '<i class="fa-solid fa-spinner spin"></i> Connecting…';
+  try {
+    const { data, error } = await sb.functions.invoke(FEED_FUNCTION, { body: { platform: k, force: true, settings: cfg.socials.platforms[k] } });
+    if (error) {
+      const status = error.context && error.context.status;
+      let msg = error.message;
+      try { const j = await error.context.json(); if (j && (j.error || j.message)) msg = j.error || j.message; } catch (e) {}
+      if (status === 404 || /Failed to send|fetch/i.test(msg)) msg = `The "${FEED_FUNCTION}" function is not deployed yet — see Supabase Setup → Step 3.`;
+      throw new Error(msg);
+    }
+    if (!data || !data.ok) throw new Error((data && data.error) || 'Unknown error');
+    if (k === 'youtube' && data.channelId && cfg.socials.platforms.youtube.channelId !== data.channelId) {
+      cfg.socials.platforms.youtube.channelId = data.channelId; markDirty();
+      const inp = document.querySelector('[data-p="socials.platforms.youtube.channelId"]'); if (inp) inp.value = data.channelId;
+    }
+    out.classList.add('ok');
+    out.innerHTML = `✅ Connected — found <b>${data.items.length}</b> posts.${dirty ? ' Click <b>Publish</b> to show them on your website.' : ''}<div class="test-thumbs">${data.items.slice(0, 8).map(it => it.thumb ? `<img src="${esc(it.thumb)}" alt="" referrerpolicy="no-referrer">` : '').join('')}</div>`;
+  } catch (e) { out.classList.add('err'); out.innerHTML = '❌ ' + esc(e.message); }
+}
+async function checkSetup() {
+  const out = $('#chk-out'); out.innerHTML = '<div class="empty" style="padding:10px"><i class="fa-solid fa-spinner spin" style="font-size:16px;display:inline"></i> Checking…</div>';
+  const rows = [];
+  const add = (ok, label, extra = '') => rows.push(`<div class="chk"><i class="fa-solid ${ok ? 'fa-circle-check' : 'fa-circle-xmark'}" style="color:${ok ? 'var(--ok)' : 'var(--err)'}"></i><span style="flex:1">${label}</span><small style="color:var(--mu)">${esc(extra)}</small></div>`);
+  const t1 = await sb.from('site_settings').select('id', { head: true, count: 'exact' }); add(!t1.error, 'Website settings table', t1.error?.message || '');
+  const t2 = await sb.from('contact_messages').select('id', { head: true, count: 'exact' }); add(!t2.error, 'Contact messages table', t2.error?.message || '');
+  const t3 = await sb.from('social_secrets').select('id', { head: true, count: 'exact' }); add(!t3.error, 'Social tokens table (private)', t3.error?.message || '');
+  const s1 = await sb.storage.from(STORAGE_BUCKET).list('', { limit: 1 }); add(!s1.error, 'Photo & video storage', s1.error?.message || '');
+  let fnOk = false, fnMsg = '';
+  try { const { data, error } = await sb.functions.invoke(FEED_FUNCTION, { body: { platform: 'ping' } }); fnOk = !error && data && data.pong; fnMsg = error ? 'not deployed (only needed for auto-feeds)' : ''; } catch (e) { fnMsg = e.message; }
+  add(fnOk, 'Social feed function (Step 3)', fnMsg);
+  out.innerHTML = rows.join('');
+}
+function copyText(t, msg) { navigator.clipboard.writeText(t).then(() => toast(msg)).catch(() => toast('Copy failed — select the text manually', 'warn')); }
 function msgCard(m) {
   const phone = String(m.phone || '').replace(/\D/g, '');
   return `<div class="msg ${m.is_read ? '' : 'unread'}"><div class="msg-top">
@@ -764,118 +1000,86 @@ function readVal(el) {
   if (t === 'toggle') return el.checked;
   if (t === 'range' || t === 'number') return parseFloat(el.value);
   if (t === 'lines') return el.value.split('\n').map(s => s.trim()).filter(Boolean);
+  if (t === 'tags') return el.value.split(',').map(s => s.trim()).filter(Boolean);
   return el.value;
 }
+function assign(el, val) {
+  if (el.dataset.p) { setPath(cfg, el.dataset.p, val); return true; }
+  if (el.dataset.a) {
+    const arr = getPath(cfg, el.dataset.a); if (!arr) return false;
+    arr[+el.dataset.i][el.dataset.k] = val;
+    const lt = document.getElementById(`lt-${el.dataset.a}-${el.dataset.i}`);
+    const sc = LIST_REG[el.dataset.a]; if (lt && sc) lt.textContent = sc.label(arr[+el.dataset.i]) || 'Untitled';
+    return true;
+  }
+  return false;
+}
 function onEdit(e) {
-  const el = e.target; if (!el.dataset || !el.dataset.t) return;
+  const el = e.target; if (!el.dataset || !el.dataset.t || el.dataset.t === 'file') return;
   const t = el.dataset.t, val = readVal(el);
   if (t === 'colortext' && !/^#[0-9a-f]{6}$/i.test(val)) return;
+  if (!assign(el, val)) return;
   if (el.dataset.p) {
-    setPath(cfg, el.dataset.p, val);
     if (el.dataset.p.startsWith('theme.') && ['color', 'colortext'].includes(t)) { cfg.theme.preset = 'custom'; document.querySelectorAll('.preset.on').forEach(p => p.classList.remove('on')); }
     if (t === 'color' || t === 'colortext') document.querySelectorAll(`[data-p="${el.dataset.p}"]`).forEach(o => { if (o !== el) o.value = val; });
-  } else if (el.dataset.l) {
-    const key = el.dataset.l, i = +el.dataset.i;
-    cfg[key][i][el.dataset.k] = val;
-    const lt = document.getElementById(`lt-${key}-${i}`); if (lt) lt.textContent = LISTS[key].label(cfg[key][i]) || 'Untitled';
-  } else return;
+  }
   if (t === 'range') el.nextElementSibling.textContent = el.value + (el.dataset.unit || '');
   if (t === 'icon') el.previousElementSibling.innerHTML = `<i class="${esc(val)}"></i>`;
   markDirty();
+  if (el.dataset.rr) go(page);
 }
-$('#content').addEventListener('input', onEdit);
-$('#content').addEventListener('change', e => { if (['toggle', 'select'].includes(e.target.dataset?.t)) onEdit(e); });
+$('#content').addEventListener('input', e => { if (!['toggle', 'select', 'file'].includes(e.target.dataset?.t)) onEdit(e); });
+$('#content').addEventListener('change', async e => {
+  const el = e.target;
+  if (el.dataset?.t === 'file') {
+    const file = el.files[0]; if (!file) return;
+    if (file.size > 50 * 1024 * 1024) return toast('File is larger than 50 MB — please compress it first', 'err');
+    toast('Uploading ' + file.name + '…', 'warn');
+    try {
+      const url = await uploadFile(file, file.type.startsWith('video') ? 'videos' : 'images');
+      assign(el, url); markDirty(); go(page); toast('Uploaded ✓ — click Publish to make it live');
+    } catch (err) { toast('Upload failed: ' + err.message + ' — run the Setup SQL (storage part).', 'err'); }
+    return;
+  }
+  if (['toggle', 'select'].includes(el.dataset?.t)) onEdit(e);
+  else if (el.closest('.img-row')) go(page); // refresh thumbnail after pasting a link
+});
 $('#content').addEventListener('click', e => {
-  const b = e.target.closest('[data-act]'); if (!b) return;
-  const act = b.dataset.act, key = b.dataset.l, i = +b.dataset.i;
+  const b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
+  const act = b.dataset.act;
   if (act === 'preset') { Object.assign(cfg.theme, PRESETS[b.dataset.k]); delete cfg.theme.name; cfg.theme.preset = b.dataset.k; markDirty(); go('theme'); return; }
-  if (!key) return;
-  const arr = cfg[key];
-  if (act === 'toggle') { if (e.target.closest('.li-actions')) return; const id = key + ':' + i; openItems.has(id) ? openItems.delete(id) : openItems.add(id); b.parentElement.classList.toggle('open'); return; }
+  if (act === 'new-sec') { addSection(b.dataset.type); return; }
+  if (act === 'edit-sec') { const id = b.dataset.id; go(csIndex(id) >= 0 ? 'cs:' + id : BUILTIN_PAGE[id] || 'builder'); return; }
+  if (act === 'ord') {
+    const o = orderList(cfg), i = o.indexOf(b.dataset.id), j = i + (+b.dataset.dir);
+    if (j < 0 || j >= o.length) return;
+    [o[i], o[j]] = [o[j], o[i]]; cfg.order = o; markDirty(); go('builder'); return;
+  }
+  if (act === 'del-sec') {
+    const i = csIndex(b.dataset.id); if (i < 0) return;
+    if (!confirm(`Delete the section "${csName(cfg.customSections[i])}" and all its items?`)) return;
+    cfg.customSections.splice(i, 1); cfg.order = orderList(cfg); openItems.clear(); markDirty(); go('builder'); toast('Section deleted — click Publish to apply'); return;
+  }
+  if (act === 'dup-sec') {
+    const i = csIndex(b.dataset.id); if (i < 0) return;
+    const copy = clone(cfg.customSections[i]); copy.id = 'cs-' + Math.random().toString(36).slice(2, 8); copy.nav = copy.nav ? copy.nav + ' (copy)' : '';
+    cfg.customSections.splice(i + 1, 0, copy);
+    const o = orderList(cfg).filter(x => x !== copy.id); o.splice(o.indexOf(b.dataset.id) + 1, 0, copy.id); cfg.order = o;
+    markDirty(); go('cs:' + copy.id); toast('Section duplicated'); return;
+  }
+  const path = b.dataset.a; if (!path) return;
+  const i = +b.dataset.i;
+  if (act === 'toggle') { if (e.target.closest('.li-actions')) return; const id = path + ':' + i; openItems.has(id) ? openItems.delete(id) : openItems.add(id); b.parentElement.classList.toggle('open'); return; }
   e.stopPropagation();
-  if (act === 'add') { arr.push(clone(LISTS[key].blank)); openItems.add(key + ':' + (arr.length - 1)); }
+  if (!getPath(cfg, path)) setPath(cfg, path, []);
+  const arr = getPath(cfg, path), sc = LIST_REG[path];
+  if (act === 'add') { arr.push(clone(sc.blank)); openItems.add(path + ':' + (arr.length - 1)); }
   if (act === 'del') { if (!confirm('Delete this item?')) return; arr.splice(i, 1); openItems.clear(); }
-  if (act === 'dup') { arr.splice(i + 1, 0, clone(arr[i])); openItems.clear(); openItems.add(key + ':' + (i + 1)); }
+  if (act === 'dup') { arr.splice(i + 1, 0, clone(arr[i])); openItems.clear(); openItems.add(path + ':' + (i + 1)); }
   if (act === 'up' && i > 0) { [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]]; openItems.clear(); }
   if (act === 'down' && i < arr.length - 1) { [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]]; openItems.clear(); }
   markDirty(); go(page);
 });
-
-/* =========================================================
-   SETUP SQL
-   ========================================================= */
-const SETUP_SQL = `-- ===== 1. Website settings (all editable content) =====
-create table if not exists public.site_settings (
-  id text primary key,
-  data jsonb not null default '{}'::jsonb,
-  updated_at timestamptz not null default now()
-);
-alter table public.site_settings enable row level security;
-
-drop policy if exists "Public can read settings" on public.site_settings;
-create policy "Public can read settings" on public.site_settings
-  for select to anon, authenticated using (true);
-
-drop policy if exists "Admin can write settings" on public.site_settings;
-create policy "Admin can write settings" on public.site_settings
-  for all to authenticated
-  using ((auth.jwt() ->> 'email') = '${ADMIN_EMAIL}')
-  with check ((auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
-
--- ===== 2. Contact form messages =====
-create table if not exists public.contact_messages (
-  id bigint generated by default as identity primary key,
-  name text not null,
-  email text not null,
-  phone text,
-  service text,
-  message text not null,
-  is_read boolean not null default false,
-  created_at timestamptz not null default now()
-);
-alter table public.contact_messages add column if not exists is_read boolean not null default false;
-alter table public.contact_messages enable row level security;
-
-drop policy if exists "Allow anonymous inserts" on public.contact_messages;
-create policy "Allow anonymous inserts" on public.contact_messages
-  for insert to anon, authenticated with check (true);
-
-drop policy if exists "Admin can read messages" on public.contact_messages;
-create policy "Admin can read messages" on public.contact_messages
-  for select to authenticated using ((auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
-
-drop policy if exists "Admin can update messages" on public.contact_messages;
-create policy "Admin can update messages" on public.contact_messages
-  for update to authenticated using ((auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
-
-drop policy if exists "Admin can delete messages" on public.contact_messages;
-create policy "Admin can delete messages" on public.contact_messages
-  for delete to authenticated using ((auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
-
--- ===== 3. Storage bucket for profile photo & CV =====
-insert into storage.buckets (id, name, public)
-values ('${STORAGE_BUCKET}', '${STORAGE_BUCKET}', true)
-on conflict (id) do update set public = true;
-
-drop policy if exists "Public read portfolio files" on storage.objects;
-create policy "Public read portfolio files" on storage.objects
-  for select using (bucket_id = '${STORAGE_BUCKET}');
-
-drop policy if exists "Admin upload portfolio files" on storage.objects;
-create policy "Admin upload portfolio files" on storage.objects
-  for insert to authenticated
-  with check (bucket_id = '${STORAGE_BUCKET}' and (auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
-
-drop policy if exists "Admin update portfolio files" on storage.objects;
-create policy "Admin update portfolio files" on storage.objects
-  for update to authenticated
-  using (bucket_id = '${STORAGE_BUCKET}' and (auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
-
-drop policy if exists "Admin delete portfolio files" on storage.objects;
-create policy "Admin delete portfolio files" on storage.objects
-  for delete to authenticated
-  using (bucket_id = '${STORAGE_BUCKET}' and (auth.jwt() ->> 'email') = '${ADMIN_EMAIL}');
-`;
 
 /* icon suggestions */
 document.body.insertAdjacentHTML('beforeend', `<datalist id="icon-list">${ICONS.map(i => `<option value="${i}">`).join('')}</datalist>`);
