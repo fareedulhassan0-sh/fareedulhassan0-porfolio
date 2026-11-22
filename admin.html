@@ -11,45 +11,45 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="site-config.js"></script>
   <style>
-    :root{--a:#ff5500;--a2:#ff8a00;--bg:#090a0f;--panel:#11131a;--panel2:#171a24;--line:#242838;--tx:#e8eaf0;--mu:#8b91a5;--ok:#22c55e;--err:#ef4444;--warn:#f59e0b}
+    :root{--a:#e85d75;--a2:#f3b07a;--bg:#09070e;--panel:#120e1a;--panel2:#191424;--line:#292138;--tx:#f5f0f7;--mu:#9c90ad;--ok:#22c55e;--err:#ef4444;--warn:#f59e0b}
     *{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--bg);color:var(--tx);font-family:Inter,sans-serif;font-size:14px;line-height:1.5}
     a{color:inherit;text-decoration:none}
     button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
     input,select,textarea{font:inherit;color:inherit}
-    code{background:var(--panel2);padding:1px 6px;border-radius:6px;font-size:12.5px;color:#ffb38a}
-    ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#2c3142;border-radius:8px}
+    code{background:var(--panel2);padding:1px 6px;border-radius:6px;font-size:12.5px;color:#f6b8a2}
+    ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#342a47;border-radius:8px}
     .hidden{display:none!important}
 
     /* Login */
-    #login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 10%,rgba(255,85,0,.15),transparent 40%),radial-gradient(circle at 80% 90%,rgba(255,140,0,.1),transparent 40%)}
-    .login-card{width:100%;max-width:410px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:34px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
-    .login-card .logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;font-weight:900;font-size:24px;color:#fff;margin-bottom:18px;box-shadow:0 10px 30px -6px rgba(255,85,0,.6)}
+    #login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 10%,rgba(232,93,117,.16),transparent 42%),radial-gradient(circle at 80% 90%,rgba(243,176,122,.12),transparent 42%)}
+    .login-card{width:100%;max-width:410px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:34px;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+    .login-card .logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;font-weight:900;font-size:24px;color:#fff;margin-bottom:18px;box-shadow:0 10px 30px -6px rgba(232,93,117,.55)}
     .login-card h1{font-size:22px}
     .login-card p{color:var(--mu);margin:4px 0 22px}
 
     /* Layout */
-    #app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
-    #app.with-preview{grid-template-columns:250px minmax(0,1fr) 470px}
+    #app{display:grid;grid-template-columns:252px minmax(0,1fr);min-height:100vh}
+    #app.with-preview{grid-template-columns:252px minmax(0,1fr) 470px}
     .side{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--panel);border-right:1px solid var(--line);padding:18px 14px;display:flex;flex-direction:column}
     .side-brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;border-bottom:1px solid var(--line);margin-bottom:12px}
     .side-brand .logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;font-weight:900;color:#fff}
     .side-brand b{display:block;font-size:14px}.side-brand small{color:var(--mu);font-size:11.5px}
-    .nav-group{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#5d6377;padding:14px 10px 6px}
+    .nav-group{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6e6282;padding:14px 10px 6px}
     .nav-item{display:flex;align-items:center;gap:11px;width:100%;padding:8px 11px;border-radius:10px;color:var(--mu);font-weight:500;transition:.2s;text-align:left}
     .nav-item i{width:18px;text-align:center}
     .nav-item span.t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .nav-item:hover{background:var(--panel2);color:var(--tx)}
-    .nav-item.active{background:linear-gradient(90deg,rgba(255,85,0,.18),rgba(255,85,0,.04));color:#fff;box-shadow:inset 3px 0 0 var(--a)}
+    .nav-item.active{background:linear-gradient(90deg,rgba(232,93,117,.2),rgba(243,176,122,.05));color:#fff;box-shadow:inset 3px 0 0 var(--a)}
     .nav-item.active i{color:var(--a)}
     .nav-item .badge{margin-left:auto;background:var(--a);color:#fff;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px}
-    .nav-item.add{color:#ffb38a;border:1px dashed #3a3f55;margin-top:4px}
+    .nav-item.add{color:#f6b8a2;border:1px dashed #43375a;margin-top:4px}
     .nav-item.off{opacity:.55}
     .side-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--mu)}
     .side-foot .user{display:flex;align-items:center;gap:9px;padding:8px}
     .side-foot .av{width:32px;height:32px;border-radius:50%;background:var(--panel2);display:grid;place-items:center;color:var(--a)}
     .main{min-width:0;display:flex;flex-direction:column}
-    .topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;padding:12px 24px;background:rgba(9,10,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;padding:12px 24px;background:rgba(9,7,14,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
     .topbar h2{font-size:17px;font-weight:700;margin-right:auto;display:flex;align-items:center;gap:10px;min-width:0}
     .topbar h2 i{color:var(--a)}
     .topbar h2 span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -58,14 +58,14 @@
     .dirty-pill .d{width:7px;height:7px;border-radius:50%;background:var(--ok)}
     .dirty-pill.on .d{background:var(--warn)}
     .menu-toggle{display:none!important}
-    .content{padding:24px;width:100%;max-width:1100px}
-    .preview{position:sticky;top:0;height:100vh;border-left:1px solid var(--line);background:#05060a;display:flex;flex-direction:column}
+    .content{padding:24px;width:100%;max-width:1120px}
+    .preview{position:sticky;top:0;height:100vh;border-left:1px solid var(--line);background:#050409;display:flex;flex-direction:column}
     .preview-bar{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--panel)}
     .preview-bar b{margin-right:auto;font-size:13px}
     .preview-frame{flex:1;display:flex;justify-content:center;overflow:hidden}
     .preview iframe{border:0;width:100%;height:100%;background:#000;transition:width .3s}
     .preview.mobile iframe{width:390px;max-width:100%;border-left:1px solid var(--line);border-right:1px solid var(--line)}
-    @media(max-width:1250px){#app.with-preview{grid-template-columns:250px minmax(0,1fr)}.preview{position:fixed;right:0;top:0;width:min(470px,100%);z-index:80;box-shadow:-20px 0 60px rgba(0,0,0,.6)}}
+    @media(max-width:1250px){#app.with-preview{grid-template-columns:252px minmax(0,1fr)}.preview{position:fixed;right:0;top:0;width:min(470px,100%);z-index:80;box-shadow:-20px 0 60px rgba(0,0,0,.6)}}
     @media(max-width:880px){#app,#app.with-preview{grid-template-columns:minmax(0,1fr)}.side{position:fixed;left:-270px;width:260px;z-index:90;transition:left .3s}.side.open{left:0;box-shadow:20px 0 60px rgba(0,0,0,.6)}.menu-toggle{display:inline-flex!important}.content{padding:16px}.topbar{padding:10px 14px;flex-wrap:wrap}.hide-sm{display:none}}
 
     /* Components */
@@ -79,15 +79,15 @@
     .full{grid-column:1/-1}
     @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}.grid4{grid-template-columns:repeat(2,1fr)}}
     .f label{display:block;font-size:12px;font-weight:600;color:var(--mu);margin-bottom:6px}
-    .f .help{font-size:11.5px;color:#6d7489;margin-top:5px}
+    .f .help{font-size:11.5px;color:#7d7191;margin-top:5px}
     .f input[type=text],.f input[type=number],.f input[type=password],.f input[type=email],.f textarea,.f select,.inp{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s}
     .f textarea{resize:vertical;min-height:84px}
-    .f input:focus,.f textarea:focus,.f select:focus,.inp:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(255,85,0,.12)}
+    .f input:focus,.f textarea:focus,.f select:focus,.inp:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(232,93,117,.14)}
     select option{background:var(--panel)}
     .color-row{display:flex;gap:8px;align-items:center}
     .color-row input[type=color]{width:46px;height:42px;padding:3px;border-radius:10px;border:1px solid var(--line);background:var(--bg);cursor:pointer;flex-shrink:0}
     .icon-row,.img-row{display:flex;gap:8px;align-items:center}
-    .icon-row .ip,.img-row .thumb{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;background:rgba(255,85,0,.1);color:var(--a);border:1px solid rgba(255,85,0,.3);font-size:17px;overflow:hidden}
+    .icon-row .ip,.img-row .thumb{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;background:rgba(232,93,117,.12);color:var(--a);border:1px solid rgba(232,93,117,.3);font-size:17px;overflow:hidden}
     .img-row .thumb img{width:100%;height:100%;object-fit:cover}
     .img-row label.btn{flex-shrink:0}
     .range-row{display:flex;align-items:center;gap:12px}
@@ -96,14 +96,14 @@
     .switch{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--line);border-radius:10px;cursor:pointer}
     .switch span{font-weight:600;font-size:13.5px}
     .switch small{display:block;color:var(--mu);font-weight:400;font-size:12px}
-    .tgl,.switch input{appearance:none;-webkit-appearance:none;width:42px;height:24px;border-radius:99px;background:#2a2f40;position:relative;cursor:pointer;flex-shrink:0;transition:.25s;border:0}
+    .tgl,.switch input{appearance:none;-webkit-appearance:none;width:42px;height:24px;border-radius:99px;background:#2f2642;position:relative;cursor:pointer;flex-shrink:0;transition:.25s;border:0}
     .tgl::after,.switch input::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.25s}
     .tgl:checked,.switch input:checked{background:var(--a)}
     .tgl:checked::after,.switch input:checked::after{left:21px}
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 15px;border-radius:10px;font-weight:600;font-size:13px;border:1px solid var(--line);background:var(--panel2);transition:.2s;white-space:nowrap;cursor:pointer}
-    .btn:hover{border-color:#3a4058;background:#1d2130}
-    .btn.pri{background:linear-gradient(90deg,#ff3b00,#ff7a00);border:0;color:#fff;box-shadow:0 8px 20px -8px rgba(255,85,0,.7)}
-    .btn.pri:hover{filter:brightness(1.08)}
+    .btn:hover{border-color:#44385c;background:#221b30}
+    .btn.pri{background:linear-gradient(110deg,var(--a),var(--a2));border:0;color:#fff;box-shadow:0 8px 20px -8px rgba(232,93,117,.75)}
+    .btn.pri:hover{filter:brightness(1.07)}
     .btn.danger{color:#fca5a5;border-color:#5b1f1f}.btn.danger:hover{background:#2a1212}
     .btn.sm{padding:6px 10px;font-size:12px}
     .btn.icon{width:32px;height:32px;padding:0}
@@ -112,9 +112,9 @@
 
     /* List editor */
     .li-card{border:1px solid var(--line);border-radius:12px;background:var(--panel2);margin-bottom:10px}
-    .li-card.open{border-color:#3a3f55}
+    .li-card.open{border-color:#44385c}
     .li-head{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;user-select:none}
-    .li-num{width:26px;height:26px;border-radius:8px;background:rgba(255,85,0,.12);color:var(--a);display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .li-num{width:26px;height:26px;border-radius:8px;background:rgba(232,93,117,.14);color:var(--a);display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0}
     .li-thumb{width:34px;height:34px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--bg);display:grid;place-items:center;color:var(--mu)}
     .li-thumb img{width:100%;height:100%;object-fit:cover}
     .li-title{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -126,10 +126,10 @@
 
     /* Dashboard */
     .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px}
-    .kpi .ki{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:18px;background:rgba(255,85,0,.12);color:var(--a)}
+    .kpi .ki{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:18px;background:rgba(232,93,117,.14);color:var(--a)}
     .kpi b{font-size:22px;display:block;line-height:1.1}
     .kpi small{color:var(--mu);font-size:12px}
-    .welcome{background:linear-gradient(120deg,rgba(255,85,0,.22),rgba(255,85,0,.03) 60%),var(--panel);border:1px solid rgba(255,85,0,.3);border-radius:16px;padding:24px;margin-bottom:18px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+    .welcome{background:linear-gradient(120deg,rgba(232,93,117,.22),rgba(243,176,122,.05) 60%),var(--panel);border:1px solid rgba(232,93,117,.35);border-radius:16px;padding:24px;margin-bottom:18px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
     .welcome h3{font-size:20px}.welcome p{color:var(--mu)}
     .quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
     .quick button{padding:14px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);text-align:left;transition:.2s}
@@ -141,24 +141,44 @@
     .msg{border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:14px 16px;margin-bottom:10px}
     .msg.unread{border-left:3px solid var(--a)}
     .msg-top{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
-    .msg-av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,85,0,.14);color:var(--a);font-weight:700;flex-shrink:0}
+    .msg-av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(232,93,117,.15);color:var(--a);font-weight:700;flex-shrink:0}
     .msg-meta{flex:1;min-width:180px}
     .msg-meta b{font-size:14.5px}
     .msg-meta small{display:block;color:var(--mu);font-size:12px;word-break:break-all}
-    .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:rgba(255,85,0,.12);color:#ffb38a;border:1px solid rgba(255,85,0,.25)}
+    .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:rgba(232,93,117,.14);color:#f6b8a2;border:1px solid rgba(232,93,117,.3)}
     .tag.new{background:var(--a);color:#fff;border-color:var(--a)}
-    .msg-body{margin:12px 0;color:#c9ccd6;white-space:pre-wrap;word-break:break-word;font-size:13.5px;background:var(--bg);border-radius:10px;padding:12px}
+    .msg-body{margin:12px 0;color:#d6cde0;white-space:pre-wrap;word-break:break-word;font-size:13.5px;background:var(--bg);border-radius:10px;padding:12px}
     .empty{text-align:center;color:var(--mu);padding:30px 20px}
-    .empty i{font-size:30px;color:#3a3f55;margin-bottom:10px;display:block}
+    .empty i{font-size:30px;color:#44385c;margin-bottom:10px;display:block}
 
-    /* Theme presets */
-    .presets{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+    /* Theme Presets (20 Romantic & Cinematic Themes) */
+    .presets{display:grid;grid-template-columns:repeat(auto-fill,minmax(142px,1fr));gap:10px}
     .preset{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--bg);text-align:left;transition:.2s}
-    .preset:hover{transform:translateY(-2px);border-color:#3a3f55}
-    .preset.on{border-color:var(--a);box-shadow:0 0 0 2px rgba(255,85,0,.25)}
-    .preset .sw{height:44px;border-radius:8px;margin-bottom:8px;display:flex;overflow:hidden}
+    .preset:hover{transform:translateY(-2px);border-color:#524270}
+    .preset.on{border-color:var(--a);box-shadow:0 0 0 2px rgba(232,93,117,.3)}
+    .preset .sw{height:44px;border-radius:8px;margin-bottom:8px;display:flex;overflow:hidden;border:1px solid rgba(255,255,255,.06)}
     .preset .sw i{flex:1}
-    .preset span{font-size:12.5px;font-weight:600}
+    .preset span{font-size:12.5px;font-weight:600;display:block}
+    .preset small{font-size:10.5px;color:var(--mu);display:block;margin-top:2px}
+
+    /* 12 Website Designs Gallery */
+    .designs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:14px}
+    .design-card{border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--bg);text-align:left;transition:.25s;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+    .design-card:hover{transform:translateY(-3px);border-color:#5c487d;box-shadow:0 16px 34px -18px rgba(0,0,0,.7)}
+    .design-card.on{border-color:var(--a);background:linear-gradient(155deg,rgba(232,93,117,.14),var(--bg) 65%);box-shadow:0 0 0 2px rgba(232,93,117,.3)}
+    .design-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .design-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:17px;background:rgba(232,93,117,.14);color:var(--a);border:1px solid rgba(232,93,117,.28)}
+    .design-card.on .design-ic{background:linear-gradient(135deg,var(--a),var(--a2));color:#fff;border-color:transparent}
+    .design-badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--panel2);color:var(--a2);border:1px solid var(--line);text-transform:uppercase;letter-spacing:.06em}
+    .design-card.on .design-badge{background:var(--a);color:#fff;border-color:var(--a)}
+    .design-card b{font-size:14.5px;display:block}
+    .design-card p{font-size:12px;color:var(--mu);line-height:1.45;margin:0}
+    .design-wire{height:58px;border-radius:10px;background:var(--panel);border:1px solid var(--line);padding:8px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .dw-lines{flex:1;display:grid;gap:5px}
+    .dw-lines i{display:block;height:5px;border-radius:4px;background:var(--line)}
+    .dw-lines i:first-child{width:78%;background:linear-gradient(90deg,var(--a),var(--a2))}
+    .dw-lines i:last-child{width:54%}
+    .dw-shape{width:38px;height:38px;flex-shrink:0;background:linear-gradient(135deg,rgba(232,93,117,.35),rgba(243,176,122,.28));border:1.5px solid var(--a)}
 
     /* Socials */
     .plat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:18px}
@@ -167,20 +187,20 @@
     .plat.wide{grid-column:1/-1}
     .plat-head{display:flex;align-items:center;gap:12px;padding:14px 16px}
     .plat-ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:18px;color:#fff;background:var(--pc);flex-shrink:0}
-    .plat:not(.on) .plat-ic{background:#2a2f40;color:#9aa0b4}
+    .plat:not(.on) .plat-ic{background:#2c243d;color:#9aa0b4}
     .plat-name{flex:1;min-width:0}
     .plat-name b{display:block}
     .plat-name small{color:var(--mu);font-size:12px}
     .st{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
-    .st.off{background:#1f2230;color:#7d8399}
+    .st.off{background:#221c30;color:#8a7f9e}
     .st.warn{background:rgba(245,158,11,.12);color:#fcd34d}
     .st.on{background:rgba(34,197,94,.12);color:#86efac}
-    .st.live{background:rgba(255,85,0,.15);color:#ffb38a}
+    .st.live{background:rgba(232,93,117,.18);color:#f6b8a2}
     .plat-body{padding:0 16px 16px;border-top:1px solid var(--line);padding-top:14px}
     .plat-body .grid2{gap:12px}
     details.how{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:12px}
-    details.how summary{cursor:pointer;font-weight:600;font-size:13px;color:#ffb38a}
-    details.how ol{padding-left:20px;margin-top:10px;color:#c9ccd6;display:grid;gap:6px;font-size:13px}
+    details.how summary{cursor:pointer;font-weight:600;font-size:13px;color:#f6b8a2}
+    details.how ol{padding-left:20px;margin-top:10px;color:#d6cde0;display:grid;gap:6px;font-size:13px}
     details.how a{color:var(--a);text-decoration:underline}
     .test-out{margin-top:10px;font-size:13px;color:var(--mu)}
     .test-out.ok{color:#86efac}.test-out.err{color:#fca5a5}
@@ -190,7 +210,7 @@
     /* Page builder */
     .pb-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);margin-bottom:8px;flex-wrap:wrap}
     .pb-row.fixed{opacity:.75}
-    .pb-ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(255,85,0,.1);color:var(--a);flex-shrink:0}
+    .pb-ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(232,93,117,.12);color:var(--a);flex-shrink:0}
     .pb-row.custom .pb-ic{background:rgba(139,92,246,.15);color:#c4b5fd}
     .pb-name{flex:1;min-width:150px}
     .pb-name b{display:block;font-size:13.5px}
@@ -207,22 +227,22 @@
     @media(max-width:760px){.pb-nav{width:100%!important;order:5}}
 
     .photo-box{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-    .photo-prev{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;overflow:hidden;font-weight:900;font-size:30px;color:#fff;border:3px solid rgba(255,140,0,.5);flex-shrink:0}
+    .photo-prev{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--a2));display:grid;place-items:center;overflow:hidden;font-weight:900;font-size:30px;color:#fff;border:3px solid rgba(243,176,122,.5);flex-shrink:0}
     .photo-prev img{width:100%;height:100%;object-fit:cover}
-    pre.code{background:#05060a;border:1px solid var(--line);border-radius:12px;padding:16px;font-size:12px;color:#86efac;overflow:auto;max-height:380px;line-height:1.6}
-    ol.steps{padding-left:20px;color:#c9ccd6;display:grid;gap:9px}
+    pre.code{background:#050409;border:1px solid var(--line);border-radius:12px;padding:16px;font-size:12px;color:#86efac;overflow:auto;max-height:380px;line-height:1.6}
+    ol.steps{padding-left:20px;color:#d6cde0;display:grid;gap:9px}
     ol.steps b{color:#fff}
     ol.steps a{color:var(--a);text-decoration:underline}
     .note{padding:12px 14px;border-radius:10px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);color:#fcd34d;font-size:13px;margin-bottom:14px}
     .note.ok{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3);color:#86efac}
     .note.err{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3);color:#fca5a5}
-    .note.info{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.3);color:#93c5fd}
+    .note.info{background:rgba(232,93,117,.1);border-color:rgba(232,93,117,.35);color:#f6b8a2}
     .chk{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
     .chk:last-child{border:0}
     .chk i{width:18px}
 
     #toasts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
-    .toast{background:#1b1f2b;border:1px solid var(--line);border-left:4px solid var(--ok);padding:11px 16px;border-radius:10px;box-shadow:0 14px 40px rgba(0,0,0,.5);font-size:13.5px;animation:tin .3s;max-width:90vw}
+    .toast{background:#1d172b;border:1px solid var(--line);border-left:4px solid var(--ok);padding:11px 16px;border-radius:10px;box-shadow:0 14px 40px rgba(0,0,0,.5);font-size:13.5px;animation:tin .3s;max-width:90vw}
     .toast.err{border-left-color:var(--err)}.toast.warn{border-left-color:var(--warn)}
     @keyframes tin{from{opacity:0;transform:translateY(10px)}}
     .spin{animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
@@ -293,23 +313,57 @@
 const DRAFT_KEY = 'sfh_admin_draft';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* Setup code (also saved as files in the /supabase folder of the repo) */
+/* Setup code */
 const SETUP_SQL = "-- =====================================================================\n-- Portfolio website \u2014 Supabase setup (safe to run again any time)\n-- Supabase Dashboard \u2192 SQL Editor \u2192 New query \u2192 paste \u2192 Run\n-- =====================================================================\n\n-- ===== 1. Website settings (all editable content) =====\ncreate table if not exists public.site_settings (\n  id text primary key,\n  data jsonb not null default '{}'::jsonb,\n  updated_at timestamptz not null default now()\n);\nalter table public.site_settings enable row level security;\n\ndrop policy if exists \"Public can read settings\" on public.site_settings;\ncreate policy \"Public can read settings\" on public.site_settings\n  for select to anon, authenticated using (true);\n\ndrop policy if exists \"Admin can write settings\" on public.site_settings;\ncreate policy \"Admin can write settings\" on public.site_settings\n  for all to authenticated\n  using ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com')\n  with check ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\n-- ===== 2. Contact form messages =====\ncreate table if not exists public.contact_messages (\n  id bigint generated by default as identity primary key,\n  name text not null,\n  email text not null,\n  phone text,\n  service text,\n  message text not null,\n  is_read boolean not null default false,\n  created_at timestamptz not null default now()\n);\nalter table public.contact_messages add column if not exists is_read boolean not null default false;\nalter table public.contact_messages enable row level security;\n\ndrop policy if exists \"Allow anonymous inserts\" on public.contact_messages;\ncreate policy \"Allow anonymous inserts\" on public.contact_messages\n  for insert to anon, authenticated with check (true);\n\ndrop policy if exists \"Admin can read messages\" on public.contact_messages;\ncreate policy \"Admin can read messages\" on public.contact_messages\n  for select to authenticated using ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\ndrop policy if exists \"Admin can update messages\" on public.contact_messages;\ncreate policy \"Admin can update messages\" on public.contact_messages\n  for update to authenticated using ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\ndrop policy if exists \"Admin can delete messages\" on public.contact_messages;\ncreate policy \"Admin can delete messages\" on public.contact_messages\n  for delete to authenticated using ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\n-- ===== 3. Social media tokens (PRIVATE \u2014 admin only, never public) =====\ncreate table if not exists public.social_secrets (\n  id text primary key,\n  value text not null,\n  updated_at timestamptz not null default now()\n);\nalter table public.social_secrets enable row level security;\n\ndrop policy if exists \"Admin manages social secrets\" on public.social_secrets;\ncreate policy \"Admin manages social secrets\" on public.social_secrets\n  for all to authenticated\n  using ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com')\n  with check ((auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\n-- ===== 4. Social feed cache (used only by the social-feed function) =====\ncreate table if not exists public.social_cache (\n  platform text primary key,\n  source text,\n  data jsonb not null default '[]'::jsonb,\n  fetched_at timestamptz not null default now()\n);\nalter table public.social_cache enable row level security;\n-- no policies on purpose: only the Edge Function (service role) can read/write it\n\n-- ===== 5. Storage bucket for photos, videos & CV =====\ninsert into storage.buckets (id, name, public)\nvalues ('portfolio', 'portfolio', true)\non conflict (id) do update set public = true;\n\ndrop policy if exists \"Public read portfolio files\" on storage.objects;\ncreate policy \"Public read portfolio files\" on storage.objects\n  for select using (bucket_id = 'portfolio');\n\ndrop policy if exists \"Admin upload portfolio files\" on storage.objects;\ncreate policy \"Admin upload portfolio files\" on storage.objects\n  for insert to authenticated\n  with check (bucket_id = 'portfolio' and (auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\ndrop policy if exists \"Admin update portfolio files\" on storage.objects;\ncreate policy \"Admin update portfolio files\" on storage.objects\n  for update to authenticated\n  using (bucket_id = 'portfolio' and (auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n\ndrop policy if exists \"Admin delete portfolio files\" on storage.objects;\ncreate policy \"Admin delete portfolio files\" on storage.objects\n  for delete to authenticated\n  using (bucket_id = 'portfolio' and (auth.jwt() ->> 'email') = 'fareedulhassan0@gmail.com');\n";
-const FEED_FN_CODE = "// =====================================================================\n// Supabase Edge Function: social-feed\n// Fetches your latest YouTube videos, Instagram posts and Facebook Page\n// posts so they appear on the portfolio website automatically.\n//\n// Deploy ONCE (no CLI needed):\n//   Supabase Dashboard \u2192 Edge Functions \u2192 \"Deploy a new function\" \u2192 \"Via Editor\"\n//   \u2192 name it exactly:  social-feed   \u2192 replace the sample code with this file \u2192 Deploy\n//\n// Secrets (Instagram / Facebook tokens) are saved from admin.html into the\n// private \"social_secrets\" table \u2014 never exposed on the public website.\n// Results are cached for 30 minutes in \"social_cache\".\n// =====================================================================\nimport { createClient } from 'npm:@supabase/supabase-js@2';\n\nconst ADMIN_EMAIL = 'fareedulhassan0@gmail.com';\nconst SETTINGS_ID = 'main';\nconst CACHE_MINUTES = 30;\n\nconst cors = {\n  'Access-Control-Allow-Origin': '*',\n  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',\n  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',\n};\nconst json = (body: unknown) =>\n  new Response(JSON.stringify(body), { headers: { ...cors, 'Content-Type': 'application/json' } });\n\nconst db = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {\n  auth: { persistSession: false },\n});\n\ntype Item = {\n  id: string; platform: string; type: string; title: string; text: string;\n  thumb: string; media: string; url: string; date: string; album?: boolean;\n};\n\nasync function getSecret(id: string) {\n  const { data } = await db.from('social_secrets').select('value,updated_at').eq('id', id).maybeSingle();\n  return data as { value: string; updated_at: string } | null;\n}\nasync function setSecret(id: string, value: string) {\n  await db.from('social_secrets').upsert({ id, value, updated_at: new Date().toISOString() });\n}\n\nconst decode = (s: string) =>\n  s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#39;/g, \"'\");\nconst tag = (xml: string, name: string) => {\n  const m = xml.match(new RegExp(`<${name}[^>]*>([\\\\s\\\\S]*?)</${name}>`));\n  return m ? decode(m[1].trim()) : '';\n};\nconst BROWSER = {\n  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',\n  'Accept-Language': 'en-US,en;q=0.9',\n  'Cookie': 'CONSENT=YES+cb; SOCS=CAI',\n};\n\n/* ---------------- YouTube (no API key needed) ---------------- */\nasync function resolveChannel(input: string): Promise<string> {\n  const v = String(input || '').trim();\n  if (/^UC[\\w-]{22}$/.test(v)) return v;\n  let m = v.match(/channel\\/(UC[\\w-]{22})/);\n  if (m) return m[1];\n  if (!v) throw new Error('Add your YouTube channel link or Channel ID.');\n  const url = /^https?:\\/\\//.test(v) ? v : 'https://www.youtube.com/' + (v.startsWith('@') ? v : '@' + v);\n  const r = await fetch(url, { headers: BROWSER });\n  const html = await r.text();\n  m = html.match(/<link rel=\"canonical\" href=\"https:\\/\\/www\\.youtube\\.com\\/channel\\/(UC[\\w-]{22})\"/) ||\n      html.match(/\"externalId\":\"(UC[\\w-]{22})\"/) ||\n      html.match(/\"channelId\":\"(UC[\\w-]{22})\"/);\n  if (!m) throw new Error('Could not find this YouTube channel. Paste the Channel ID (starts with UC) instead.');\n  return m[1];\n}\n\nasync function youtube(p: Record<string, string>) {\n  const channelId = await resolveChannel(p.channelId || p.url);\n  const r = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`, { headers: BROWSER });\n  if (!r.ok) throw new Error(`YouTube returned ${r.status}. Check the Channel ID.`);\n  const xml = await r.text();\n  const items: Item[] = xml.split('<entry>').slice(1).map((e) => {\n    const id = tag(e, 'yt:videoId');\n    const link = (e.match(/<link[^>]*href=\"([^\"]+)\"/) || [])[1] || `https://www.youtube.com/watch?v=${id}`;\n    return {\n      id, platform: 'youtube', type: 'video', title: tag(e, 'title'),\n      text: tag(e, 'media:description').slice(0, 280),\n      thumb: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`, media: '', url: decode(link), date: tag(e, 'published'),\n    };\n  });\n  return { items, channelId };\n}\n\n/* ---------------- Instagram (Professional account + token) ---------------- */\nasync function instagram(): Promise<Item[]> {\n  const s = await getSecret('instagram_token');\n  if (!s?.value) throw new Error('Instagram access token is not saved yet (Admin \u2192 Social Media \u2192 Instagram).');\n  let token = s.value;\n  // Long-lived tokens last 60 days \u2014 refresh weekly so it never expires\n  if (Date.now() - new Date(s.updated_at).getTime() > 7 * 86400000) {\n    try {\n      const r = await fetch(`https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${encodeURIComponent(token)}`);\n      const j = await r.json();\n      if (j.access_token) { token = j.access_token; await setSecret('instagram_token', token); }\n    } catch { /* keep the current token */ }\n  }\n  const qs = new URLSearchParams({\n    fields: 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp', limit: '30', access_token: token,\n  });\n  const r = await fetch(`https://graph.instagram.com/me/media?${qs}`);\n  const j = await r.json();\n  if (j.error) throw new Error('Instagram: ' + (j.error.message || 'request failed'));\n  // deno-lint-ignore no-explicit-any\n  return (j.data || []).map((m: any): Item => ({\n    id: m.id, platform: 'instagram', type: m.media_type === 'VIDEO' ? 'video' : 'image', title: '',\n    text: String(m.caption || '').slice(0, 280),\n    thumb: m.media_type === 'VIDEO' ? (m.thumbnail_url || '') : (m.media_url || ''),\n    media: m.media_url || '', url: m.permalink, date: m.timestamp, album: m.media_type === 'CAROUSEL_ALBUM',\n  }));\n}\n\n/* ---------------- Facebook Page (Page access token) ---------------- */\nasync function facebook(p: Record<string, string>): Promise<Item[]> {\n  const s = await getSecret('facebook_token');\n  if (!s?.value) throw new Error('Facebook Page access token is not saved yet (Admin \u2192 Social Media \u2192 Facebook).');\n  const page = String(p.pageId || '').trim() || 'me';\n  const qs = new URLSearchParams({\n    fields: 'id,message,full_picture,permalink_url,created_time,attachments{media_type}', limit: '30', access_token: s.value,\n  });\n  const r = await fetch(`https://graph.facebook.com/${encodeURIComponent(page)}/posts?${qs}`);\n  const j = await r.json();\n  if (j.error) throw new Error('Facebook: ' + (j.error.message || 'request failed'));\n  // deno-lint-ignore no-explicit-any\n  return (j.data || []).filter((x: any) => x.full_picture || x.message).map((x: any): Item => {\n    const mt = String(x.attachments?.data?.[0]?.media_type || '');\n    return {\n      id: x.id, platform: 'facebook', type: mt.includes('video') ? 'video' : x.full_picture ? 'image' : 'text', title: '',\n      text: String(x.message || '').slice(0, 280), thumb: x.full_picture || '', media: x.full_picture || '',\n      url: x.permalink_url, date: x.created_time,\n    };\n  });\n}\n\n/* ---------------- Handler ---------------- */\nDeno.serve(async (req) => {\n  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });\n  try {\n    // deno-lint-ignore no-explicit-any\n    let body: any = {};\n    if (req.method === 'POST') { try { body = await req.json(); } catch { body = {}; } }\n    const q = new URL(req.url).searchParams;\n    const platform = String(body.platform || q.get('platform') || '').toLowerCase();\n    if (platform === 'ping') return json({ ok: true, pong: true });\n    if (!['youtube', 'instagram', 'facebook'].includes(platform)) return json({ ok: false, error: 'Unknown platform' });\n\n    // The admin \"Test\" button forces a refresh and may test unsaved settings\n    let isAdmin = false;\n    if (body.force) {\n      const jwt = (req.headers.get('Authorization') || '').replace(/^Bearer\\s+/i, '');\n      const { data } = await db.auth.getUser(jwt);\n      isAdmin = (data?.user?.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase();\n      if (!isAdmin) return json({ ok: false, error: 'Only the admin can run a test. Please log in again.' });\n    }\n\n    const { data: st } = await db.from('site_settings').select('data').eq('id', SETTINGS_ID).maybeSingle();\n    let p = st?.data?.socials?.platforms?.[platform] || {};\n    if (isAdmin && body.settings) p = { ...p, ...body.settings };\n    if (!isAdmin && !(p.enabled && p.feed)) return json({ ok: false, error: `${platform} feed is turned off in the admin panel` });\n\n    const source = platform === 'youtube' ? String(p.channelId || p.url || '') : platform === 'facebook' ? String(p.pageId || '') : 'me';\n    const { data: cache } = await db.from('social_cache').select('data,source,fetched_at').eq('platform', platform).maybeSingle();\n    const sameSource = cache && cache.source === source;\n    if (!isAdmin && sameSource && Date.now() - new Date(cache.fetched_at).getTime() < CACHE_MINUTES * 60000) {\n      return json({ ok: true, cached: true, items: cache.data });\n    }\n\n    try {\n      let items: Item[] = [];\n      let extra: Record<string, unknown> = {};\n      if (platform === 'youtube') { const r = await youtube(p); items = r.items; extra = { channelId: r.channelId }; }\n      else if (platform === 'instagram') items = await instagram();\n      else items = await facebook(p);\n      await db.from('social_cache').upsert({ platform, source, data: items, fetched_at: new Date().toISOString() });\n      return json({ ok: true, items, ...extra });\n    } catch (e) {\n      const msg = e instanceof Error ? e.message : String(e);\n      if (!isAdmin && sameSource) return json({ ok: true, stale: true, items: cache.data, error: msg });\n      return json({ ok: false, error: msg });\n    }\n  } catch (e) {\n    return json({ ok: false, error: e instanceof Error ? e.message : String(e) });\n  }\n});\n";
+const FEED_FN_CODE = "// =====================================================================\n// Supabase Edge Function: social-feed\n// Fetches your latest YouTube videos, Instagram posts and Facebook Page\n// posts so they appear on the portfolio website automatically.\n// =====================================================================\nimport { createClient } from 'npm:@supabase/supabase-js@2';\n\nconst ADMIN_EMAIL = 'fareedulhassan0@gmail.com';\nconst SETTINGS_ID = 'main';\nconst CACHE_MINUTES = 30;\n\nconst cors = {\n  'Access-Control-Allow-Origin': '*',\n  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',\n  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',\n};\nconst json = (body: unknown) =>\n  new Response(JSON.stringify(body), { headers: { ...cors, 'Content-Type': 'application/json' } });\n\nconst db = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {\n  auth: { persistSession: false },\n});\n\ntype Item = {\n  id: string; platform: string; type: string; title: string; text: string;\n  thumb: string; media: string; url: string; date: string; album?: boolean;\n};\n\nasync function getSecret(id: string) {\n  const { data } = await db.from('social_secrets').select('value,updated_at').eq('id', id).maybeSingle();\n  return data as { value: string; updated_at: string } | null;\n}\nasync function setSecret(id: string, value: string) {\n  await db.from('social_secrets').upsert({ id, value, updated_at: new Date().toISOString() });\n}\n\nconst decode = (s: string) =>\n  s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#39;/g, \"'\");\nconst tag = (xml: string, name: string) => {\n  const m = xml.match(new RegExp(`<${name}[^>]*>([\\\\s\\\\S]*?)</${name}>`));\n  return m ? decode(m[1].trim()) : '';\n};\nconst BROWSER = {\n  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',\n  'Accept-Language': 'en-US,en;q=0.9',\n  'Cookie': 'CONSENT=YES+cb; SOCS=CAI',\n};\n\nasync function resolveChannel(input: string): Promise<string> {\n  const v = String(input || '').trim();\n  if (/^UC[\\w-]{22}$/.test(v)) return v;\n  let m = v.match(/channel\\/(UC[\\w-]{22})/);\n  if (m) return m[1];\n  if (!v) throw new Error('Add your YouTube channel link or Channel ID.');\n  const url = /^https?:\\/\\//.test(v) ? v : 'https://www.youtube.com/' + (v.startsWith('@') ? v : '@' + v);\n  const r = await fetch(url, { headers: BROWSER });\n  const html = await r.text();\n  m = html.match(/<link rel=\"canonical\" href=\"https:\\/\\/www\\.youtube\\.com\\/channel\\/(UC[\\w-]{22})\"/) ||\n      html.match(/\"externalId\":\"(UC[\\w-]{22})\"/) ||\n      html.match(/\"channelId\":\"(UC[\\w-]{22})\"/);\n  if (!m) throw new Error('Could not find this YouTube channel. Paste the Channel ID (starts with UC) instead.');\n  return m[1];\n}\n\nasync function youtube(p: Record<string, string>) {\n  const channelId = await resolveChannel(p.channelId || p.url);\n  const r = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`, { headers: BROWSER });\n  if (!r.ok) throw new Error(`YouTube returned ${r.status}. Check the Channel ID.`);\n  const xml = await r.text();\n  const items: Item[] = xml.split('<entry>').slice(1).map((e) => {\n    const id = tag(e, 'yt:videoId');\n    const link = (e.match(/<link[^>]*href=\"([^\"]+)\"/) || [])[1] || `https://www.youtube.com/watch?v=${id}`;\n    return {\n      id, platform: 'youtube', type: 'video', title: tag(e, 'title'),\n      text: tag(e, 'media:description').slice(0, 280),\n      thumb: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`, media: '', url: decode(link), date: tag(e, 'published'),\n    };\n  });\n  return { items, channelId };\n}\n\nasync function instagram(): Promise<Item[]> {\n  const s = await getSecret('instagram_token');\n  if (!s?.value) throw new Error('Instagram access token is not saved yet (Admin \u2192 Social Media \u2192 Instagram).');\n  let token = s.value;\n  if (Date.now() - new Date(s.updated_at).getTime() > 7 * 86400000) {\n    try {\n      const r = await fetch(`https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${encodeURIComponent(token)}`);\n      const j = await r.json();\n      if (j.access_token) { token = j.access_token; await setSecret('instagram_token', token); }\n    } catch { }\n  }\n  const qs = new URLSearchParams({\n    fields: 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp', limit: '30', access_token: token,\n  });\n  const r = await fetch(`https://graph.instagram.com/me/media?${qs}`);\n  const j = await r.json();\n  if (j.error) throw new Error('Instagram: ' + (j.error.message || 'request failed'));\n  return (j.data || []).map((m: any): Item => ({\n    id: m.id, platform: 'instagram', type: m.media_type === 'VIDEO' ? 'video' : 'image', title: '',\n    text: String(m.caption || '').slice(0, 280),\n    thumb: m.media_type === 'VIDEO' ? (m.thumbnail_url || '') : (m.media_url || ''),\n    media: m.media_url || '', url: m.permalink, date: m.timestamp, album: m.media_type === 'CAROUSEL_ALBUM',\n  }));\n}\n\nasync function facebook(p: Record<string, string>): Promise<Item[]> {\n  const s = await getSecret('facebook_token');\n  if (!s?.value) throw new Error('Facebook Page access token is not saved yet (Admin \u2192 Social Media \u2192 Facebook).');\n  const page = String(p.pageId || '').trim() || 'me';\n  const qs = new URLSearchParams({\n    fields: 'id,message,full_picture,permalink_url,created_time,attachments{media_type}', limit: '30', access_token: s.value,\n  });\n  const r = await fetch(`https://graph.facebook.com/${encodeURIComponent(page)}/posts?${qs}`);\n  const j = await r.json();\n  if (j.error) throw new Error('Facebook: ' + (j.error.message || 'request failed'));\n  return (j.data || []).filter((x: any) => x.full_picture || x.message).map((x: any): Item => {\n    const mt = String(x.attachments?.data?.[0]?.media_type || '');\n    return {\n      id: x.id, platform: 'facebook', type: mt.includes('video') ? 'video' : x.full_picture ? 'image' : 'text', title: '',\n      text: String(x.message || '').slice(0, 280), thumb: x.full_picture || '', media: x.full_picture || '',\n      url: x.permalink_url, date: x.created_time,\n    };\n  });\n}\n\nDeno.serve(async (req) => {\n  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });\n  try {\n    let body: any = {};\n    if (req.method === 'POST') { try { body = await req.json(); } catch { body = {}; } }\n    const q = new URL(req.url).searchParams;\n    const platform = String(body.platform || q.get('platform') || '').toLowerCase();\n    if (platform === 'ping') return json({ ok: true, pong: true });\n    if (!['youtube', 'instagram', 'facebook'].includes(platform)) return json({ ok: false, error: 'Unknown platform' });\n    let isAdmin = false;\n    if (body.force) {\n      const jwt = (req.headers.get('Authorization') || '').replace(/^Bearer\\s+/i, '');\n      const { data } = await db.auth.getUser(jwt);\n      isAdmin = (data?.user?.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase();\n      if (!isAdmin) return json({ ok: false, error: 'Only the admin can run a test. Please log in again.' });\n    }\n    const { data: st } = await db.from('site_settings').select('data').eq('id', SETTINGS_ID).maybeSingle();\n    let p = st?.data?.socials?.platforms?.[platform] || {};\n    if (isAdmin && body.settings) p = { ...p, ...body.settings };\n    if (!isAdmin && !(p.enabled && p.feed)) return json({ ok: false, error: `${platform} feed is turned off in the admin panel` });\n    const source = platform === 'youtube' ? String(p.channelId || p.url || '') : platform === 'facebook' ? String(p.pageId || '') : 'me';\n    const { data: cache } = await db.from('social_cache').select('data,source,fetched_at').eq('platform', platform).maybeSingle();\n    const sameSource = cache && cache.source === source;\n    if (!isAdmin && sameSource && Date.now() - new Date(cache.fetched_at).getTime() < CACHE_MINUTES * 60000) {\n      return json({ ok: true, cached: true, items: cache.data });\n    }\n    try {\n      let items: Item[] = [];\n      let extra: Record<string, unknown> = {};\n      if (platform === 'youtube') { const r = await youtube(p); items = r.items; extra = { channelId: r.channelId }; }\n      else if (platform === 'instagram') items = await instagram();\n      else items = await facebook(p);\n      await db.from('social_cache').upsert({ platform, source, data: items, fetched_at: new Date().toISOString() });\n      return json({ ok: true, items, ...extra });\n    } catch (e) {\n      const msg = e instanceof Error ? e.message : String(e);\n      if (!isAdmin && sameSource) return json({ ok: true, stale: true, items: cache.data, error: msg });\n      return json({ ok: false, error: msg });\n    }\n  } catch (e) {\n    return json({ ok: false, error: e instanceof Error ? e.message : String(e) });\n  }\n});\n";
 
 const FONTS = ['Outfit', 'Inter', 'Poppins', 'Montserrat', 'Space Grotesk', 'Sora', 'Plus Jakarta Sans', 'Manrope', 'Raleway', 'Playfair Display', 'DM Sans', 'Urbanist', 'Lexend', 'Rubik', 'Nunito', 'Lora', 'Roboto', 'Open Sans', 'Syne', 'Bebas Neue'];
-const PRESETS = {
-  flame:   { name: 'Flame Orange', primary: '#ff5500', secondary: '#ff9900', bg: '#060609', bg2: '#0c0c12', card: '#13131c', text: '#f3f4f6', muted: '#9ca3af' },
-  ocean:   { name: 'Ocean Blue', primary: '#2f80ff', secondary: '#00d4ff', bg: '#050912', bg2: '#0a1120', card: '#0f182b', text: '#eef4ff', muted: '#94a3b8' },
-  emerald: { name: 'Emerald', primary: '#10b981', secondary: '#84cc16', bg: '#04100c', bg2: '#081a14', card: '#0d211a', text: '#ecfdf5', muted: '#94b3a6' },
-  violet:  { name: 'Royal Violet', primary: '#8b5cf6', secondary: '#ec4899', bg: '#08060f', bg2: '#110c1d', card: '#171127', text: '#f5f3ff', muted: '#a49bb8' },
-  rose:    { name: 'Crimson Rose', primary: '#f43f5e', secondary: '#fb923c', bg: '#0c0507', bg2: '#16090d', card: '#1d0e13', text: '#fff1f2', muted: '#b39aa0' },
-  gold:    { name: 'Luxury Gold', primary: '#d4a017', secondary: '#f5d76e', bg: '#0a0906', bg2: '#13110b', card: '#1a1710', text: '#fdf8ec', muted: '#aaa189' },
-  cyber:   { name: 'Cyber Neon', primary: '#00e5ff', secondary: '#ff00c8', bg: '#05040a', bg2: '#0b0a16', card: '#110f20', text: '#f0f9ff', muted: '#9ba3c4' },
-  light:   { name: 'Clean Light', primary: '#ff5500', secondary: '#ff9900', bg: '#f8f7f4', bg2: '#efede8', card: '#ffffff', text: '#16161d', muted: '#5f6372' },
-  lightblue: { name: 'Light Corporate', primary: '#2563eb', secondary: '#0ea5e9', bg: '#f6f8fc', bg2: '#eaf0f8', card: '#ffffff', text: '#0f172a', muted: '#55627a' }
+
+/* =========================================================
+   12 WEBSITE DESIGNS (Synced 1-to-1 with index.html)
+   ========================================================= */
+const DESIGNS = {
+  cinema:         { name: 'Romantic Cinema',    badge: 'Default',   icon: 'fa-film',            shape: 'clip-path:polygon(29% 0%,71% 0%,100% 29%,100% 71%,71% 100%,29% 100%,0% 71%,0% 29%)', desc: 'Velvet cinema glass, octagon portrait, warm rose-gold bokeh & film grain.' },
+  'prism-3d':     { name: '3D Floating Prism',  badge: '3D Depth',  icon: 'fa-cube',            shape: 'clip-path:polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%)', desc: 'Deep 3D perspective shadows, hexagonal prism portrait & luminous floor grid.' },
+  'glass-aurora': { name: 'Aurora Frosted Glass',badge: 'Glass',    icon: 'fa-wand-magic-sparkles', shape: 'border-radius:50%', desc: 'Ultra-translucent frosted glass surfaces with soft circular aurora portrait.' },
+  'editorial-luxe':{ name: 'Editorial Magazine', badge: 'Luxury',   icon: 'fa-feather-pointed', shape: 'border-radius:50% 50% 8px 8px', desc: 'High-fashion serif typography, arched editorial portrait & refined borders.' },
+  'cyber-hud':    { name: 'Futuristic 3D HUD',  badge: 'Sci-Fi',    icon: 'fa-microchip',       shape: 'clip-path:polygon(29% 0%,71% 0%,100% 29%,100% 71%,71% 100%,29% 100%,0% 71%,0% 29%)', desc: 'Chamfered cut-corner HUD cards, glowing brackets & high-energy 3D grid.' },
+  'velvet-noir':  { name: 'Velvet Film Noir',   badge: 'Cinema',    icon: 'fa-clapperboard',    shape: 'border-radius:10px', desc: 'Dramatic double-rimmed noir frames with moody cinematic spotlighting.' },
+  'bento-modern': { name: 'Modern Bento Studio',badge: 'Studio',    icon: 'fa-table-cells-large',shape: 'border-radius:30%', desc: 'Soft elevated bento tiles, rounded squircle portrait & crisp modern icons.' },
+  'minimal-zen':  { name: 'Minimalist Zen',     badge: 'Clean',     icon: 'fa-spa',             shape: 'border-radius:50%', desc: 'Airy, distraction-free layout with delicate circular portrait & subtle lines.' },
+  'royal-arch':   { name: 'Royal Heritage Arch',badge: 'Regal',     icon: 'fa-crown',           shape: 'border-radius:48% 48% 6px 6px', desc: 'Gilded top-accented cards, classic serif headings & regal arch portrait.' },
+  'neon-pulse':   { name: 'Neon Synthwave 3D',  badge: 'Neon 3D',   icon: 'fa-bolt',            shape: 'clip-path:polygon(29% 0%,71% 0%,100% 29%,100% 71%,71% 100%,29% 100%,0% 71%,0% 29%)', desc: 'Vibrant glowing neon card rims, radiant typography & bold 3D horizon.' },
+  'sunset-silk':  { name: 'Golden Hour Silk',   badge: 'Romantic',  icon: 'fa-sun',             shape: 'border-radius:44% 56% 52% 48%/48% 46% 54% 52%', desc: 'Dreamy organic soft-curved cards & warm romantic sunset wash.' },
+  'brutalist-pro':{ name: 'Neo-Editorial Bold', badge: 'Bold',      icon: 'fa-square',          shape: 'border-radius:8px;box-shadow:3px 3px 0 var(--a)', desc: 'Crisp offset drop-shadows, structured frames & confident modern geometry.' }
 };
-const ICONS = ['fa-solid fa-briefcase','fa-solid fa-atom','fa-solid fa-book-quran','fa-solid fa-file-pen','fa-solid fa-laptop-file','fa-solid fa-graduation-cap','fa-solid fa-certificate','fa-solid fa-award','fa-solid fa-trophy','fa-solid fa-medal','fa-solid fa-star','fa-solid fa-chalkboard-user','fa-solid fa-school','fa-solid fa-flask','fa-solid fa-globe','fa-solid fa-compass','fa-solid fa-comments','fa-solid fa-user-graduate','fa-solid fa-folder-tree','fa-solid fa-headset','fa-solid fa-bullseye','fa-solid fa-rocket','fa-solid fa-lightbulb','fa-solid fa-square-root-variable','fa-solid fa-layer-group','fa-solid fa-hands-holding-child','fa-solid fa-microscope','fa-solid fa-pen-nib','fa-solid fa-chart-line','fa-solid fa-handshake','fa-solid fa-users','fa-solid fa-flag','fa-solid fa-heart','fa-solid fa-code','fa-solid fa-camera','fa-solid fa-video','fa-solid fa-envelope-open-text','fa-brands fa-amazon','fa-brands fa-linkedin-in','fa-brands fa-whatsapp','fa-brands fa-youtube'];
+
+/* =========================================================
+   20 ROMANTIC & CINEMATIC COLOR THEMES (Synced with index.html)
+   ========================================================= */
+const PRESETS = {
+  cinema:          { name: 'Midnight Rose',     mode: 'dark',  primary: '#e85d75', secondary: '#f3b07a', bg: '#09060e', bg2: '#120c1b', card: '#1a1126', text: '#fbf6f2', muted: '#bfb1c6' },
+  'paris-dusk':    { name: 'Parisian Dusk',     mode: 'dark',  primary: '#e27396', secondary: '#f6bd92', bg: '#0b0916', bg2: '#141026', card: '#1d1736', text: '#fcf7fa', muted: '#c2b6d4' },
+  'velvet-wine':   { name: 'Velvet Burgundy',   mode: 'dark',  primary: '#d94862', secondary: '#e6be8a', bg: '#10060b', bg2: '#1b0b13', card: '#26101b', text: '#fdf6f7', muted: '#ccb4be' },
+  'moonlight-silk':{ name: 'Moonlight Silk',    mode: 'dark',  primary: '#60a5fa', secondary: '#f5c6aa', bg: '#070b16', bg2: '#0e1629', card: '#15203b', text: '#f4f8ff', muted: '#aab9d4' },
+  'golden-hour':   { name: 'Golden Hour',       mode: 'dark',  primary: '#f59e56', secondary: '#eb6b7f', bg: '#0f0907', bg2: '#1a100c', card: '#261712', text: '#fef8f2', muted: '#cdb8ad' },
+  'sakura-night':  { name: 'Sakura Midnight',   mode: 'dark',  primary: '#f48fb1', secondary: '#c5a3ff', bg: '#0e0812', bg2: '#180e20', card: '#22152e', text: '#fdf6fb', muted: '#c7b5d1' },
+  'emerald-velvet':{ name: 'Emerald Velvet',    mode: 'dark',  primary: '#38b28e', secondary: '#e8c088', bg: '#060e0d', bg2: '#0c1a17', card: '#132622', text: '#f4faf7', muted: '#a7c2b9' },
+  'royal-amethyst':{ name: 'Royal Amethyst',    mode: 'dark',  primary: '#c06ee0', secondary: '#f5a998', bg: '#0c0716', bg2: '#150e26', card: '#1f1538', text: '#faf5fc', muted: '#bfb4d1' },
+  'venice-sunset': { name: 'Venice Sunset',     mode: 'dark',  primary: '#e06358', secondary: '#f2c078', bg: '#110a0d', bg2: '#1d1116', card: '#29191f', text: '#fdf7f4', muted: '#cbb7b9' },
+  'aurora-teal':   { name: 'Northern Aurora',   mode: 'dark',  primary: '#2dd4bf', secondary: '#f472b6', bg: '#050d12', bg2: '#0a1821', card: '#112430', text: '#f3fbfc', muted: '#a4c0cc' },
+  'obsidian-gold': { name: 'Obsidian Rose Gold',mode: 'dark',  primary: '#d99b82', secondary: '#f2d0a9', bg: '#08080a', bg2: '#121114', card: '#1b191e', text: '#fcf9f5', muted: '#c2bab3' },
+  'mocha-silk':    { name: 'Mocha Silk',        mode: 'dark',  primary: '#d98a54', secondary: '#e07a84', bg: '#120d0a', bg2: '#1d1510', card: '#291e17', text: '#fdf8f3', muted: '#cab9ae' },
+  'crimson-noir':  { name: 'Crimson Noir',      mode: 'dark',  primary: '#e11d48', secondary: '#fbbf24', bg: '#0d0507', bg2: '#190a0e', card: '#241016', text: '#fff5f7', muted: '#ccafb6' },
+  'starlight-plum':{ name: 'Starlight Plum',    mode: 'dark',  primary: '#e64980', secondary: '#a5b4fc', bg: '#0f0717', bg2: '#190d26', card: '#241336', text: '#fcf6ff', muted: '#c4b3d4' },
+  'sunset-coral':  { name: 'Coral Horizon',     mode: 'dark',  primary: '#ff6b6b', secondary: '#ffd166', bg: '#0a0c14', bg2: '#131726', card: '#1c2236', text: '#fafbff', muted: '#b2b9cf' },
+  'blush-ivory':   { name: 'Blush Ivory',       mode: 'light', primary: '#c94b6d', secondary: '#e08b63', bg: '#fdf7f5', bg2: '#f7ece9', card: '#ffffff', text: '#1e1424', muted: '#6b5b73' },
+  'champagne-day': { name: 'Champagne Day',     mode: 'light', primary: '#b86b43', secondary: '#c95b74', bg: '#fcf9f4', bg2: '#f5ede2', card: '#ffffff', text: '#241914', muted: '#756358' },
+  'lavender-mist': { name: 'Lavender Mist',     mode: 'light', primary: '#9d4edd', secondary: '#e07a5f', bg: '#f9f6fc', bg2: '#f1eaf8', card: '#ffffff', text: '#1e1326', muted: '#6a5975' },
+  'coastal-pearl': { name: 'Coastal Pearl',     mode: 'light', primary: '#2b7a9b', secondary: '#df6c63', bg: '#f5f9fc', bg2: '#eaf2f7', card: '#ffffff', text: '#12222e', muted: '#5a6f80' },
+  'sage-linen':    { name: 'Sage & Linen',      mode: 'light', primary: '#2f856b', secondary: '#c98a4b', bg: '#f7faf7', bg2: '#ecf3ec', card: '#ffffff', text: '#14241e', muted: '#596e65' }
+};
+
+const ICONS = ['fa-solid fa-briefcase','fa-solid fa-atom','fa-solid fa-book-quran','fa-solid fa-file-pen','fa-solid fa-laptop-file','fa-solid fa-graduation-cap','fa-solid fa-certificate','fa-solid fa-award','fa-solid fa-trophy','fa-solid fa-medal','fa-solid fa-star','fa-solid fa-chalkboard-user','fa-solid fa-school','fa-solid fa-flask','fa-solid fa-globe','fa-solid fa-compass','fa-solid fa-comments','fa-solid fa-user-graduate','fa-solid fa-folder-tree','fa-solid fa-headset','fa-solid fa-bullseye','fa-solid fa-rocket','fa-solid fa-lightbulb','fa-solid fa-square-root-variable','fa-solid fa-layer-group','fa-solid fa-hands-holding-child','fa-solid fa-microscope','fa-solid fa-pen-nib','fa-solid fa-chart-line','fa-solid fa-handshake','fa-solid fa-users','fa-solid fa-flag','fa-solid fa-heart','fa-solid fa-wand-magic-sparkles','fa-solid fa-code','fa-solid fa-camera','fa-solid fa-video','fa-solid fa-envelope-open-text','fa-brands fa-amazon','fa-brands fa-linkedin-in','fa-brands fa-whatsapp','fa-brands fa-youtube'];
 const BUILTIN_ICONS = { hero: 'fa-house', marquee: 'fa-arrows-left-right', stats: 'fa-chart-simple', about: 'fa-id-card', services: 'fa-briefcase', skills: 'fa-bars-progress', experience: 'fa-timeline', education: 'fa-graduation-cap', highlights: 'fa-star', social: 'fa-share-nodes', contact: 'fa-envelope' };
 const BUILTIN_PAGE = { hero: 'hero', marquee: 'hero', stats: 'stats', about: 'profile', services: 'services', skills: 'skills', experience: 'experience', education: 'education', highlights: 'highlights', social: 'socials', contact: 'settings' };
 
@@ -359,12 +413,12 @@ const CS_TYPES = {
     f: [{ k: 'image', l: 'Logo', t: 'image', full: true }, { k: 'title', l: 'Name' }, { k: 'link', l: 'Website (optional)' }] }
 };
 
-/* ---------- Built-in list schemas ---------- */
+/* ---------- Built-in list schemas (Updated for 3D Flip Cards) ---------- */
 const SCHEMA = {
   stats: { label: x => `${x.value}${x.suffix} — ${x.label}`, blank: { icon: 'fa-solid fa-star', value: '1', suffix: '+', label: 'New stat' },
     f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'label', l: 'Label' }, { k: 'value', l: 'Number / Value', help: 'Numbers animate as a counter' }, { k: 'suffix', l: 'Suffix (e.g. + or %)' }] },
-  services: { label: x => x.title, blank: { icon: 'fa-solid fa-star', title: 'New Service', desc: '', tag: '' },
-    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'title', l: 'Title' }, { k: 'desc', l: 'Description', t: 'textarea', full: true }, { k: 'tag', l: 'Footer tag' }] },
+  services: { label: x => x.title, blank: { icon: 'fa-solid fa-star', title: 'New Service', desc: '', tag: '', backNote: '' },
+    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'title', l: 'Title' }, { k: 'desc', l: 'Description (front)', t: 'textarea', full: true }, { k: 'tag', l: 'Footer tag', full: true }, { k: 'backNote', l: '3D Flip-card back note (shown when flipped)', t: 'textarea', full: true }] },
   skills: { label: x => `${x.name} (${x.percent}%)`, blank: { name: 'New Skill', percent: 80, category: 'Career Services' },
     f: [{ k: 'name', l: 'Skill name' }, { k: 'category', l: 'Category (filter tab)' }, { k: 'percent', l: 'Proficiency', t: 'range', min: 0, max: 100, unit: '%', full: true }] },
   experience: { label: x => `${x.role} — ${x.company}`, blank: { role: 'New Role', company: 'Company', period: '2026 – Present', type: 'Category', icon: 'fa-solid fa-briefcase', current: false, points: [] },
@@ -373,8 +427,8 @@ const SCHEMA = {
     f: [{ k: 'degree', l: 'Degree' }, { k: 'institute', l: 'Institute' }, { k: 'period', l: 'Period' }, { k: 'location', l: 'Location' }, { k: 'desc', l: 'Description (optional)', t: 'textarea', full: true }] },
   certifications: { label: x => x.title, blank: { title: 'New Certification', org: '', year: '', icon: 'fa-solid fa-certificate', desc: '' },
     f: [{ k: 'title', l: 'Title' }, { k: 'org', l: 'Issued by' }, { k: 'year', l: 'Year / Label' }, { k: 'icon', l: 'Icon', t: 'icon' }, { k: 'desc', l: 'Description', t: 'textarea', full: true }] },
-  highlights: { label: x => x.title, blank: { icon: 'fa-solid fa-star', title: 'New Highlight', text: '' },
-    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'title', l: 'Title' }, { k: 'text', l: 'Text', t: 'textarea', full: true }] },
+  highlights: { label: x => x.title, blank: { icon: 'fa-solid fa-star', title: 'New Highlight', text: '', tag: 'Key Advantage', backNote: '' },
+    f: [{ k: 'icon', l: 'Icon', t: 'icon' }, { k: 'title', l: 'Title' }, { k: 'text', l: 'Text (front)', t: 'textarea', full: true }, { k: 'tag', l: 'Bottom badge tag', full: true }, { k: 'backNote', l: '3D Flip-card back note (shown when flipped)', t: 'textarea', full: true }] },
   posts: { label: x => x.title || x.caption || x.url || 'New post', blank: { url: '', title: '', caption: '' },
     f: [{ k: 'url', l: 'Post link or upload — YouTube, Instagram, Facebook, LinkedIn, TikTok, Vimeo, or your own photo/video', t: 'media', full: true }, { k: 'title', l: 'Title (optional)' }, { k: 'caption', l: 'Caption (optional)' }] }
 };
@@ -396,6 +450,15 @@ function toast(msg, type = 'ok') { const t = document.createElement('div'); t.cl
 const fmtDate = d => new Date(d).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 const csIndex = id => (cfg.customSections || []).findIndex(c => c.id === id);
 const csName = cs => (cs.nav || [cs.title, cs.accent].filter(Boolean).join(' ') || 'Untitled section').trim();
+
+function ensureNewDefaults() {
+  if (!cfg.theme) cfg.theme = {};
+  if (!cfg.theme.design) cfg.theme.design = 'cinema';
+  if (!cfg.animations) cfg.animations = {};
+  if (cfg.animations.flipCards === undefined) cfg.animations.flipCards = true;
+  if (cfg.animations.rotatePortrait === undefined) cfg.animations.rotatePortrait = true;
+  if (cfg.animations.depth3d === undefined) cfg.animations.depth3d = true;
+}
 
 /* =========================================================
    AUTH
@@ -421,6 +484,7 @@ async function enter(session) {
   $('#login').classList.add('hidden'); $('#app').classList.remove('hidden');
   $('#user-email').textContent = session.user.email;
   if (session.user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) toast('Note: only ' + ADMIN_EMAIL + ' can publish changes (database rule).', 'warn');
+  ensureNewDefaults();
   renderNav(); go(location.hash.slice(1) || 'dashboard');
   await loadConfig(); loadMessages(); loadSecrets();
 }
@@ -433,6 +497,7 @@ async function loadConfig() {
   const { data, error } = await sb.from('site_settings').select('data,updated_at').eq('id', SETTINGS_ID).maybeSingle();
   if (error) settingsError = error.message;
   cfg = merge(clone(DEFAULTS), data?.data || null);
+  ensureNewDefaults();
   cfg.order = orderList(cfg);
   savedJSON = JSON.stringify(cfg);
   lastSaved = data?.updated_at ? new Date(data.updated_at) : null;
@@ -441,12 +506,13 @@ async function loadConfig() {
 }
 async function save() {
   const btn = $('#save-btn'); btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner spin"></i> Publishing...';
+  ensureNewDefaults();
   cfg.order = orderList(cfg);
   const { error } = await sb.from('site_settings').upsert({ id: SETTINGS_ID, data: cfg, updated_at: new Date().toISOString() });
   btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Publish';
   if (error) { toast('Publish failed: ' + error.message, 'err'); return; }
   savedJSON = JSON.stringify(cfg); lastSaved = new Date(); setDirty(false);
-  try { localStorage.setItem('sfh_site_cfg', savedJSON); localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+  try { localStorage.setItem('sfh_site_cfg_v3', savedJSON); localStorage.setItem('sfh_site_cfg', savedJSON); localStorage.removeItem(DRAFT_KEY); } catch (e) {}
   toast('Published! Your live website is updated.');
   if (page === 'dashboard') go(page);
 }
@@ -531,7 +597,7 @@ function setDirty(v) {
 function markDirty() {
   setDirty(JSON.stringify(cfg) !== savedJSON);
   try { localStorage.setItem(DRAFT_KEY, JSON.stringify(cfg)); } catch (e) {}
-  clearTimeout(pvTimer); pvTimer = setTimeout(sendPreview, 250);
+  clearTimeout(pvTimer); pvTimer = setTimeout(sendPreview, 200);
 }
 function sendPreview() { const f = $('#pv-frame'); if (pvReady && f.contentWindow) f.contentWindow.postMessage({ type: 'sfh-preview', config: cfg }, '*'); }
 addEventListener('message', e => { if (e.data?.type === 'sfh-ready' && e.source === $('#pv-frame').contentWindow) { pvReady = true; sendPreview(); } });
@@ -547,7 +613,7 @@ addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key.toLower
 function toggleSide(force) { const s = $('#side'), on = force ?? !s.classList.contains('open'); s.classList.toggle('open', on); $('#scrim').classList.toggle('on', on); }
 
 /* =========================================================
-   NAVIGATION
+   NAVIGATION (With Dedicated Designs Section)
    ========================================================= */
 const PAGES = [
   { g: 'Overview' },
@@ -565,9 +631,10 @@ const PAGES = [
   { id: 'highlights', i: 'fa-star', l: 'Highlights' },
   { g: 'Custom Sections', custom: true },
   { g: 'Social & Design' },
+  { id: 'designs', i: 'fa-cubes', l: 'Designs (12)' },
+  { id: 'theme', i: 'fa-palette', l: 'Themes & Colors' },
+  { id: 'animations', i: 'fa-wand-magic-sparkles', l: '3D & Animations' },
   { id: 'socials', i: 'fa-share-nodes', l: 'Social Media' },
-  { id: 'theme', i: 'fa-palette', l: 'Theme & Colors' },
-  { id: 'animations', i: 'fa-wand-magic-sparkles', l: 'Animations' },
   { g: 'System' },
   { id: 'settings', i: 'fa-sliders', l: 'Contact & SEO' },
   { id: 'backup', i: 'fa-box-archive', l: 'Backup & Restore' },
@@ -636,7 +703,6 @@ function field(f) { const v = getPath(cfg, f.p), a = `data-p="${f.p}"${f.rr ? ' 
 function fields(list, cls = 'grid2') { return `<div class="${cls}">${list.map(field).join('')}</div>`; }
 function panel(title, icon, sub, body, id) { return `<div class="panel" ${id ? `id="${id}"` : ''}><h3><i class="fa-solid ${icon}"></i>${title}</h3>${sub ? `<div class="sub">${sub}</div>` : '<div style="height:12px"></div>'}${body}</div>`; }
 
-/* Generic list editor — works with any array path, e.g. "services" or "customSections.2.items" */
 function listEditor(path, schema, addLabel = 'Add item') {
   LIST_REG[path] = schema;
   const arr = getPath(cfg, path) || [];
@@ -666,19 +732,49 @@ const VIEWS = {
   dashboard() {
     const unread = messages.filter(m => !m.is_read).length;
     const recent = messages.slice(0, 4);
-    const socOn = Object.values(cfg.socials.platforms).filter(p => p.enabled && p.url).length;
+    const activeDesign = (DESIGNS[cfg.theme.design] || DESIGNS.cinema).name;
+    const activeTheme = (PRESETS[cfg.theme.preset]?.name) || 'Custom';
     return `${settingsError ? `<div class="note err"><b>Database not ready:</b> ${esc(settingsError)} — open <a href="#" onclick="go('setup');return false" style="text-decoration:underline">Supabase Setup</a> and run the SQL.</div>` : ''}
-    <div class="welcome"><div><h3>Assalam-o-Alaikum, ${esc(cfg.profile.firstName)} 👋</h3><p>Edit any part of your website, preview it live, then press <b>Publish</b>.</p></div>
+    <div class="welcome"><div><h3>Assalam-o-Alaikum, ${esc(cfg.profile.firstName)} 👋</h3><p>Switch between <b>12 Designs</b>, <b>20 Romantic Themes</b>, and <b>3D Motion Effects</b>, preview live, then press <b>Publish</b>.</p></div>
       <div class="btn-row"><button class="btn" onclick="togglePreview(true)"><i class="fa-solid fa-eye"></i> Live Preview</button><a class="btn pri" href="index.html" target="_blank"><i class="fa-solid fa-globe"></i> Open Website</a></div></div>
     <div class="grid4" style="margin-bottom:18px">
-      ${[['fa-envelope', `${unread} / ${messages.length}`, 'Unread / Total Messages'], ['fa-share-nodes', socOn, 'Social Platforms Connected'], ['fa-layer-group', (cfg.customSections || []).length, 'Custom Sections'], ['fa-clock-rotate-left', lastSaved ? lastSaved.toLocaleDateString() : '—', 'Last Published']]
-        .map(k => `<div class="kpi"><div class="ki"><i class="fa-solid ${k[0]}"></i></div><div><b>${esc(k[1])}</b><small>${k[2]}</small></div></div>`).join('')}
+      ${[['fa-envelope', `${unread} / ${messages.length}`, 'Unread / Total Messages'], ['fa-cubes', activeDesign, 'Active Design'], ['fa-palette', activeTheme, 'Active Theme'], ['fa-clock-rotate-left', lastSaved ? lastSaved.toLocaleDateString() : '—', 'Last Published']]
+        .map(k => `<div class="kpi"><div class="ki"><i class="fa-solid ${k[0]}"></i></div><div><b style="font-size:17px">${esc(k[1])}</b><small>${k[2]}</small></div></div>`).join('')}
     </div>
     <div class="grid2">
       ${panel('Recent Messages', 'fa-inbox', 'Latest contact form submissions', recent.length ? recent.map(msgCard).join('') + `<button class="btn" onclick="go('messages')">View all messages →</button>` : `<div class="empty"><i class="fa-regular fa-envelope-open"></i>${msgError ? esc(msgError) : 'No messages yet.'}</div>`)}
       ${panel('Quick Edit', 'fa-bolt', 'Jump to any part of your site', `<div class="quick">${PAGES.filter(p => p.id && !['dashboard', 'messages'].includes(p.id)).map(p => `<button onclick="go('${p.id}')"><i class="fa-solid ${p.i}"></i><span>${p.l}</span></button>`).join('')}</div>`)}
     </div>`;
   },
+
+  /* NEW DEDICATED DESIGNS SECTION (12 Designs + 3D Quick Controls) */
+  designs() {
+    const cur = cfg.theme.design || 'cinema';
+    return `<div class="note info"><i class="fa-solid fa-cubes"></i> Pick any of the <b>12 Website Designs</b> below. Pair any design with any of the <b>20 Themes</b> in Themes & Colors, and preview on both Desktop & Mobile using Live Preview!</div>` +
+      panel('Website Design Architectures (12 Styles)', 'fa-cubes', 'Click any design card to transform your portrait frame, card styling, borders, and 3D depth immediately', `<div class="designs-grid">${Object.entries(DESIGNS).map(([k, d]) => `
+        <button class="design-card ${cur === k ? 'on' : ''}" data-act="design" data-k="${k}">
+          <div class="design-top">
+            <span class="design-ic"><i class="fa-solid ${d.icon}"></i></span>
+            <span class="design-badge">${cur === k ? 'Active' : d.badge}</span>
+          </div>
+          <div class="design-wire">
+            <div class="dw-lines"><i></i><i></i><i></i></div>
+            <div class="dw-shape" style="${d.shape}"></div>
+          </div>
+          <div>
+            <b>${d.name}</b>
+            <p>${d.desc}</p>
+          </div>
+        </button>`).join('')}</div>`) +
+      panel('3D Motion Quick-Controls', 'fa-cube', 'Toggle 3D flipping cards, rotating portrait & layered 3D depth right here', fields([
+        { p: 'animations.flipCards', l: '3D Flipping Cards', t: 'toggle', help: 'Services & Highlights cards flip 180° in 3D on hover / tap' },
+        { p: 'animations.rotatePortrait', l: '3D Rotating Portrait', t: 'toggle', help: 'Gentle 3D gyroscopic sway, tilted 3D rings & click-to-spin' },
+        { p: 'animations.depth3d', l: '3D Layered Card Depth', t: 'toggle', help: 'Icons & titles float forward on Z-axis during 3D tilt' },
+        { p: 'animations.tilt', l: '3D Mouse Tilt', t: 'toggle', help: 'Interactive 3D perspective tilt on cards' }
+      ])) +
+      `<div class="btn-row"><button class="btn" onclick="togglePreview(true);setDevice(false)"><i class="fa-solid fa-desktop"></i> Preview Desktop</button><button class="btn" onclick="togglePreview(true);setDevice(true)"><i class="fa-solid fa-mobile-screen"></i> Preview Mobile</button><button class="btn pri" onclick="go('theme')"><i class="fa-solid fa-palette"></i> Choose Color Theme →</button></div>`;
+  },
+
   messages() {
     let list = messages;
     if (msgFilter === 'unread') list = list.filter(m => !m.is_read);
@@ -715,7 +811,7 @@ const VIEWS = {
           ${cs ? `<button class="btn icon sm danger" title="Delete section" data-act="del-sec" data-id="${id}"><i class="fa-solid fa-trash"></i></button>` : ''}
         </span></div>`;
     };
-    return `<div class="note info"><i class="fa-solid fa-circle-info"></i> Arrange the order of every section on your website, show/hide them, rename menu items — and add brand-new sections (Projects, Achievements, Gallery, anything) below.</div>` +
+    return `<div class="note info"><i class="fa-solid fa-circle-info"></i> Arrange the order of every section on your website, show/hide them, rename menu items — and add brand-new sections below.</div>` +
       panel('Website Layout', 'fa-layer-group', 'Top to bottom, exactly as it appears on your website',
         `<div class="pb-row fixed"><span class="li-num"><i class="fa-solid fa-lock" style="font-size:10px"></i></span><span class="pb-ic"><i class="fa-solid fa-house"></i></span><div class="pb-name"><b>Hero</b><small>Always first</small></div>
           <input class="inp pb-nav" data-p="sections.hero.nav" data-t="text" value="${esc(cfg.sections.hero.nav || '')}" placeholder="Menu label">
@@ -727,7 +823,7 @@ const VIEWS = {
   },
   profile() {
     const p = cfg.profile;
-    return panel('Profile Photo', 'fa-camera', 'Shown in the hero and About circles. Upload saves to Supabase Storage.', `
+    return panel('Profile Photo', 'fa-camera', 'Shown in the hero and About frames. Upload saves to Supabase Storage.', `
       <div class="photo-box"><div class="photo-prev">${p.photoUrl ? `<img src="${esc(p.photoUrl)}" alt="">` : esc(p.initials)}</div>
       <div style="flex:1;min-width:240px"><div class="btn-row" style="margin-bottom:12px">
         <label class="btn pri"><i class="fa-solid fa-upload"></i> Upload Photo<input type="file" accept="image/*" hidden onchange="handleUpload(this,'profile.photoUrl')"></label>
@@ -750,47 +846,64 @@ const VIEWS = {
       ${field({ p: 'profile.cvUrl', l: 'CV file URL', ph: 'Leave empty to use the built-in printable CV' })}`);
   },
   hero() {
-    return panel('Hero Text', 'fa-house', 'The first screen visitors see', fields([
-      { p: 'profile.badge', l: 'Top badge text', full: true }, { p: 'profile.hello', l: 'Greeting line' }, { p: 'nav.cta', l: 'Main button text' },
+    return panel('Hero Text', 'fa-house', 'The first screen visitors see (clean editorial layout)', fields([
+      { p: 'profile.hello', l: 'Greeting line' }, { p: 'nav.cta', l: 'Navbar CTA button text' },
       { p: 'profile.roles', l: 'Typewriter roles (one per line)', t: 'lines', full: true },
       { p: 'profile.intro', l: 'Intro paragraph', t: 'textarea', full: true, rows: 4 }])) +
     panel('Floating Badges', 'fa-award', 'Little cards floating around your photo (leave empty to hide)', fields([
       { p: 'profile.yearsExp', l: 'Big number', ph: '4+' }, { p: 'profile.yearsLabel', l: 'Number label' }, { p: 'profile.floatBadge', l: 'Pill badge text' }], 'grid3')) +
-    panel('Scrolling Ticker', 'fa-arrows-left-right', 'Animated strip below the hero', fields([{ p: 'sections.marquee.show', l: 'Show ticker strip', t: 'toggle', full: true }, { p: 'marquee', l: 'Ticker items (one per line)', t: 'lines', full: true, rows: 6 }]));
+    panel('Scrolling Ticker Ribbon', 'fa-arrows-left-right', 'Animated luminous ribbon below the hero', fields([{ p: 'sections.marquee.show', l: 'Show ticker ribbon', t: 'toggle', full: true }, { p: 'marquee', l: 'Ribbon items (one per line)', t: 'lines', full: true, rows: 6 }]));
   },
   stats() { return panel('Stats Counter', 'fa-chart-simple', 'Animated numbers below the hero', fields([{ p: 'sections.stats.show', l: 'Show stats section', t: 'toggle', full: true }]) + '<div style="height:14px"></div>' + listEditor('stats', SCHEMA.stats)); },
-  services() { return sectionHeadPanel('services') + panel('Service Cards', 'fa-briefcase', 'Also used as options in the contact form', listEditor('services', SCHEMA.services)); },
-  skills() { return sectionHeadPanel('skills') + panel('Skill Bars', 'fa-bars-progress', 'Categories automatically become filter tabs', listEditor('skills', SCHEMA.skills)) + panel('Competency Tags', 'fa-tags', 'Shown below the bars and in the printable CV', fields([{ p: 'competencies', l: 'One per line', t: 'lines', full: true, rows: 8 }])); },
-  experience() { return sectionHeadPanel('experience') + panel('Jobs Timeline', 'fa-timeline', 'Top item appears first', listEditor('experience', SCHEMA.experience)); },
+  services() { return sectionHeadPanel('services') + panel('Service Cards (3D Flip-Enabled)', 'fa-briefcase', 'Also used as options in the contact form', listEditor('services', SCHEMA.services)); },
+  skills() { return sectionHeadPanel('skills', true) + panel('Skill Bars', 'fa-bars-progress', 'Categories automatically become filter tabs', listEditor('skills', SCHEMA.skills)) + panel('CV Competency Tags', 'fa-tags', 'Used inside your printable CV document', fields([{ p: 'competencies', l: 'One per line', t: 'lines', full: true, rows: 6 }])); },
+  experience() { return sectionHeadPanel('experience') + panel('Professional Experience Track', 'fa-timeline', 'Top item appears first', listEditor('experience', SCHEMA.experience)); },
   education() { return sectionHeadPanel('education') + panel('Academic Degrees', 'fa-graduation-cap', '', listEditor('education', SCHEMA.education)) + panel('Training & Certifications', 'fa-certificate', '', listEditor('certifications', SCHEMA.certifications)); },
-  highlights() { return sectionHeadPanel('highlights') + panel('Highlight Cards', 'fa-star', '', listEditor('highlights', SCHEMA.highlights)); },
+  highlights() { return sectionHeadPanel('highlights') + panel('Value Pillar Cards (3D Flip-Enabled)', 'fa-star', '', listEditor('highlights', SCHEMA.highlights)); },
   socials() {
     const keys = Object.keys(SOCIAL_PLATFORMS);
-    return `<div class="note ok"><i class="fa-solid fa-plug"></i> Every platform starts <b>inactive</b>. Switch one on and paste your profile link — its icon appears on your website. Platforms marked <b>Auto-feed</b> can also show your newest videos & photos automatically: once connected, whatever you post there shows up on your website by itself.</div>` +
+    return `<div class="note ok"><i class="fa-solid fa-plug"></i> Every platform starts <b>inactive</b>. Switch one on and paste your profile link — its icon appears on your website.</div>` +
       `<div class="plat-grid">${keys.map(platCard).join('')}</div>` +
       panel('Where to show social icons', 'fa-eye', '', fields([{ p: 'socials.showHero', l: 'Hero (top of page)', t: 'toggle' }, { p: 'socials.showFooter', l: 'Footer', t: 'toggle' }, { p: 'socials.showContact', l: 'Contact section', t: 'toggle' }, { p: 'socials.floatingBar', l: 'Floating side bar', t: 'toggle', help: 'Desktop only' }], 'grid4')) +
-      panel('Social Feed Section', 'fa-rss', 'The website section that shows your latest posts (appears automatically when an auto-feed or featured post exists)', fields([
+      panel('Social Feed Section', 'fa-rss', 'The website section that shows your latest posts', fields([
         { p: 'sections.social.show', l: 'Show the social feed section', t: 'toggle', full: true },
         { p: 'sections.social.nav', l: 'Menu label (empty = not in menu)', ph: 'e.g. Updates' }, { p: 'sections.social.kicker', l: 'Small label' },
         { p: 'sections.social.title', l: 'Title (plain part)' }, { p: 'sections.social.accent', l: 'Title (gradient part)' },
         { p: 'sections.social.sub', l: 'Subtitle', full: true },
         { p: 'sections.social.maxItems', l: 'Posts shown before "Load more"', t: 'range', min: 3, max: 30, step: 3, full: true }])) +
-      panel('Featured Posts & Uploads', 'fa-thumbtack', 'Pin any post to your website — paste a link from YouTube, Instagram, Facebook, LinkedIn, TikTok or Vimeo, or upload your own photo/video. Featured posts always show first. <b>Tip:</b> this is how to show LinkedIn posts (LinkedIn does not allow automatic feeds).', listEditor('socials.posts', SCHEMA.posts, 'Add post'));
+      panel('Featured Posts & Uploads', 'fa-thumbtack', 'Pin any post to your website.', listEditor('socials.posts', SCHEMA.posts, 'Add post'));
   },
+
+  /* UPGRADED THEMES & COLORS (20 Romantic & Cinematic Themes) */
   theme() {
     const t = cfg.theme;
-    return panel('Color Presets', 'fa-swatchbook', 'One click to change the whole website color scheme', `<div class="presets">${Object.entries(PRESETS).map(([k, p]) => `
-      <button class="preset ${t.preset === k ? 'on' : ''}" data-act="preset" data-k="${k}"><div class="sw"><i style="background:${p.bg}"></i><i style="background:${p.card}"></i><i style="background:${p.primary}"></i><i style="background:${p.secondary}"></i></div><span>${p.name}</span></button>`).join('')}</div>`) +
-    panel('Custom Colors', 'fa-palette', 'Fine-tune every color', fields([
-      { p: 'theme.primary', l: 'Primary / accent', t: 'color' }, { p: 'theme.secondary', l: 'Secondary (gradient end)', t: 'color' },
-      { p: 'theme.bg', l: 'Page background', t: 'color' }, { p: 'theme.bg2', l: 'Alternate section background', t: 'color' },
-      { p: 'theme.card', l: 'Card background', t: 'color' }, { p: 'theme.text', l: 'Main text', t: 'color' }, { p: 'theme.muted', l: 'Secondary text', t: 'color' }], 'grid3')) +
-    panel('Typography & Shape', 'fa-font', 'Fonts load automatically from Google Fonts', fields([
-      { p: 'theme.fontHeading', l: 'Heading font', t: 'select', opts: FONTS }, { p: 'theme.fontBody', l: 'Body font', t: 'select', opts: FONTS },
-      { p: 'theme.radius', l: 'Card corner roundness', t: 'range', min: 0, max: 36, unit: 'px' }, { p: 'theme.glow', l: 'Glow intensity', t: 'range', min: 0, max: 90, unit: 'px' }]));
+    const darkPresets = Object.entries(PRESETS).filter(([, p]) => p.mode === 'dark');
+    const lightPresets = Object.entries(PRESETS).filter(([, p]) => p.mode === 'light');
+    const renderPresets = list => `<div class="presets">${list.map(([k, p]) => `
+      <button class="preset ${t.preset === k ? 'on' : ''}" data-act="preset" data-k="${k}">
+        <div class="sw"><i style="background:${p.bg}"></i><i style="background:${p.card}"></i><i style="background:${p.primary}"></i><i style="background:${p.secondary}"></i></div>
+        <span>${p.name}</span>
+        <small>${p.mode === 'dark' ? 'Dark Cinema' : 'Soft Light'}</small>
+      </button>`).join('')}</div>`;
+    return panel('Dark Cinematic & Romantic Themes (15)', 'fa-moon', 'Rich velvet dark palettes inspired by romantic cinema — one click to apply', renderPresets(darkPresets)) +
+      panel('Light Romantic & Daylight Themes (5)', 'fa-sun', 'Soft blush, champagne & serene daylight palettes with automatic contrast harmony', renderPresets(lightPresets)) +
+      panel('Custom Colors', 'fa-palette', 'Fine-tune every color manually', fields([
+        { p: 'theme.primary', l: 'Primary / accent', t: 'color' }, { p: 'theme.secondary', l: 'Secondary (gradient end)', t: 'color' },
+        { p: 'theme.bg', l: 'Page background', t: 'color' }, { p: 'theme.bg2', l: 'Alternate section background', t: 'color' },
+        { p: 'theme.card', l: 'Card background', t: 'color' }, { p: 'theme.text', l: 'Main text', t: 'color' }, { p: 'theme.muted', l: 'Secondary text', t: 'color' }], 'grid3')) +
+      panel('Typography & Shape', 'fa-font', 'Fonts load automatically from Google Fonts', fields([
+        { p: 'theme.fontHeading', l: 'Heading font', t: 'select', opts: FONTS }, { p: 'theme.fontBody', l: 'Body font', t: 'select', opts: FONTS },
+        { p: 'theme.radius', l: 'Card corner roundness', t: 'range', min: 0, max: 36, unit: 'px' }, { p: 'theme.glow', l: 'Glow intensity', t: 'range', min: 0, max: 90, unit: 'px' }]));
   },
+
+  /* UPGRADED 3D & ANIMATIONS */
   animations() {
     return panel('Master Control', 'fa-power-off', '', fields([{ p: 'animations.enabled', l: 'Enable all animations', t: 'toggle', help: 'Turn off for a fully static site', full: true }])) +
+      panel('3D Motion Graphics', 'fa-cubes', 'Interactive 3D flipping cards, rotating portrait & Z-axis depth', fields([
+        { p: 'animations.flipCards', l: '3D Flipping Cards', t: 'toggle', help: 'Services & Highlights flip 180° in 3D on hover / tap' },
+        { p: 'animations.rotatePortrait', l: '3D Rotating Portrait', t: 'toggle', help: 'Gyroscopic 3D sway, tilted Saturn rings & click-to-spin' },
+        { p: 'animations.depth3d', l: '3D Layered Card Depth', t: 'toggle', help: 'Icons & titles float forward in 3D space' },
+        { p: 'animations.tilt', l: '3D Card Tilt on Hover', t: 'toggle', help: 'Smooth perspective tilt following cursor' }])) +
       panel('Scroll Reveal', 'fa-arrow-down-wide-short', 'How sections appear while scrolling', fields([
         { p: 'animations.reveal', l: 'Reveal style', t: 'select', opts: [['fade-up', 'Fade Up'], ['fade', 'Fade'], ['zoom', 'Zoom In'], ['slide-left', 'Slide from Left'], ['slide-right', 'Slide from Right'], ['flip', '3D Flip'], ['blur', 'Blur In']] },
         { p: 'animations.speed', l: 'Animation duration', t: 'range', min: 0.2, max: 2, step: 0.1, unit: 's' },
@@ -800,12 +913,13 @@ const VIEWS = {
         { p: 'animations.orbit', l: 'Rotating orbit rings', t: 'toggle' }, { p: 'animations.float', l: 'Floating photo & badges', t: 'toggle' },
         { p: 'animations.preloader', l: 'Loading screen', t: 'toggle' }, { p: 'animations.counters', l: 'Counting numbers', t: 'toggle' }])) +
       panel('Background & Interaction', 'fa-hand-pointer', '', fields([
-        { p: 'animations.particles', l: 'Particle network background', t: 'toggle' }, { p: 'animations.particleCount', l: 'Particle amount', t: 'range', min: 10, max: 150 },
-        { p: 'animations.cursorGlow', l: 'Cursor glow', t: 'toggle' }, { p: 'animations.tilt', l: '3D card tilt on hover', t: 'toggle' },
-        { p: 'animations.marquee', l: 'Moving ticker strip', t: 'toggle' }, { p: 'animations.marqueeSpeed', l: 'Ticker loop time (higher = slower)', t: 'range', min: 8, max: 80, unit: 's' },
+        { p: 'animations.particles', l: 'Bokeh & stardust background', t: 'toggle' }, { p: 'animations.particleCount', l: 'Particle amount', t: 'range', min: 10, max: 130 },
+        { p: 'animations.cursorGlow', l: 'Cursor glow', t: 'toggle' },
+        { p: 'animations.marquee', l: 'Moving ticker ribbon', t: 'toggle' }, { p: 'animations.marqueeSpeed', l: 'Ribbon loop time (higher = slower)', t: 'range', min: 8, max: 80, unit: 's' },
         { p: 'animations.scrollProgress', l: 'Top scroll progress bar', t: 'toggle' }])) +
       `<button class="btn" onclick="togglePreview(true);reloadPreview()"><i class="fa-solid fa-rotate"></i> Replay animations in preview</button>`;
   },
+
   settings() {
     return sectionHeadPanel('contact') +
       panel('Contact Form', 'fa-envelope', 'Where form messages go', fields([
@@ -824,31 +938,30 @@ const VIEWS = {
       panel('Restore', 'fa-clock-rotate-left', '', `<div class="btn-row">
       <button class="btn" onclick="restoreDraft()"><i class="fa-solid fa-file-pen"></i> Restore last local draft</button>
       <button class="btn" onclick="if(confirm('Discard unpublished changes?'))loadConfig()"><i class="fa-solid fa-rotate-left"></i> Discard unpublished changes</button>
-      <button class="btn danger" onclick="if(confirm('Reset ALL content to the original defaults? (You still need to Publish)')){cfg=clone(DEFAULTS);markDirty();go('backup');toast('Defaults loaded — click Publish to apply')}"><i class="fa-solid fa-triangle-exclamation"></i> Reset to defaults</button></div>`);
+      <button class="btn danger" onclick="if(confirm('Reset ALL content to the original defaults? (You still need to Publish)')){cfg=clone(DEFAULTS);ensureNewDefaults();markDirty();go('backup');toast('Defaults loaded — click Publish to apply')}"><i class="fa-solid fa-triangle-exclamation"></i> Reset to defaults</button></div>`);
   },
   setup() {
     return `<div class="note ok">Do steps 1–2 <b>once</b>. Step 3 is only needed for automatic YouTube / Instagram / Facebook feeds.</div>` +
       panel('Check Status', 'fa-stethoscope', 'Tests your database, storage and social-feed function', `<div id="chk-out"><div class="empty" style="padding:10px">Click the button to run a check.</div></div><button class="btn pri" onclick="checkSetup()" style="margin-top:10px"><i class="fa-solid fa-play"></i> Run check</button>`) +
       panel('Step 1 — Database (SQL)', 'fa-database', '', `<ol class="steps">
         <li>Open <a href="https://supabase.com/dashboard/project/${SUPABASE_URL.split('//')[1].split('.')[0]}/sql/new" target="_blank">Supabase → SQL Editor → New query</a>.</li>
-        <li>Click <b>Copy SQL</b> below, paste it and press <b>Run</b>. (Safe to run again whenever this file is updated.)</li></ol>
+        <li>Click <b>Copy SQL</b> below, paste it and press <b>Run</b>.</li></ol>
         <pre class="code" style="margin-top:12px">${esc(SETUP_SQL)}</pre><div class="btn-row" style="margin-top:12px"><button class="btn pri" onclick="copyText(SETUP_SQL,'SQL copied')"><i class="fa-regular fa-copy"></i> Copy SQL</button></div>`) +
       panel('Step 2 — Admin user', 'fa-user-shield', '', `<ol class="steps">
         <li>Supabase → <b>Authentication → Users → Add user</b>. Email <b>${esc(ADMIN_EMAIL)}</b>, choose a strong password, tick “Auto confirm”.</li>
-        <li>Recommended: <b>Authentication → Sign In / Providers</b> → turn off “Allow new users to sign up”.</li>
         <li>Gmail: submit your website contact form once — FormSubmit emails <b>${esc(cfg.contact.gmailTo)}</b> an activation link. Click “Activate”.</li></ol>`) +
       panel('Step 3 — Social feed function (for auto-feeds)', 'fa-bolt', 'Lets your website show your newest YouTube videos, Instagram posts and Facebook posts automatically.', `<ol class="steps">
         <li>Supabase → <b>Edge Functions</b> → <b>Deploy a new function</b> → <b>Via Editor</b>.</li>
         <li>Name it exactly <code>${FEED_FUNCTION}</code>.</li>
-        <li>Delete the sample code, click <b>Copy function code</b> below and paste it.</li>
-        <li>Click <b>Deploy function</b>. Done — no other settings needed.</li></ol>
+        <li>Paste the code below and click <b>Deploy function</b>.</li></ol>
         <pre class="code" style="margin-top:12px;max-height:260px">${esc(FEED_FN_CODE)}</pre><div class="btn-row" style="margin-top:12px"><button class="btn pri" onclick="copyText(FEED_FN_CODE,'Function code copied')"><i class="fa-regular fa-copy"></i> Copy function code</button></div>`);
   }
 };
-function sectionHeadPanel(k) {
+function sectionHeadPanel(k, hideKicker) {
   return panel((SECTION_LABELS[k] || k) + ' — Section Heading', 'fa-heading', '', fields([
     { p: `sections.${k}.show`, l: 'Show this section', t: 'toggle', full: true },
-    { p: `sections.${k}.kicker`, l: 'Small label above title' }, { p: `sections.${k}.nav`, l: 'Menu label (empty = not in menu)' },
+    ...(hideKicker ? [] : [{ p: `sections.${k}.kicker`, l: 'Small label above title' }]),
+    { p: `sections.${k}.nav`, l: 'Menu label (empty = not in menu)' },
     { p: `sections.${k}.title`, l: 'Title (plain part)' }, { p: `sections.${k}.accent`, l: 'Title (gradient part)' },
     { p: `sections.${k}.sub`, l: 'Subtitle', full: true }]));
 }
@@ -902,55 +1015,33 @@ function secretBox(id, label) {
   const s = SECRETS[id];
   return `<div class="f full"><label>${label}</label><div class="color-row"><input type="password" class="inp" id="sec-${id}" autocomplete="off" placeholder="${s ? 'Saved ••••' + esc(s.tail) + ' — paste a new one to replace' : 'Paste your access token here'}">
     <button class="btn pri" onclick="saveSecret('${id}')">Save</button>${s ? `<button class="btn danger" onclick="deleteSecret('${id}')">Remove</button>` : ''}</div>
-    <div class="help">${s ? `✓ Saved ${new Date(s.updated_at).toLocaleDateString()} — stored privately in Supabase, never shown on your website.${id === 'instagram_token' ? ' Renewed automatically every week.' : ''}` : 'Stored privately in your Supabase database — never visible on your website.'}</div></div>`;
+    <div class="help">${s ? `✓ Saved ${new Date(s.updated_at).toLocaleDateString()} — stored privately in Supabase.` : 'Stored privately in your Supabase database.'}</div></div>`;
 }
 function feedSettings(k) {
   const P = cfg.socials.platforms[k], base = `socials.platforms.${k}`;
   const toggle = (l, help) => fields([{ p: base + '.feed', l, t: 'toggle', help, full: true, rr: true }]);
-  if (k === 'youtube') return `<div style="height:12px"></div>` + toggle('Show my latest YouTube videos on the website', 'New uploads appear automatically (refreshed every 30 minutes)') +
-    (P.feed ? `<div style="height:12px"></div>` + fields([{ p: base + '.channelId', l: 'Channel ID (optional)', ph: 'UCxxxxxxxxxxxxxxxxxxxxxx', full: true, help: 'Leave empty — "Test connection" finds it from your channel link automatically.' }]) + testBtn('youtube') +
-      `<details class="how"><summary>How it works</summary><ol><li>Paste your channel link above (e.g. https://youtube.com/@yourname).</li><li>Make sure the function from <a href="#" onclick="go('setup');return false">Supabase Setup → Step 3</a> is deployed.</li><li>Click <b>Test connection</b>, then <b>Publish</b>. That's it — every new video shows up on your website by itself.</li></ol></details>` : '');
-  if (k === 'instagram') return `<div style="height:12px"></div>` + toggle('Show my latest Instagram posts & reels on the website', 'Requires an Instagram Professional (Business/Creator) account + a free access token') +
-    (P.feed ? `<div style="height:12px"></div><div class="grid2">${secretBox('instagram_token', 'Instagram access token')}</div>` + testBtn('instagram') +
-      `<details class="how"><summary>How to get your Instagram token (one time, ~10 minutes)</summary><ol>
-        <li>Instagram app → Settings → <b>Account type and tools</b> → switch to a <b>Professional account</b> (Creator or Business — free).</li>
-        <li>Go to <a href="https://developers.facebook.com/apps" target="_blank">developers.facebook.com/apps</a> → <b>Create app</b> → use case “Other” → type <b>Business</b>.</li>
-        <li>In the app dashboard, add the <b>Instagram</b> product → open <b>API setup with Instagram login</b>.</li>
-        <li>Under “Generate access tokens” click <b>Add account</b>, log in to your Instagram and allow access.</li>
-        <li>Click <b>Generate token</b>, copy it, paste it above and click <b>Save</b>.</li>
-        <li>Make sure the function from <a href="#" onclick="go('setup');return false">Supabase Setup → Step 3</a> is deployed, then <b>Test connection</b> → <b>Publish</b>.</li></ol></details>` : '');
-  if (k === 'facebook') return `<div style="height:12px"></div>` + toggle('Show my Facebook Page posts on the website', 'Works with Facebook Pages (public). Personal profiles cannot be embedded by Facebook.') +
-    (P.feed ? `<div style="height:12px"></div>` + fields([{ p: base + '.mode', l: 'Display style', t: 'select', rr: true, full: true, opts: [['plugin', 'Page timeline widget — easiest, no token needed'], ['api', 'Photo grid in my website style — needs Page token']] }]) +
-      (P.mode === 'api' ? `<div style="height:12px"></div><div class="grid2">${field({ p: base + '.pageId', l: 'Facebook Page ID', ph: 'e.g. 1234567890' })}${secretBox('facebook_token', 'Page access token')}</div>` + testBtn('facebook') +
-        `<details class="how"><summary>How to get your Page ID and token</summary><ol>
-          <li>Your Page → <b>About</b> → <b>Page transparency</b> shows the Page ID.</li>
-          <li>Go to <a href="https://developers.facebook.com/apps" target="_blank">developers.facebook.com/apps</a> → <b>Create app</b> (type Business).</li>
-          <li>Open <a href="https://developers.facebook.com/tools/explorer" target="_blank">Graph API Explorer</a> → choose your app → add permissions <code>pages_show_list</code> and <code>pages_read_engagement</code> → <b>Generate Access Token</b>.</li>
-          <li>Click the “i” next to the token → <b>Open in Access Token Tool</b> → <b>Extend Access Token</b>.</li>
-          <li>Back in the Explorer, paste the extended token, run <code>me/accounts</code> and copy the <code>access_token</code> of your Page (this Page token does not expire).</li>
-          <li>Paste it above → <b>Save</b> → <b>Test connection</b> → <b>Publish</b>.</li></ol></details>`
-        : `<div class="note info" style="margin:12px 0 0">Uses the Facebook Page link above. Just <b>Publish</b> — your Page timeline appears in the Social Feed section.</div>`) : '');
-  if (k === 'tiktok') return `<div style="height:12px"></div>` + toggle('Show my TikTok profile & latest videos on the website', "Uses TikTok's official profile embed — no token needed. Just make sure your link above looks like https://tiktok.com/@username");
+  if (k === 'youtube') return `<div style="height:12px"></div>` + toggle('Show my latest YouTube videos on the website', 'New uploads appear automatically') +
+    (P.feed ? `<div style="height:12px"></div>` + fields([{ p: base + '.channelId', l: 'Channel ID (optional)', ph: 'UCxxxxxxxxxxxxxxxxxxxxxx', full: true }]) + testBtn('youtube') : '');
+  if (k === 'instagram') return `<div style="height:12px"></div>` + toggle('Show my latest Instagram posts & reels on the website', 'Requires an Instagram Professional account + access token') +
+    (P.feed ? `<div style="height:12px"></div><div class="grid2">${secretBox('instagram_token', 'Instagram access token')}</div>` + testBtn('instagram') : '');
+  if (k === 'facebook') return `<div style="height:12px"></div>` + toggle('Show my Facebook Page posts on the website', 'Works with public Facebook Pages') +
+    (P.feed ? `<div style="height:12px"></div>` + fields([{ p: base + '.mode', l: 'Display style', t: 'select', rr: true, full: true, opts: [['plugin', 'Page timeline widget — no token needed'], ['api', 'Photo grid — needs Page token']] }]) +
+      (P.mode === 'api' ? `<div style="height:12px"></div><div class="grid2">${field({ p: base + '.pageId', l: 'Facebook Page ID', ph: 'e.g. 1234567890' })}${secretBox('facebook_token', 'Page access token')}</div>` + testBtn('facebook') : '') : '');
+  if (k === 'tiktok') return `<div style="height:12px"></div>` + toggle('Show my TikTok profile & latest videos on the website', "Uses TikTok's official profile embed");
   return '';
 }
 async function testFeed(k) {
   const out = $('#test-' + k); out.className = 'test-out'; out.innerHTML = '<i class="fa-solid fa-spinner spin"></i> Connecting…';
   try {
     const { data, error } = await sb.functions.invoke(FEED_FUNCTION, { body: { platform: k, force: true, settings: cfg.socials.platforms[k] } });
-    if (error) {
-      const status = error.context && error.context.status;
-      let msg = error.message;
-      try { const j = await error.context.json(); if (j && (j.error || j.message)) msg = j.error || j.message; } catch (e) {}
-      if (status === 404 || /Failed to send|fetch/i.test(msg)) msg = `The "${FEED_FUNCTION}" function is not deployed yet — see Supabase Setup → Step 3.`;
-      throw new Error(msg);
-    }
+    if (error) throw new Error(error.message);
     if (!data || !data.ok) throw new Error((data && data.error) || 'Unknown error');
     if (k === 'youtube' && data.channelId && cfg.socials.platforms.youtube.channelId !== data.channelId) {
       cfg.socials.platforms.youtube.channelId = data.channelId; markDirty();
       const inp = document.querySelector('[data-p="socials.platforms.youtube.channelId"]'); if (inp) inp.value = data.channelId;
     }
     out.classList.add('ok');
-    out.innerHTML = `✅ Connected — found <b>${data.items.length}</b> posts.${dirty ? ' Click <b>Publish</b> to show them on your website.' : ''}<div class="test-thumbs">${data.items.slice(0, 8).map(it => it.thumb ? `<img src="${esc(it.thumb)}" alt="" referrerpolicy="no-referrer">` : '').join('')}</div>`;
+    out.innerHTML = `✅ Connected — found <b>${data.items.length}</b> posts.<div class="test-thumbs">${data.items.slice(0, 8).map(it => it.thumb ? `<img src="${esc(it.thumb)}" alt="" referrerpolicy="no-referrer">` : '').join('')}</div>`;
   } catch (e) { out.classList.add('err'); out.innerHTML = '❌ ' + esc(e.message); }
 }
 async function checkSetup() {
@@ -984,16 +1075,16 @@ function msgCard(m) {
 function importJSON(inp) {
   const f = inp.files[0]; if (!f) return;
   const r = new FileReader();
-  r.onload = e => { try { cfg = merge(clone(DEFAULTS), JSON.parse(e.target.result)); markDirty(); go(page); toast('Imported — click Publish to apply'); } catch (err) { toast('Invalid JSON file', 'err'); } };
+  r.onload = e => { try { cfg = merge(clone(DEFAULTS), JSON.parse(e.target.result)); ensureNewDefaults(); markDirty(); go(page); toast('Imported — click Publish to apply'); } catch (err) { toast('Invalid JSON file', 'err'); } };
   r.readAsText(f);
 }
 function restoreDraft() {
-  try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); if (!d) return toast('No local draft found', 'warn'); cfg = merge(clone(DEFAULTS), d); markDirty(); go(page); toast('Draft restored'); }
+  try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); if (!d) return toast('No local draft found', 'warn'); cfg = merge(clone(DEFAULTS), d); ensureNewDefaults(); markDirty(); go(page); toast('Draft restored'); }
   catch (e) { toast('Could not read draft', 'err'); }
 }
 
 /* =========================================================
-   EVENT DELEGATION (all editing happens here)
+   EVENT DELEGATION
    ========================================================= */
 function readVal(el) {
   const t = el.dataset.t;
@@ -1020,7 +1111,11 @@ function onEdit(e) {
   if (t === 'colortext' && !/^#[0-9a-f]{6}$/i.test(val)) return;
   if (!assign(el, val)) return;
   if (el.dataset.p) {
-    if (el.dataset.p.startsWith('theme.') && ['color', 'colortext'].includes(t)) { cfg.theme.preset = 'custom'; document.querySelectorAll('.preset.on').forEach(p => p.classList.remove('on')); }
+    if (el.dataset.p.startsWith('theme.') && ['color', 'colortext'].includes(t)) {
+      cfg.theme.preset = 'custom';
+      cfg.theme.customColors = true;
+      document.querySelectorAll('.preset.on').forEach(p => p.classList.remove('on'));
+    }
     if (t === 'color' || t === 'colortext') document.querySelectorAll(`[data-p="${el.dataset.p}"]`).forEach(o => { if (o !== el) o.value = val; });
   }
   if (t === 'range') el.nextElementSibling.textContent = el.value + (el.dataset.unit || '');
@@ -1042,12 +1137,26 @@ $('#content').addEventListener('change', async e => {
     return;
   }
   if (['toggle', 'select'].includes(el.dataset?.t)) onEdit(e);
-  else if (el.closest('.img-row')) go(page); // refresh thumbnail after pasting a link
+  else if (el.closest('.img-row')) go(page);
 });
 $('#content').addEventListener('click', e => {
   const b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
   const act = b.dataset.act;
-  if (act === 'preset') { Object.assign(cfg.theme, PRESETS[b.dataset.k]); delete cfg.theme.name; cfg.theme.preset = b.dataset.k; markDirty(); go('theme'); return; }
+  if (act === 'design') {
+    cfg.theme.design = b.dataset.k;
+    markDirty();
+    go('designs');
+    toast(`Design switched to "${DESIGNS[b.dataset.k].name}" — click Publish to make it live`);
+    return;
+  }
+  if (act === 'preset') {
+    const p = PRESETS[b.dataset.k];
+    Object.assign(cfg.theme, { primary: p.primary, secondary: p.secondary, bg: p.bg, bg2: p.bg2, card: p.card, text: p.text, muted: p.muted, preset: b.dataset.k, customColors: false });
+    markDirty();
+    go('theme');
+    toast(`Theme switched to "${p.name}"`);
+    return;
+  }
   if (act === 'new-sec') { addSection(b.dataset.type); return; }
   if (act === 'edit-sec') { const id = b.dataset.id; go(csIndex(id) >= 0 ? 'cs:' + id : BUILTIN_PAGE[id] || 'builder'); return; }
   if (act === 'ord') {
@@ -1081,7 +1190,6 @@ $('#content').addEventListener('click', e => {
   markDirty(); go(page);
 });
 
-/* icon suggestions */
 document.body.insertAdjacentHTML('beforeend', `<datalist id="icon-list">${ICONS.map(i => `<option value="${i}">`).join('')}</datalist>`);
 
 boot();
