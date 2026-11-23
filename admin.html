@@ -320,35 +320,41 @@ const FEED_FN_CODE = "// =======================================================
 const FONTS = ['Outfit', 'Inter', 'Poppins', 'Montserrat', 'Space Grotesk', 'Sora', 'Plus Jakarta Sans', 'Manrope', 'Raleway', 'Playfair Display', 'DM Sans', 'Urbanist', 'Lexend', 'Rubik', 'Nunito', 'Lora', 'Roboto', 'Open Sans', 'Syne', 'Bebas Neue'];
 
 /* =========================================================
-   6 COMPLETE WEBSITE TEMPLATES (Synced 1-to-1 with index.html)
+   10 COMPLETE WEBSITE TEMPLATES (Synced 1-to-1 with index.html)
    Only ONE template is active at a time!
    ========================================================= */
 const TEMPLATES = {
-  dennis:           { name: 'Dennis Editorial Studio', badge: 'Awwwards',  preset: 'studio-dennis',  icon: 'fa-award',           shape: 'border-radius:10px', desc: 'Studio-slate hero, giant direction-reactive marquee, 70/30 About, hover-reveal Services rows & curved footer.' },
-  'editorial-light':{ name: 'Clean Minimalist Light',  badge: 'Minimal',   preset: 'alabaster-ink',  icon: 'fa-feather-pointed', shape: 'border-radius:14px;background:rgba(255,255,255,.85)', desc: 'Centered floating pill navbar, italic serif headline accent, studio portrait glow & airy crisp cards.' },
-  'gold-noir':      { name: 'Executive Gold Noir',     badge: 'Executive', preset: 'executive-gold', icon: 'fa-medal',           shape: 'border-radius:10px;border-left:4px solid #f59e0b', desc: 'Matte obsidian canvas, left portrait with gold geometric block & circular SVG skill rings.' },
-  'cyber-wave':     { name: 'Dark Tech Wave',          badge: 'Split Hero',preset: 'midnight-indigo',icon: 'fa-wave-square',     shape: 'border-radius:10px', desc: '3-column split hero with centered portrait, role callouts & hover-reveal editorial rows.' },
-  'crimson-poster': { name: 'Bold Magazine Poster',    badge: 'Poster',    preset: 'crimson-poster', icon: 'fa-bolt',            shape: 'border-radius:6px;border-color:#dc2626', desc: 'Dramatic condensed PORTFOLIO backdrop, bold Bebas Neue display typography & stacked KPI column.' },
-  'obsidian-amber': { name: 'Executive Dark Amber',    badge: 'Modern',    preset: 'amber-forge',    icon: 'fa-layer-group',     shape: 'border-radius:50%;border-color:#f59e0b', desc: 'Circular glowing halo portrait, top-accented 4-column Services grid & sleek dark-slate styling.' },
-  octagon:          { name: 'Classic Octagon Cyber',   badge: 'Original',  preset: 'titanium-cyan',  icon: 'fa-shield-halved',   shape: 'clip-path:polygon(29% 0%,71% 0%,100% 29%,100% 71%,71% 100%,29% 100%,0% 71%,0% 29%)', desc: 'Your classic octagon portrait & rotating dashed halo—rebuilt compact, fast & lag-free.' }
+  dennis:            { name: 'Dennis Editorial Studio',  badge: 'Awwwards',  preset: 'studio-dennis',    icon: 'fa-award',           shape: 'border-radius:10px', desc: 'Studio-slate hero, giant direction-reactive marquee, 70/30 About, hover-reveal Services rows & curved footer.' },
+  'editorial-light': { name: 'Clean Minimalist Light',   badge: 'Minimal',   preset: 'alabaster-ink',    icon: 'fa-feather-pointed', shape: 'border-radius:14px;background:rgba(255,255,255,.85)', desc: 'Centered floating pill navbar, italic serif headline accent, studio portrait glow & airy crisp cards.' },
+  'gold-noir':       { name: 'Executive Gold Noir',      badge: 'Executive', preset: 'executive-gold',   icon: 'fa-medal',           shape: 'border-radius:10px;border-left:4px solid #f59e0b', desc: 'Matte obsidian canvas, left portrait with gold geometric block & circular SVG skill rings.' },
+  'cyber-wave':      { name: 'Dark Tech Wave',           badge: 'Split Hero',preset: 'midnight-indigo',  icon: 'fa-wave-square',     shape: 'border-radius:10px', desc: '3-column split hero with centered portrait, role callouts & hover-reveal editorial rows.' },
+  'crimson-poster':  { name: 'Bold Magazine Poster',     badge: 'Poster',    preset: 'crimson-poster',   icon: 'fa-bolt',            shape: 'border-radius:6px;border-color:#dc2626', desc: 'Dramatic condensed PORTFOLIO backdrop, bold Bebas Neue display typography & stacked KPI column.' },
+  'obsidian-amber':  { name: 'Executive Dark Amber',     badge: 'Modern',    preset: 'amber-forge',      icon: 'fa-layer-group',     shape: 'border-radius:50%;border-color:#f59e0b', desc: 'Circular glowing halo portrait, top-accented 4-column Services grid & sleek dark-slate styling.' },
+  octagon:           { name: 'Classic Octagon Cyber',    badge: 'Original',  preset: 'titanium-cyan',    icon: 'fa-shield-halved',   shape: 'clip-path:polygon(29% 0%,71% 0%,100% 29%,100% 71%,71% 100%,29% 100%,0% 71%,0% 29%)', desc: 'Your classic octagon portrait & rotating dashed halo—rebuilt compact, fast & lag-free.' },
+  'forest-amber':    { name: 'Forest & Amber Ribbon',    badge: 'Editorial', preset: 'forest-gold',      icon: 'fa-leaf',            shape: 'border-radius:16px;background:rgba(245,166,35,.4);border-color:#284632', desc: 'Deep forest pill navbar, crisp white canvas, golden-amber ticker ribbon & inverted forest About band.' },
+  'midnight-horizon':{ name: 'Midnight Horizon',         badge: 'Centered',  preset: 'navy-coral',       icon: 'fa-mountain',        shape: 'border-radius:50%;border-color:#ef5350', desc: 'Centered circular portrait over dark atmospheric horizon, crisp hairline boxes & coral-red accents.' },
+  'nordic-slate':    { name: 'Nordic Slate Radial',      badge: 'Studio',    preset: 'nordic-terracotta',icon: 'fa-compass',         shape: 'border-radius:50%;border:2px dashed #f06c4e', desc: 'Matte Nordic slate canvas, radial sunburst portrait halo, terracotta hero service tile & slim skill lines.' }
 };
 
 /* =========================================================
-   12 STRONG MASCULINE EXECUTIVE THEMES (Synced with index.html)
+   15 STRONG MASCULINE EXECUTIVE THEMES (Synced with index.html)
    ========================================================= */
 const PRESETS = {
-  'obsidian-cobalt': { name: 'Obsidian Cobalt',    mode: 'dark',  primary: '#3b82f6', secondary: '#60a5fa', bg: '#090b10', bg2: '#10131c', card: '#151924', text: '#f3f5f9', muted: '#98a2b3' },
-  'studio-dennis':   { name: 'Dennis Studio',      mode: 'dark',  primary: '#455ce9', secondary: '#6b7ff2', bg: '#141517', bg2: '#1c1d20', card: '#222429', text: '#f8fafc', muted: '#a1a6b3' },
-  'executive-gold':  { name: 'Noir & Amber Gold',  mode: 'dark',  primary: '#f59e0b', secondary: '#fbbf24', bg: '#0c0c0d', bg2: '#141416', card: '#1b1b1e', text: '#f8f9fa', muted: '#a1a1aa' },
-  'crimson-poster':  { name: 'Matte Black Crimson',mode: 'dark',  primary: '#dc2626', secondary: '#ef4444', bg: '#09090b', bg2: '#121012', card: '#191618', text: '#fafafa', muted: '#a1a1aa' },
-  'amber-forge':     { name: 'Slate Burnt Amber',  mode: 'dark',  primary: '#ea580c', secondary: '#f59e0b', bg: '#0b0e14', bg2: '#121620', card: '#181d2a', text: '#f8fafc', muted: '#94a3b8' },
-  'emerald-steel':   { name: 'Carbon Emerald',     mode: 'dark',  primary: '#10b981', secondary: '#34d399', bg: '#070d0b', bg2: '#0d1714', card: '#12201c', text: '#f0fdf4', muted: '#94a8a0' },
-  'titanium-cyan':   { name: 'Titanium Cyan',      mode: 'dark',  primary: '#0ea5e9', secondary: '#38bdf8', bg: '#070b11', bg2: '#0d141f', card: '#131d2b', text: '#f0f9ff', muted: '#94a3b8' },
-  'midnight-indigo': { name: 'Midnight Indigo',    mode: 'dark',  primary: '#6366f1', secondary: '#818cf8', bg: '#080a14', bg2: '#101324', card: '#161a30', text: '#f5f7ff', muted: '#9ca3c4' },
-  'stealth-silver':  { name: 'Stealth Silver',     mode: 'dark',  primary: '#e5e7eb', secondary: '#9ca3af', bg: '#09090b', bg2: '#121215', card: '#1a1a1f', text: '#fafafa', muted: '#a1a1aa' },
-  'warm-bronze':     { name: 'Espresso Bronze',    mode: 'dark',  primary: '#c27832', secondary: '#e2a866', bg: '#0e0b09', bg2: '#17120f', card: '#201915', text: '#faf7f2', muted: '#a89f96' },
-  'alabaster-ink':   { name: 'Alabaster & Ink',    mode: 'light', primary: '#18181b', secondary: '#b45309', bg: '#f9f8f6', bg2: '#f1efe9', card: '#ffffff', text: '#141416', muted: '#52525b' },
-  'slate-corporate': { name: 'Corporate Slate',    mode: 'light', primary: '#1d4ed8', secondary: '#0284c7', bg: '#f8fafc', bg2: '#eff4fa', card: '#ffffff', text: '#0f172a', muted: '#475569' }
+  'obsidian-cobalt':  { name: 'Obsidian Cobalt',    mode: 'dark',  primary: '#3b82f6', secondary: '#60a5fa', bg: '#090b10', bg2: '#10131c', card: '#151924', text: '#f3f5f9', muted: '#98a2b3' },
+  'studio-dennis':    { name: 'Dennis Studio',      mode: 'dark',  primary: '#455ce9', secondary: '#6b7ff2', bg: '#141517', bg2: '#1c1d20', card: '#222429', text: '#f8fafc', muted: '#a1a6b3' },
+  'executive-gold':   { name: 'Noir & Amber Gold',  mode: 'dark',  primary: '#f59e0b', secondary: '#fbbf24', bg: '#0c0c0d', bg2: '#141416', card: '#1b1b1e', text: '#f8f9fa', muted: '#a1a1aa' },
+  'crimson-poster':   { name: 'Matte Black Crimson',mode: 'dark',  primary: '#dc2626', secondary: '#ef4444', bg: '#09090b', bg2: '#121012', card: '#191618', text: '#fafafa', muted: '#a1a1aa' },
+  'amber-forge':      { name: 'Slate Burnt Amber',  mode: 'dark',  primary: '#ea580c', secondary: '#f59e0b', bg: '#0b0e14', bg2: '#121620', card: '#181d2a', text: '#f8fafc', muted: '#94a3b8' },
+  'emerald-steel':    { name: 'Carbon Emerald',     mode: 'dark',  primary: '#10b981', secondary: '#34d399', bg: '#070d0b', bg2: '#0d1714', card: '#12201c', text: '#f0fdf4', muted: '#94a8a0' },
+  'titanium-cyan':    { name: 'Titanium Cyan',      mode: 'dark',  primary: '#0ea5e9', secondary: '#38bdf8', bg: '#070b11', bg2: '#0d141f', card: '#131d2b', text: '#f0f9ff', muted: '#94a3b8' },
+  'midnight-indigo':  { name: 'Midnight Indigo',    mode: 'dark',  primary: '#6366f1', secondary: '#818cf8', bg: '#080a14', bg2: '#101324', card: '#161a30', text: '#f5f7ff', muted: '#9ca3c4' },
+  'stealth-silver':   { name: 'Stealth Silver',     mode: 'dark',  primary: '#e5e7eb', secondary: '#9ca3af', bg: '#09090b', bg2: '#121215', card: '#1a1a1f', text: '#fafafa', muted: '#a1a1aa' },
+  'warm-bronze':      { name: 'Espresso Bronze',    mode: 'dark',  primary: '#c27832', secondary: '#e2a866', bg: '#0e0b09', bg2: '#17120f', card: '#201915', text: '#faf7f2', muted: '#a89f96' },
+  'navy-coral':       { name: 'Navy & Coral Red',   mode: 'dark',  primary: '#ef5350', secondary: '#f87171', bg: '#1f2235', bg2: '#252940', card: '#2b304a', text: '#f8fafc', muted: '#a5adc6' },
+  'nordic-terracotta':{ name: 'Nordic Terracotta',  mode: 'dark',  primary: '#f06c4e', secondary: '#fb923c', bg: '#2b2e3b', bg2: '#232631', card: '#313545', text: '#f5f7fa', muted: '#a6adbf' },
+  'forest-gold':      { name: 'Forest & Amber',     mode: 'light', primary: '#f5a623', secondary: '#d98a12', bg: '#ffffff', bg2: '#f5f7f5', card: '#ffffff', text: '#1a241d', muted: '#526056' },
+  'alabaster-ink':    { name: 'Alabaster & Ink',    mode: 'light', primary: '#18181b', secondary: '#b45309', bg: '#f9f8f6', bg2: '#f1efe9', card: '#ffffff', text: '#141416', muted: '#52525b' },
+  'slate-corporate':  { name: 'Corporate Slate',    mode: 'light', primary: '#1d4ed8', secondary: '#0284c7', bg: '#f8fafc', bg2: '#eff4fa', card: '#ffffff', text: '#0f172a', muted: '#475569' }
 };
 
 const ICONS = ['fa-solid fa-briefcase','fa-solid fa-atom','fa-solid fa-book-quran','fa-solid fa-file-pen','fa-solid fa-laptop-file','fa-solid fa-graduation-cap','fa-solid fa-certificate','fa-solid fa-award','fa-solid fa-trophy','fa-solid fa-medal','fa-solid fa-star','fa-solid fa-chalkboard-user','fa-solid fa-school','fa-solid fa-flask','fa-solid fa-globe','fa-solid fa-compass','fa-solid fa-comments','fa-solid fa-user-graduate','fa-solid fa-folder-tree','fa-solid fa-headset','fa-solid fa-bullseye','fa-solid fa-rocket','fa-solid fa-lightbulb','fa-solid fa-square-root-variable','fa-solid fa-layer-group','fa-solid fa-hands-holding-child','fa-solid fa-microscope','fa-solid fa-pen-nib','fa-solid fa-chart-line','fa-solid fa-handshake','fa-solid fa-users','fa-solid fa-flag','fa-solid fa-heart','fa-solid fa-wand-magic-sparkles','fa-solid fa-code','fa-solid fa-camera','fa-solid fa-video','fa-solid fa-envelope-open-text','fa-brands fa-amazon','fa-brands fa-linkedin-in','fa-brands fa-whatsapp','fa-brands fa-youtube'];
@@ -616,7 +622,7 @@ const PAGES = [
   { id: 'highlights', i: 'fa-star', l: 'Highlights' },
   { g: 'Custom Sections', custom: true },
   { g: 'Social & Design' },
-  { id: 'templates', i: 'fa-cubes', l: 'Templates (7)' },
+  { id: 'templates', i: 'fa-cubes', l: 'Templates (10)' },
   { id: 'theme', i: 'fa-palette', l: 'Themes & Colors' },
   { id: 'animations', i: 'fa-wand-magic-sparkles', l: 'Motion & Speed' },
   { id: 'socials', i: 'fa-share-nodes', l: 'Social Media' },
@@ -720,7 +726,7 @@ const VIEWS = {
     const activeTpl = (TEMPLATES[cfg.theme.template] || TEMPLATES.dennis).name;
     const activeTheme = (PRESETS[cfg.theme.preset]?.name) || 'Custom';
     return `${settingsError ? `<div class="note err"><b>Database not ready:</b> ${esc(settingsError)} — open <a href="#" onclick="go('setup');return false" style="text-decoration:underline">Supabase Setup</a> and run the SQL.</div>` : ''}
-    <div class="welcome"><div><h3>Assalam-o-Alaikum, ${esc(cfg.profile.firstName)} 👋</h3><p>Switch between <b>6 Complete Templates</b> and <b>12 Executive Themes</b>, preview live on Desktop & Mobile, then press <b>Publish</b>.</p></div>
+    <div class="welcome"><div><h3>Assalam-o-Alaikum, ${esc(cfg.profile.firstName)} 👋</h3><p>Switch between <b>10 Complete Templates</b> and <b>15 Executive Themes</b>, preview live on Desktop & Mobile, then press <b>Publish</b>.</p></div>
       <div class="btn-row"><button class="btn" onclick="togglePreview(true)"><i class="fa-solid fa-eye"></i> Live Preview</button><a class="btn pri" href="index.html" target="_blank"><i class="fa-solid fa-globe"></i> Open Website</a></div></div>
     <div class="grid4" style="margin-bottom:18px">
       ${[['fa-envelope', `${unread} / ${messages.length}`, 'Unread / Total Messages'], ['fa-cubes', activeTpl, 'Active Template'], ['fa-palette', activeTheme, 'Active Theme'], ['fa-clock-rotate-left', lastSaved ? lastSaved.toLocaleDateString() : '—', 'Last Published']]
@@ -735,8 +741,8 @@ const VIEWS = {
   /* DEDICATED TEMPLATES SECTION (6 Complete Templates — Only One Live at a Time) */
   templates() {
     const cur = cfg.theme.template || 'dennis';
-    return `<div class="note info"><i class="fa-solid fa-cubes"></i> Pick any of the <b>7 Complete Portfolio Templates</b> below. Only <b>one template</b> is live on your website at a time—selecting one automatically applies its recommended executive palette (which you can customize anytime in Themes & Colors).</div>` +
-      panel('Complete Portfolio Templates (7 Architectures)', 'fa-cubes', 'Click any template card to switch your entire website structure & preview it live', `<div class="designs-grid">${Object.entries(TEMPLATES).map(([k, d]) => `
+    return `<div class="note info"><i class="fa-solid fa-cubes"></i> Pick any of the <b>10 Complete Portfolio Templates</b> below. Only <b>one template</b> is live on your website at a time—selecting one automatically applies its recommended executive palette (which you can customize anytime in Themes & Colors).</div>` +
+      panel('Complete Portfolio Templates (10 Architectures)', 'fa-cubes', 'Click any template card to switch your entire website structure & preview it live', `<div class="designs-grid">${Object.entries(TEMPLATES).map(([k, d]) => `
         <button class="design-card ${cur === k ? 'on' : ''}" data-act="template" data-k="${k}">
           <div class="design-top">
             <span class="design-ic"><i class="fa-solid ${d.icon}"></i></span>
@@ -864,8 +870,8 @@ const VIEWS = {
         <span>${p.name}</span>
         <small>${p.mode === 'dark' ? 'Dark Executive' : 'Clean Light'}</small>
       </button>`).join('')}</div>`;
-    return panel('Dark Executive Themes (10)', 'fa-moon', 'Bold, strong, high-contrast palettes — one click to apply', renderPresets(darkPresets)) +
-      panel('Clean Light Themes (2)', 'fa-sun', 'Crisp architectural alabaster & corporate slate light modes', renderPresets(lightPresets)) +
+    return panel('Dark Executive Themes (12)', 'fa-moon', 'Bold, strong, high-contrast palettes — one click to apply', renderPresets(darkPresets)) +
+      panel('Clean Light Themes (3)', 'fa-sun', 'Crisp architectural forest, alabaster & corporate slate light modes', renderPresets(lightPresets)) +
       panel('Custom Colors', 'fa-palette', 'Fine-tune every color manually', fields([
         { p: 'theme.primary', l: 'Primary / accent', t: 'color' }, { p: 'theme.secondary', l: 'Secondary accent', t: 'color' },
         { p: 'theme.bg', l: 'Page background', t: 'color' }, { p: 'theme.bg2', l: 'Alternate section background', t: 'color' },
