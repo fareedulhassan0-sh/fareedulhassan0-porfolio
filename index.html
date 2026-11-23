@@ -195,9 +195,10 @@
       position: fixed; top: 0; right: 0; bottom: 0; width: min(400px, 88vw); z-index: 260;
       background: #16181e; color: #f3f5f9; padding: 88px 36px 32px;
       display: flex; flex-direction: column; justify-content: space-between;
-      transform: translateX(108%); transition: transform .6s var(--ease);
+      transform: translateX(calc(100% + 120px)); visibility: hidden; pointer-events: none;
+      transition: transform .6s var(--ease), visibility .6s;
     }
-    .drawer.open { transform: translateX(0); }
+    .drawer.open { transform: translateX(0); visibility: visible; pointer-events: auto; }
     .drawer-curve {
       position: absolute; top: -10%; bottom: -10%; left: -54px; width: 110px;
       background: #16181e; border-radius: 50%; transition: width .65s var(--ease), left .65s var(--ease);
@@ -532,6 +533,76 @@
       clip-path: polygon(26% 0%, 74% 0%, 100% 26%, 100% 74%, 74% 100%, 26% 100%, 0% 74%, 0% 26%);
     }
 
+    /* TEMPLATE 8: FOREST & AMBER RIBBON (New Design 1) */
+    body[data-template="forest-amber"] .nav .container {
+      background: #284632; color: #f8faf8; border-radius: 999px; height: 58px;
+      margin-top: 10px; padding: 0 12px 0 18px;
+      box-shadow: 0 10px 26px -12px rgba(0,0,0,.28);
+    }
+    body[data-template="forest-amber"] .nav.scrolled { background: transparent; border-color: transparent; backdrop-filter: none; }
+    body[data-template="forest-amber"] .nav-links a { color: rgba(255,255,255,.78); }
+    body[data-template="forest-amber"] .nav-links a:hover,
+    body[data-template="forest-amber"] .nav-links a.active { color: var(--primary); }
+    body[data-template="forest-amber"] .nav .brand { color: #fff; }
+    body[data-template="forest-amber"] .nav .brand small { color: rgba(255,255,255,.65); }
+    body[data-template="forest-amber"] .nav .nav-cta { background: #fff; color: #1b3122; border-color: #fff; }
+    body[data-template="forest-amber"] .hero-hello {
+      border: 1.5px solid var(--border-strong); padding: 4px 12px; border-radius: 4px;
+    }
+    body[data-template="forest-amber"] .hero-hello::before { display: none; }
+    body[data-template="forest-amber"] .portrait-box::before {
+      content: ""; position: absolute; inset: 8% -6% -4% -6%; border-radius: 54% 46% 48% 52% / 44% 52% 48% 56%;
+      background: var(--primary); opacity: .92; z-index: 0;
+    }
+    body[data-template="forest-amber"] .portrait-inner { position: relative; z-index: 1; border-radius: 26px; border-color: transparent; }
+    body[data-template="forest-amber"] .marquee {
+      background: var(--primary); border-block: 4px solid #284632; padding: 12px 0;
+    }
+    body[data-template="forest-amber"] .marquee .mq-item { color: #142218; font-weight: 700; }
+    body[data-template="forest-amber"] .marquee .mq-dot { background: #142218; }
+    body[data-template="forest-amber"] #about { background: #284632; color: #f4f7f5; }
+    body[data-template="forest-amber"] #about .about-lead,
+    body[data-template="forest-amber"] #about h2,
+    body[data-template="forest-amber"] #about strong { color: #fff; }
+    body[data-template="forest-amber"] #about p,
+    body[data-template="forest-amber"] #about small { color: rgba(255,255,255,.78); }
+    body[data-template="forest-amber"] #about .fact { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.16); }
+
+    /* TEMPLATE 9: MIDNIGHT HORIZON CENTERED (New Design 2) */
+    body[data-template="midnight-horizon"] .hero {
+      background: linear-gradient(180deg, rgba(14,16,26,.55) 0%, var(--bg) 100%),
+                  radial-gradient(ellipse 80% 60% at 50% 25%, var(--p20), transparent 70%), #131622;
+      text-align: center; padding: 118px 0 74px;
+    }
+    body[data-template="midnight-horizon"] .hero-grid { grid-template-columns: 1fr; justify-items: center; gap: 20px; }
+    body[data-template="midnight-horizon"] .portrait-box { order: -1; max-width: 148px; aspect-ratio: 1 / 1; }
+    body[data-template="midnight-horizon"] .portrait-inner { border-radius: 50%; border: 3px solid var(--p40); }
+    body[data-template="midnight-horizon"] .hero-hello,
+    body[data-template="midnight-horizon"] .hero-cta-row { justify-content: center; }
+    body[data-template="midnight-horizon"] .hero-bio { margin-inline: auto; }
+    body[data-template="midnight-horizon"] .card { border-radius: 6px; border-color: var(--p20); }
+    body[data-template="midnight-horizon"] .btn { border-radius: 6px; }
+    body[data-template="midnight-horizon"] .sec-num { font-size: 28px; color: var(--border-strong); opacity: .7; }
+
+    /* TEMPLATE 10: NORDIC SLATE RADIAL (New Design 3) */
+    body[data-template="nordic-slate"] .brand-name { font-family: var(--font-serif); font-style: italic; font-size: 18px; }
+    body[data-template="nordic-slate"] .portrait-box { aspect-ratio: 1 / 1; max-width: 255px; }
+    body[data-template="nordic-slate"] .portrait-inner { border-radius: 50%; border: 2px solid var(--border-strong); position: relative; z-index: 1; }
+    body[data-template="nordic-slate"] .radial-svg {
+      position: absolute; inset: -16%; width: 132%; height: 132%; pointer-events: none; z-index: 0;
+      opacity: .55; animation: octSpin 40s linear infinite;
+    }
+    body.no-anim .radial-svg { animation: none; }
+    body[data-template="nordic-slate"] .btn { border-radius: 6px; }
+    body[data-template="nordic-slate"] .card { border-radius: 8px; }
+    body[data-template="nordic-slate"] .srv-card:first-child {
+      background: var(--primary); color: var(--btn-fg); border-color: var(--primary);
+    }
+    body[data-template="nordic-slate"] .srv-card:first-child p,
+    body[data-template="nordic-slate"] .srv-card:first-child .srv-go { color: var(--btn-fg); opacity: .92; border-color: rgba(255,255,255,.25); }
+    body[data-template="nordic-slate"] .srv-card:first-child .srv-ic { background: rgba(255,255,255,.18); color: var(--btn-fg); }
+    body[data-template="nordic-slate"] .sk-track { height: 4px; }
+
     /* =========================================================================
        PRINTABLE CV MODAL (Uses div.cv-name — Single H1 on Page!)
        ========================================================================= */
@@ -564,7 +635,7 @@
       body[data-template="cyber-wave"] .cw-right,
       body[data-template="crimson-poster"] .poster-stats { text-align: center; }
       body[data-template="crimson-poster"] .poster-stats { grid-template-columns: repeat(3, 1fr); }
-      .portrait-box, body[data-template="obsidian-amber"] .portrait-box, body[data-template="octagon"] .portrait-box { max-width: 185px; order: -1; }
+      .portrait-box, body[data-template="obsidian-amber"] .portrait-box, body[data-template="octagon"] .portrait-box, body[data-template="nordic-slate"] .portrait-box { max-width: 185px; order: -1; }
       .hero-hello, .hero-cta-row { justify-content: center; }
       .hero-bio { margin-inline: auto; }
       .about-split, .edu-grid, .contact-grid { grid-template-columns: 1fr; gap: 24px; }
@@ -576,7 +647,9 @@
       .container { padding: 0 16px; }
       .nav .container { height: 60px; }
       .hero { padding: 82px 0 42px; }
-      .portrait-box, body[data-template="obsidian-amber"] .portrait-box, body[data-template="octagon"] .portrait-box { max-width: 162px; }
+      .portrait-box, body[data-template="obsidian-amber"] .portrait-box, body[data-template="octagon"] .portrait-box, body[data-template="nordic-slate"] .portrait-box { max-width: 162px; }
+      body[data-template="midnight-horizon"] .portrait-box { max-width: 128px; }
+      body[data-template="forest-amber"] .nav .container { margin-top: 6px; border-radius: 14px; }
       .hero h1 { font-size: clamp(28px, 8vw, 38px); }
       .hero-role { font-size: 16px; }
       .hero-bio { font-size: 14px; margin-bottom: 18px; }
@@ -646,34 +719,40 @@ const SETTINGS_ID = 'main';
 const CACHE_KEY = 'sfh_site_cfg_v4';
 
 /* =========================================================
-   7 COMPLETE WEBSITE TEMPLATES (Only ONE live at a time!)
+   10 COMPLETE WEBSITE TEMPLATES (Only ONE live at a time!)
    ========================================================= */
 const TEMPLATE_LIST = [
-  'dennis',          // 1. Dennis Snellenberg Editorial Studio (Awwwards Default)
-  'editorial-light', // 2. Clean Minimalist Light (Pin 1 — Rafiq / Techwitpro)
-  'gold-noir',       // 3. Executive Gold Noir + Skill Rings (Pin 2 — Steve Milner)
-  'cyber-wave',      // 4. Dark Tech Wave Split Hero (Pin 3 — Gerald Dixon)
-  'crimson-poster',  // 5. Bold Magazine Poster (Pin 4 — Rayhan Aditya)
-  'obsidian-amber',  // 6. Executive Dark Amber (Pin 5 — Alex Morgan / DevFusion)
-  'octagon'          // 7. Classic Octagon Cyber (Cleaned & Lag-Free)
+  'dennis',           // 1. Dennis Snellenberg Editorial Studio (Awwwards Default)
+  'editorial-light',  // 2. Clean Minimalist Light
+  'gold-noir',        // 3. Executive Gold Noir + Skill Rings
+  'cyber-wave',       // 4. Dark Tech Wave Split Hero
+  'crimson-poster',   // 5. Bold Magazine Poster
+  'obsidian-amber',   // 6. Executive Dark Amber
+  'octagon',          // 7. Classic Octagon Cyber
+  'forest-amber',     // 8. Forest & Amber Ribbon
+  'midnight-horizon', // 9. Midnight Horizon Centered
+  'nordic-slate'      // 10. Nordic Slate Radial
 ];
 
 /* =========================================================
-   12 STRONG MASCULINE EXECUTIVE COLOR THEMES
+   15 STRONG MASCULINE EXECUTIVE COLOR THEMES
    ========================================================= */
 const THEME_PRESETS = {
-  'obsidian-cobalt': { primary: '#3b82f6', secondary: '#60a5fa', bg: '#090b10', bg2: '#10131c', card: '#151924', text: '#f3f5f9', muted: '#98a2b3' },
-  'studio-dennis':   { primary: '#455ce9', secondary: '#6b7ff2', bg: '#141517', bg2: '#1c1d20', card: '#222429', text: '#f8fafc', muted: '#a1a6b3' },
-  'executive-gold':  { primary: '#f59e0b', secondary: '#fbbf24', bg: '#0c0c0d', bg2: '#141416', card: '#1b1b1e', text: '#f8f9fa', muted: '#a1a1aa' },
-  'crimson-poster':  { primary: '#dc2626', secondary: '#ef4444', bg: '#09090b', bg2: '#121012', card: '#191618', text: '#fafafa', muted: '#a1a1aa' },
-  'amber-forge':     { primary: '#ea580c', secondary: '#f59e0b', bg: '#0b0e14', bg2: '#121620', card: '#181d2a', text: '#f8fafc', muted: '#94a3b8' },
-  'emerald-steel':   { primary: '#10b981', secondary: '#34d399', bg: '#070d0b', bg2: '#0d1714', card: '#12201c', text: '#f0fdf4', muted: '#94a8a0' },
-  'titanium-cyan':   { primary: '#0ea5e9', secondary: '#38bdf8', bg: '#070b11', bg2: '#0d141f', card: '#131d2b', text: '#f0f9ff', muted: '#94a3b8' },
-  'midnight-indigo': { primary: '#6366f1', secondary: '#818cf8', bg: '#080a14', bg2: '#101324', card: '#161a30', text: '#f5f7ff', muted: '#9ca3c4' },
-  'stealth-silver':  { primary: '#e5e7eb', secondary: '#9ca3af', bg: '#09090b', bg2: '#121215', card: '#1a1a1f', text: '#fafafa', muted: '#a1a1aa' },
-  'warm-bronze':     { primary: '#c27832', secondary: '#e2a866', bg: '#0e0b09', bg2: '#17120f', card: '#201915', text: '#faf7f2', muted: '#a89f96' },
-  'alabaster-ink':   { primary: '#18181b', secondary: '#b45309', bg: '#f9f8f6', bg2: '#f1efe9', card: '#ffffff', text: '#141416', muted: '#52525b' },
-  'slate-corporate': { primary: '#1d4ed8', secondary: '#0284c7', bg: '#f8fafc', bg2: '#eff4fa', card: '#ffffff', text: '#0f172a', muted: '#475569' }
+  'obsidian-cobalt':  { primary: '#3b82f6', secondary: '#60a5fa', bg: '#090b10', bg2: '#10131c', card: '#151924', text: '#f3f5f9', muted: '#98a2b3' },
+  'studio-dennis':    { primary: '#455ce9', secondary: '#6b7ff2', bg: '#141517', bg2: '#1c1d20', card: '#222429', text: '#f8fafc', muted: '#a1a6b3' },
+  'executive-gold':   { primary: '#f59e0b', secondary: '#fbbf24', bg: '#0c0c0d', bg2: '#141416', card: '#1b1b1e', text: '#f8f9fa', muted: '#a1a1aa' },
+  'crimson-poster':   { primary: '#dc2626', secondary: '#ef4444', bg: '#09090b', bg2: '#121012', card: '#191618', text: '#fafafa', muted: '#a1a1aa' },
+  'amber-forge':      { primary: '#ea580c', secondary: '#f59e0b', bg: '#0b0e14', bg2: '#121620', card: '#181d2a', text: '#f8fafc', muted: '#94a3b8' },
+  'emerald-steel':    { primary: '#10b981', secondary: '#34d399', bg: '#070d0b', bg2: '#0d1714', card: '#12201c', text: '#f0fdf4', muted: '#94a8a0' },
+  'titanium-cyan':    { primary: '#0ea5e9', secondary: '#38bdf8', bg: '#070b11', bg2: '#0d141f', card: '#131d2b', text: '#f0f9ff', muted: '#94a3b8' },
+  'midnight-indigo':  { primary: '#6366f1', secondary: '#818cf8', bg: '#080a14', bg2: '#101324', card: '#161a30', text: '#f5f7ff', muted: '#9ca3c4' },
+  'stealth-silver':   { primary: '#e5e7eb', secondary: '#9ca3af', bg: '#09090b', bg2: '#121215', card: '#1a1a1f', text: '#fafafa', muted: '#a1a1aa' },
+  'warm-bronze':      { primary: '#c27832', secondary: '#e2a866', bg: '#0e0b09', bg2: '#17120f', card: '#201915', text: '#faf7f2', muted: '#a89f96' },
+  'navy-coral':       { primary: '#ef5350', secondary: '#f87171', bg: '#1f2235', bg2: '#252940', card: '#2b304a', text: '#f8fafc', muted: '#a5adc6' },
+  'nordic-terracotta':{ primary: '#f06c4e', secondary: '#fb923c', bg: '#2b2e3b', bg2: '#232631', card: '#313545', text: '#f5f7fa', muted: '#a6adbf' },
+  'forest-gold':      { primary: '#f5a623', secondary: '#d98a12', bg: '#ffffff', bg2: '#f5f7f5', card: '#ffffff', text: '#1a241d', muted: '#526056' },
+  'alabaster-ink':    { primary: '#18181b', secondary: '#b45309', bg: '#f9f8f6', bg2: '#f1efe9', card: '#ffffff', text: '#141416', muted: '#52525b' },
+  'slate-corporate':  { primary: '#1d4ed8', secondary: '#0284c7', bg: '#f8fafc', bg2: '#eff4fa', card: '#ffffff', text: '#0f172a', muted: '#475569' }
 };
 
 /* Recommended default palette per template when switching templates cleanly */
@@ -684,7 +763,10 @@ const TEMPLATE_DEFAULT_THEME = {
   'cyber-wave': 'midnight-indigo',
   'crimson-poster': 'crimson-poster',
   'obsidian-amber': 'amber-forge',
-  'octagon': 'titanium-cyan'
+  'octagon': 'titanium-cyan',
+  'forest-amber': 'forest-gold',
+  'midnight-horizon': 'navy-coral',
+  'nordic-slate': 'nordic-terracotta'
 };
 
 /* =========================================================
@@ -862,11 +944,13 @@ function portraitHTML(p, showBadge = true) {
     : `<div class="portrait-fallback">${esc(p.initials || 'SFH')}</div>`;
   const octRing = tpl === 'octagon'
     ? `<svg class="oct-ring-svg" viewBox="0 0 260 260" aria-hidden="true"><polygon points="78,8 182,8 252,78 252,182 182,252 78,252 8,182 8,78" fill="none" stroke="var(--primary)" stroke-width="1.6" stroke-dasharray="14 8" opacity=".75"/></svg>`
+    : tpl === 'nordic-slate'
+    ? `<svg class="radial-svg" viewBox="0 0 260 260" aria-hidden="true"><circle cx="130" cy="130" r="118" fill="none" stroke="var(--muted)" stroke-width="14" stroke-dasharray="2 10" opacity=".45"/><circle cx="130" cy="130" r="98" fill="none" stroke="var(--primary)" stroke-width="1" stroke-dasharray="4 10" opacity=".5"/></svg>`
     : '';
   return `<div class="portrait-box rv">
     ${octRing}
     <div class="portrait-inner">${img}</div>
-    ${showBadge && p.floatBadge ? `<span class="p-badge"><i class="fa-solid fa-atom"></i> ${esc(p.floatBadge)} · ${esc(p.yearsExp || '4+')} Yrs</span>` : ''}
+    ${showBadge && p.floatBadge && tpl !== 'midnight-horizon' ? `<span class="p-badge"><i class="fa-solid fa-atom"></i> ${esc(p.floatBadge)} · ${esc(p.yearsExp || '4+')} Yrs</span>` : ''}
   </div>`;
 }
 
