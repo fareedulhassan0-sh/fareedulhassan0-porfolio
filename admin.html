@@ -329,7 +329,8 @@ const TEMPLATES = {
   'gold-noir':      { name: 'Executive Gold Noir',     badge: 'Executive', preset: 'executive-gold', icon: 'fa-medal',           shape: 'border-radius:10px;border-left:4px solid #f59e0b', desc: 'Matte obsidian canvas, left portrait with gold geometric block & circular SVG skill rings.' },
   'cyber-wave':     { name: 'Dark Tech Wave',          badge: 'Split Hero',preset: 'midnight-indigo',icon: 'fa-wave-square',     shape: 'border-radius:10px', desc: '3-column split hero with centered portrait, role callouts & hover-reveal editorial rows.' },
   'crimson-poster': { name: 'Bold Magazine Poster',    badge: 'Poster',    preset: 'crimson-poster', icon: 'fa-bolt',            shape: 'border-radius:6px;border-color:#dc2626', desc: 'Dramatic condensed PORTFOLIO backdrop, bold Bebas Neue display typography & stacked KPI column.' },
-  'obsidian-amber': { name: 'Executive Dark Amber',    badge: 'Modern',    preset: 'amber-forge',    icon: 'fa-layer-group',     shape: 'border-radius:50%;border-color:#f59e0b', desc: 'Circular glowing halo portrait, top-accented 4-column Services grid & sleek dark-slate styling.' }
+  'obsidian-amber': { name: 'Executive Dark Amber',    badge: 'Modern',    preset: 'amber-forge',    icon: 'fa-layer-group',     shape: 'border-radius:50%;border-color:#f59e0b', desc: 'Circular glowing halo portrait, top-accented 4-column Services grid & sleek dark-slate styling.' },
+  octagon:          { name: 'Classic Octagon Cyber',   badge: 'Original',  preset: 'titanium-cyan',  icon: 'fa-shield-halved',   shape: 'clip-path:polygon(29% 0%,71% 0%,100% 29%,100% 71%,71% 100%,29% 100%,0% 71%,0% 29%)', desc: 'Your classic octagon portrait & rotating dashed halo—rebuilt compact, fast & lag-free.' }
 };
 
 /* =========================================================
@@ -615,7 +616,7 @@ const PAGES = [
   { id: 'highlights', i: 'fa-star', l: 'Highlights' },
   { g: 'Custom Sections', custom: true },
   { g: 'Social & Design' },
-  { id: 'templates', i: 'fa-cubes', l: 'Templates (6)' },
+  { id: 'templates', i: 'fa-cubes', l: 'Templates (7)' },
   { id: 'theme', i: 'fa-palette', l: 'Themes & Colors' },
   { id: 'animations', i: 'fa-wand-magic-sparkles', l: 'Motion & Speed' },
   { id: 'socials', i: 'fa-share-nodes', l: 'Social Media' },
@@ -734,8 +735,8 @@ const VIEWS = {
   /* DEDICATED TEMPLATES SECTION (6 Complete Templates — Only One Live at a Time) */
   templates() {
     const cur = cfg.theme.template || 'dennis';
-    return `<div class="note info"><i class="fa-solid fa-cubes"></i> Pick any of the <b>6 Complete Portfolio Templates</b> below. Only <b>one template</b> is live on your website at a time—selecting one automatically applies its recommended executive palette (which you can customize anytime in Themes & Colors).</div>` +
-      panel('Complete Portfolio Templates (6 Architectures)', 'fa-cubes', 'Click any template card to switch your entire website structure & preview it live', `<div class="designs-grid">${Object.entries(TEMPLATES).map(([k, d]) => `
+    return `<div class="note info"><i class="fa-solid fa-cubes"></i> Pick any of the <b>7 Complete Portfolio Templates</b> below. Only <b>one template</b> is live on your website at a time—selecting one automatically applies its recommended executive palette (which you can customize anytime in Themes & Colors).</div>` +
+      panel('Complete Portfolio Templates (7 Architectures)', 'fa-cubes', 'Click any template card to switch your entire website structure & preview it live', `<div class="designs-grid">${Object.entries(TEMPLATES).map(([k, d]) => `
         <button class="design-card ${cur === k ? 'on' : ''}" data-act="template" data-k="${k}">
           <div class="design-top">
             <span class="design-ic"><i class="fa-solid ${d.icon}"></i></span>
@@ -825,7 +826,7 @@ const VIEWS = {
   },
   hero() {
     return panel('Hero Text', 'fa-house', 'The first screen visitors see (clean editorial layout)', fields([
-      { p: 'profile.hello', l: 'Greeting line' }, { p: 'nav.cta', l: 'Navbar CTA button text' },
+      { p: 'profile.hello', l: 'Greeting line' }, { p: 'nav.cta', l: 'Primary CTA button text', ph: 'Book a Consultation' },
       { p: 'profile.roles', l: 'Typewriter roles (one per line)', t: 'lines', full: true },
       { p: 'profile.intro', l: 'Intro paragraph', t: 'textarea', full: true, rows: 4 }])) +
     panel('Floating Badges', 'fa-award', 'Little cards floating around your photo (leave empty to hide)', fields([
@@ -833,11 +834,11 @@ const VIEWS = {
     panel('Scrolling Ticker Ribbon', 'fa-arrows-left-right', 'Animated luminous ribbon below the hero', fields([{ p: 'sections.marquee.show', l: 'Show ticker ribbon', t: 'toggle', full: true }, { p: 'marquee', l: 'Ribbon items (one per line)', t: 'lines', full: true, rows: 6 }]));
   },
   stats() { return panel('Stats Counter', 'fa-chart-simple', 'Animated numbers below the hero', fields([{ p: 'sections.stats.show', l: 'Show stats section', t: 'toggle', full: true }]) + '<div style="height:14px"></div>' + listEditor('stats', SCHEMA.stats)); },
-  services() { return sectionHeadPanel('services') + panel('Service Cards (3D Flip-Enabled)', 'fa-briefcase', 'Also used as options in the contact form', listEditor('services', SCHEMA.services)); },
-  skills() { return sectionHeadPanel('skills', true) + panel('Skill Bars', 'fa-bars-progress', 'Categories automatically become filter tabs', listEditor('skills', SCHEMA.skills)) + panel('CV Competency Tags', 'fa-tags', 'Used inside your printable CV document', fields([{ p: 'competencies', l: 'One per line', t: 'lines', full: true, rows: 6 }])); },
+  services() { return sectionHeadPanel('services') + panel('Core Services', 'fa-briefcase', 'Clicking any service auto-selects it in the Contact form', listEditor('services', SCHEMA.services)); },
+  skills() { return sectionHeadPanel('skills') + panel('Skill Bars / SVG Rings', 'fa-bars-progress', 'Categories automatically become filter tabs (Gold Noir displays circular SVG rings)', listEditor('skills', SCHEMA.skills)) + panel('Resume Competency Tags', 'fa-tags', 'Used inside your printable Resume document', fields([{ p: 'competencies', l: 'One per line', t: 'lines', full: true, rows: 6 }])); },
   experience() { return sectionHeadPanel('experience') + panel('Professional Experience Track', 'fa-timeline', 'Top item appears first', listEditor('experience', SCHEMA.experience)); },
   education() { return sectionHeadPanel('education') + panel('Academic Degrees', 'fa-graduation-cap', '', listEditor('education', SCHEMA.education)) + panel('Training & Certifications', 'fa-certificate', '', listEditor('certifications', SCHEMA.certifications)); },
-  highlights() { return sectionHeadPanel('highlights') + panel('Value Pillar Cards (3D Flip-Enabled)', 'fa-star', '', listEditor('highlights', SCHEMA.highlights)); },
+  highlights() { return sectionHeadPanel('highlights') + panel('Value Pillars', 'fa-star', '', listEditor('highlights', SCHEMA.highlights)); },
   socials() {
     const keys = Object.keys(SOCIAL_PLATFORMS);
     return `<div class="note ok"><i class="fa-solid fa-plug"></i> Every platform starts <b>inactive</b>. Switch one on and paste your profile link — its icon appears on your website.</div>` +
