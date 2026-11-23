@@ -509,6 +509,29 @@
     body[data-template="obsidian-amber"] .portrait-box { aspect-ratio: 1 / 1; max-width: 255px; }
     body[data-template="obsidian-amber"] .srv-card { border-top: 2px solid var(--p40); }
 
+    /* TEMPLATE 7: OCTAGON CYBER (Classic Octagon Portrait — Cleaned & Lag-Free) */
+    body[data-template="octagon"] {
+      background-image: radial-gradient(color-mix(in srgb, var(--primary) 12%, transparent) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    body[data-template="octagon"] .portrait-box { aspect-ratio: 1 / 1; max-width: 260px; }
+    body[data-template="octagon"] .portrait-inner {
+      border-radius: 0; border: 0;
+      clip-path: polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%);
+      box-shadow: none;
+    }
+    body[data-template="octagon"] .oct-ring-svg {
+      position: absolute; inset: -10%; width: 120%; height: 120%; pointer-events: none; z-index: 0;
+      animation: octSpin 26s linear infinite;
+    }
+    @keyframes octSpin { to { transform: rotate(360deg); } }
+    body.no-anim .oct-ring-svg { animation: none; }
+    body[data-template="octagon"] .srv-ic,
+    body[data-template="octagon"] .c-ic {
+      border-radius: 0;
+      clip-path: polygon(26% 0%, 74% 0%, 100% 26%, 100% 74%, 74% 100%, 26% 100%, 0% 74%, 0% 26%);
+    }
+
     /* =========================================================================
        PRINTABLE CV MODAL (Uses div.cv-name — Single H1 on Page!)
        ========================================================================= */
@@ -541,7 +564,7 @@
       body[data-template="cyber-wave"] .cw-right,
       body[data-template="crimson-poster"] .poster-stats { text-align: center; }
       body[data-template="crimson-poster"] .poster-stats { grid-template-columns: repeat(3, 1fr); }
-      .portrait-box, body[data-template="obsidian-amber"] .portrait-box { max-width: 185px; order: -1; }
+      .portrait-box, body[data-template="obsidian-amber"] .portrait-box, body[data-template="octagon"] .portrait-box { max-width: 185px; order: -1; }
       .hero-hello, .hero-cta-row { justify-content: center; }
       .hero-bio { margin-inline: auto; }
       .about-split, .edu-grid, .contact-grid { grid-template-columns: 1fr; gap: 24px; }
@@ -553,7 +576,7 @@
       .container { padding: 0 16px; }
       .nav .container { height: 60px; }
       .hero { padding: 82px 0 42px; }
-      .portrait-box, body[data-template="obsidian-amber"] .portrait-box { max-width: 162px; }
+      .portrait-box, body[data-template="obsidian-amber"] .portrait-box, body[data-template="octagon"] .portrait-box { max-width: 162px; }
       .hero h1 { font-size: clamp(28px, 8vw, 38px); }
       .hero-role { font-size: 16px; }
       .hero-bio { font-size: 14px; margin-bottom: 18px; }
@@ -623,7 +646,7 @@ const SETTINGS_ID = 'main';
 const CACHE_KEY = 'sfh_site_cfg_v4';
 
 /* =========================================================
-   6 COMPLETE WEBSITE TEMPLATES (Only ONE live at a time!)
+   7 COMPLETE WEBSITE TEMPLATES (Only ONE live at a time!)
    ========================================================= */
 const TEMPLATE_LIST = [
   'dennis',          // 1. Dennis Snellenberg Editorial Studio (Awwwards Default)
@@ -631,7 +654,8 @@ const TEMPLATE_LIST = [
   'gold-noir',       // 3. Executive Gold Noir + Skill Rings (Pin 2 — Steve Milner)
   'cyber-wave',      // 4. Dark Tech Wave Split Hero (Pin 3 — Gerald Dixon)
   'crimson-poster',  // 5. Bold Magazine Poster (Pin 4 — Rayhan Aditya)
-  'obsidian-amber'   // 6. Executive Dark Amber (Pin 5 — Alex Morgan / DevFusion)
+  'obsidian-amber',  // 6. Executive Dark Amber (Pin 5 — Alex Morgan / DevFusion)
+  'octagon'          // 7. Classic Octagon Cyber (Cleaned & Lag-Free)
 ];
 
 /* =========================================================
@@ -659,7 +683,8 @@ const TEMPLATE_DEFAULT_THEME = {
   'gold-noir': 'executive-gold',
   'cyber-wave': 'midnight-indigo',
   'crimson-poster': 'crimson-poster',
-  'obsidian-amber': 'amber-forge'
+  'obsidian-amber': 'amber-forge',
+  'octagon': 'titanium-cyan'
 };
 
 /* =========================================================
@@ -669,7 +694,7 @@ const DEFAULTS = {
   seo: { title: 'Syed Fareed Ul Hassan | Career Expert & Physics Educator', description: 'Portfolio of Syed Fareed Ul Hassan — Career Expert, Physics Educator and Online Instructor based in Sargodha, Pakistan.' },
   theme: { template: 'dennis', preset: 'obsidian-cobalt', primary: '#3b82f6', secondary: '#60a5fa', bg: '#090b10', bg2: '#10131c', card: '#151924', text: '#f3f5f9', muted: '#98a2b3', radius: 16, glow: 32, fontHeading: 'Plus Jakarta Sans', fontBody: 'Inter' },
   animations: { enabled: true, typewriter: true, typeSpeed: 85, marquee: true, marqueeSpeed: 28, counters: true, preloader: true, scrollProgress: true },
-  nav: { cta: "Let's Talk" },
+  nav: { cta: 'Book a Consultation' },
   profile: {
     firstName: 'Syed Fareed', lastName: 'Ul Hassan', brand: 'Syed Fareed', initials: 'SFH',
     hello: "Hello, I'm",
@@ -695,7 +720,7 @@ const DEFAULTS = {
     experience: { show: true, nav: 'Experience', kicker: 'Track Record', title: 'Professional', accent: 'Experience', sub: '' },
     education: { show: true, nav: 'Education', kicker: 'Credentials', title: 'Education &', accent: 'Certifications', sub: '' },
     highlights: { show: true, nav: '', kicker: 'Why Me', title: 'How I Deliver', accent: 'Results', sub: '' },
-    contact: { show: true, nav: 'Contact', kicker: 'Connect', title: "Let's Work", accent: 'Together', sub: 'Send a direct message or connect on WhatsApp.' }
+    contact: { show: true, nav: 'Contact', kicker: 'Connect', title: 'Start a', accent: 'Conversation', sub: 'Submit an inquiry below or connect directly on WhatsApp.' }
   },
   marquee: ['Career Strategy', 'ATS Resume Design', 'Physics Mastery', 'Online Quran Teaching', 'Interview Positioning', 'Virtual Operations'],
   stats: [
@@ -784,6 +809,9 @@ function normalizeConfig(raw, isPreview) {
       out.theme = { ...out.theme, ...THEME_PRESETS[out.theme.preset] };
     }
   }
+  if (out.nav && String(out.nav.cta || '').trim().toLowerCase() === "let's talk") {
+    out.nav.cta = DEFAULTS.nav.cta;
+  }
   return out;
 }
 
@@ -828,10 +856,15 @@ const show = k => CFG.sections[k]?.show !== false;
    REUSABLE COMPONENTS & TEMPLATE RENDERERS
    ========================================================= */
 function portraitHTML(p, showBadge = true) {
+  const tpl = document.body.dataset.template;
   const img = p.photoUrl
     ? `<img src="${esc(safeUrl(p.photoUrl))}" alt="${esc(p.firstName + ' ' + p.lastName)}" loading="eager" decoding="async">`
     : `<div class="portrait-fallback">${esc(p.initials || 'SFH')}</div>`;
+  const octRing = tpl === 'octagon'
+    ? `<svg class="oct-ring-svg" viewBox="0 0 260 260" aria-hidden="true"><polygon points="78,8 182,8 252,78 252,182 182,252 78,252 8,182 8,78" fill="none" stroke="var(--primary)" stroke-width="1.6" stroke-dasharray="14 8" opacity=".75"/></svg>`
+    : '';
   return `<div class="portrait-box rv">
+    ${octRing}
     <div class="portrait-inner">${img}</div>
     ${showBadge && p.floatBadge ? `<span class="p-badge"><i class="fa-solid fa-atom"></i> ${esc(p.floatBadge)} · ${esc(p.yearsExp || '4+')} Yrs</span>` : ''}
   </div>`;
@@ -877,7 +910,6 @@ function renderHeroHTML(tpl) {
   const p = CFG.profile;
   const btns = `<div class="hero-cta-row rv" style="--d:.16s">
     <a href="#contact" class="btn btn-primary mag"><span class="bfill"></span>${esc(CFG.nav.cta)} <i class="fa-solid fa-arrow-right"></i></a>
-    <button class="btn btn-ghost mag" onclick="openCV()"><span class="bfill"></span>View CV <i class="fa-solid fa-file-lines"></i></button>
   </div>`;
 
   // Template 4: Cyber Wave 3-Column Split Hero
@@ -978,7 +1010,7 @@ function renderServicesHTML(tpl) {
       <div class="srv-ic"><i class="${esc(ico(s.icon))}"></i></div>
       <h3>${esc(s.title)}</h3>
       <p>${esc(s.desc)}</p>
-      <div class="srv-go"><span>${esc(s.tag || 'Inquire')}</span><i class="fa-solid fa-arrow-right"></i></div>
+      <div class="srv-go"><span>Request Service</span><i class="fa-solid fa-arrow-right"></i></div>
     </div>`).join('')}</div>`;
 }
 
@@ -1024,8 +1056,8 @@ function render() {
             <div class="fact"><small>Availability</small><strong>On-Site & Remote</strong></div>
           </div>
           ${tpl === 'dennis'
-            ? `<button class="btn btn-round mag" onclick="openCV()"><span class="bfill"></span>View CV</button>`
-            : `<button class="btn btn-primary mag" onclick="openCV()"><span class="bfill"></span>Open Printable CV <i class="fa-solid fa-file-lines"></i></button>`}
+            ? `<button class="btn btn-round mag" onclick="openCV()"><span class="bfill"></span>View Resume</button>`
+            : `<button class="btn btn-primary mag" onclick="openCV()"><span class="bfill"></span>View Resume <i class="fa-solid fa-file-lines"></i></button>`}
         </div>
       </div>
     </div></section>`;
@@ -1080,7 +1112,7 @@ function render() {
         <div class="c-list rv">
           ${p.email ? `<a class="c-row" href="mailto:${esc(p.email)}"><span class="c-ic"><i class="fa-solid fa-envelope"></i></span><div><small>Email</small><strong>${esc(p.email)}</strong></div></a>` : ''}
           ${p.phone ? `<a class="c-row" href="tel:${esc(p.phone)}"><span class="c-ic"><i class="fa-solid fa-phone"></i></span><div><small>Phone / WhatsApp</small><strong>${esc(p.phone)}</strong></div></a>` : ''}
-          ${p.linkedin ? `<a class="c-row" href="${esc(safeUrl(p.linkedin))}" target="_blank" rel="noopener"><span class="c-ic"><i class="fa-brands fa-linkedin-in"></i></span><div><small>LinkedIn</small><strong>Connect Professionally ↗</strong></div></a>` : ''}
+          ${p.linkedin ? `<a class="c-row" href="${esc(safeUrl(p.linkedin))}" target="_blank" rel="noopener"><span class="c-ic"><i class="fa-brands fa-linkedin-in"></i></span><div><small>LinkedIn</small><strong>View LinkedIn Profile ↗</strong></div></a>` : ''}
           ${p.location ? `<div class="c-row"><span class="c-ic"><i class="fa-solid fa-location-dot"></i></span><div><small>${esc(p.availability)}</small><strong>${esc(p.location)}</strong></div></div>` : ''}
         </div>
         <div class="card rv" style="--d:.08s">
@@ -1096,8 +1128,8 @@ function render() {
             </div>
             <div class="fg"><label>Message *</label><textarea name="cf_message" required placeholder="Briefly share your goals or project..."></textarea></div>
             <div class="f-actions">
-              <button type="submit" class="btn btn-primary mag" id="cf-submit"><span class="bfill"></span><i class="fa-solid fa-paper-plane"></i> <span>Send Message</span></button>
-              ${c.whatsappButton && wa ? `<button type="button" class="btn btn-ghost btn-wa-clean mag" id="cf-wa"><span class="bfill"></span><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>` : ''}
+              <button type="submit" class="btn btn-primary mag" id="cf-submit"><span class="bfill"></span><i class="fa-solid fa-paper-plane"></i> <span>Submit Inquiry</span></button>
+              ${c.whatsappButton && wa ? `<button type="button" class="btn btn-ghost btn-wa-clean mag" id="cf-wa"><span class="bfill"></span><i class="fa-brands fa-whatsapp"></i> Message on WhatsApp</button>` : ''}
             </div>
             <div class="status" id="cf-status"></div>
           </form>
@@ -1321,7 +1353,7 @@ async function submitContact(e) {
       mailed = r.ok && String(j.success) !== 'false';
     } catch (x) {}
   }
-  btn.disabled = false; btn.querySelector('span:last-child').textContent = 'Send Message';
+  btn.disabled = false; btn.querySelector('span:last-child').textContent = 'Submit Inquiry';
   if (saved || mailed) { setStatus('ok', '✅ ' + esc(C.successMsg)); f.reset(); }
   else {
     setStatus('warn', 'Opening Gmail so you can send directly.');
