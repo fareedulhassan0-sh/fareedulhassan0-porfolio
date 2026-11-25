@@ -580,6 +580,32 @@
       .fab-menu { width: 44px; height: 44px; top: 12px; right: 14px; }
       #toTop { width: 38px; height: 38px; right: 12px; bottom: 12px; font-size: 12px; }
     }
+
+    /* ---------- Social Links (Hero, Footer, Floating Dock) ---------- */
+    .hero-socials { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 18px; }
+    .soc-pill {
+      display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px;
+      border-radius: 99px; border: 1px solid var(--border); background: var(--card);
+      color: var(--text); font-size: 13px; font-weight: 600;
+      transition: transform .22s var(--ease-out), border-color .22s, color .22s, background .22s;
+    }
+    .soc-pill i { font-size: 14px; color: var(--soc-c, var(--primary)); transition: color .22s; }
+    .soc-pill:hover { transform: translateY(-2px); border-color: var(--soc-c, var(--primary)); color: var(--soc-c, var(--primary)); }
+    .f-soc a { display: inline-flex; align-items: center; gap: 6px; }
+    .f-soc a i { font-size: 13px; color: var(--soc-c, var(--primary)); }
+    .soc-dock {
+      position: fixed; left: 18px; top: 50%; transform: translateY(-50%); z-index: 90;
+      display: flex; flex-direction: column; gap: 8px; padding: 8px;
+      border-radius: 99px; background: color-mix(in srgb, var(--card) 86%, transparent);
+      border: 1px solid var(--border); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
+    }
+    .soc-dock a {
+      width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+      color: var(--text); font-size: 15px; transition: background .22s, color .22s, transform .22s;
+    }
+    .soc-dock a:hover { background: var(--soc-c, var(--primary)); color: #fff; transform: scale(1.08); }
+    @media (max-width: 1120px) { .soc-dock { display: none !important; } }
   </style>
 </head>
 <body data-template="dennis">
@@ -606,6 +632,7 @@
   <main id="app-root"></main>
 
   <footer id="footer"><div class="container" id="footer-c"></div></footer>
+  <div id="soc-dock-root"></div>
 
   <button id="toTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button>
 
@@ -734,6 +761,13 @@ const LIVE_DEFAULTS = {
     { icon: 'fa-solid fa-layer-group', title: 'Effortless Clarity', text: 'Complex Physics formulas and scattered career histories turned into clean, structured roadmaps.' },
     { icon: 'fa-solid fa-handshake', title: 'Dedicated 1-on-1 Support', text: 'Direct personal attention, clear milestones, and reliable communication at every step.' }
   ],
+  socials: {
+    showHero: true, showFooter: true, showContact: true, floatingBar: true,
+    platforms: {
+      facebook: { enabled: true, url: 'https://www.facebook.com/profile.php?id=100083141644668' },
+      linkedin: { enabled: true, url: 'https://www.linkedin.com/in/syed-fareed-ul-hassan-898844286' }
+    }
+  },
   contact: { formTitle: 'Send a Direct Message', formSub: 'Saved securely and delivered straight to my Gmail inbox.', gmailTo: 'fareedulhassan0@gmail.com', saveToSupabase: true, sendGmail: true, whatsappButton: true, successMsg: "Thank you! Your message has been received — I'll respond shortly." },
   footer: { tagline: 'Career Expert · Physics Educator', text: 'All Rights Reserved.' }
 };
@@ -857,8 +891,42 @@ function secHead(k, num) {
   </div>`;
 }
 
+const FALLBACK_SOCIALS = {
+  facebook:  { name: 'Facebook',  icon: 'fa-brands fa-facebook-f',  color: '#1877f2' },
+  instagram: { name: 'Instagram', icon: 'fa-brands fa-instagram',   color: '#e4405f' },
+  linkedin:  { name: 'LinkedIn',  icon: 'fa-brands fa-linkedin-in', color: '#0a66c2' },
+  youtube:   { name: 'YouTube',   icon: 'fa-brands fa-youtube',     color: '#ff0033' },
+  tiktok:    { name: 'TikTok',    icon: 'fa-brands fa-tiktok',      color: '#fe2c55' },
+  x:         { name: 'X',         icon: 'fa-brands fa-x-twitter',   color: '#8b8b8b' },
+  twitter:   { name: 'X / Twitter', icon: 'fa-brands fa-x-twitter', color: '#8b8b8b' },
+  threads:   { name: 'Threads',   icon: 'fa-brands fa-threads',     color: '#8b8b8b' },
+  whatsapp:  { name: 'WhatsApp',  icon: 'fa-brands fa-whatsapp',    color: '#25d366' },
+  telegram:  { name: 'Telegram',  icon: 'fa-brands fa-telegram',    color: '#26a5e4' },
+  github:    { name: 'GitHub',    icon: 'fa-brands fa-github',      color: '#8b8b8b' },
+  website:   { name: 'Website',   icon: 'fa-solid fa-globe',        color: '#3b82f6' }
+};
+
+function getEnabledSocials() {
+  const metaMap = (typeof SOCIAL_PLATFORMS !== 'undefined' && SOCIAL_PLATFORMS) ? SOCIAL_PLATFORMS : FALLBACK_SOCIALS;
+  const plats = (CFG.socials && CFG.socials.platforms) || {};
+  const list = [];
+  const seen = new Set();
+  Object.entries(plats).forEach(([k, v]) => {
+    if (!v || !v.enabled || !String(v.url || '').trim()) return;
+    const m = metaMap[k] || FALLBACK_SOCIALS[k] || { name: k.charAt(0).toUpperCase() + k.slice(1), icon: 'fa-solid fa-link', color: 'var(--primary)' };
+    list.push({ key: k, name: m.name, icon: m.icon, color: m.color, url: safeUrl(v.url) });
+    seen.add(k);
+  });
+  if (!seen.has('linkedin') && CFG.profile && CFG.profile.linkedin) {
+    const m = metaMap.linkedin || FALLBACK_SOCIALS.linkedin;
+    list.push({ key: 'linkedin', name: m.name, icon: m.icon, color: m.color, url: safeUrl(CFG.profile.linkedin) });
+  }
+  return list;
+}
+
 function renderNav(tpl) {
   const p = CFG.profile;
+  const socials = getEnabledSocials();
   const links = Object.entries(CFG.sections)
     .filter(([k, s]) => s.show !== false && s.nav)
     .map(([k, s]) => `<a href="#${k === 'hero' ? 'home' : k}" data-sec="${k === 'hero' ? 'home' : k}">${esc(s.nav)}</a>`).join('');
@@ -874,7 +942,7 @@ function renderNav(tpl) {
   }
   $('#drawer-links').innerHTML = links;
   $('#drawer-foot').innerHTML = [
-    p.linkedin ? `<a href="${esc(safeUrl(p.linkedin))}" target="_blank" rel="noopener noreferrer">LinkedIn</a>` : '',
+    ...socials.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.name)}</a>`),
     p.email ? `<a href="mailto:${esc(p.email)}">Email</a>` : '',
     p.whatsapp ? `<a href="https://wa.me/${esc(p.whatsapp.replace(/\D/g, ''))}" target="_blank" rel="noopener noreferrer">WhatsApp</a>` : ''
   ].join('');
@@ -883,9 +951,14 @@ function renderNav(tpl) {
 
 function renderHeroHTML(tpl) {
   const p = CFG.profile;
+  const socials = getEnabledSocials();
+  const showHeroSoc = !(CFG.socials && CFG.socials.showHero === false) && socials.length > 0;
+  const heroSocHTML = showHeroSoc
+    ? `<div class="hero-socials rv" style="--d:.16s">${socials.map(s => `<a class="soc-pill" style="--soc-c:${esc(s.color)}" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(s.name)}"><i class="${esc(s.icon)}" aria-hidden="true"></i><span>${esc(s.name)}</span></a>`).join('')}</div>`
+    : '';
   const btns = `<div class="hero-cta-row rv" style="--d:.12s">
     <a href="#contact" class="btn btn-primary mag"><span class="bfill"></span>${esc(CFG.nav.cta)} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
-  </div>`;
+  </div>${heroSocHTML}`;
 
   if (tpl === 'cyber-wave') {
     return `<section class="hero" id="home"><div class="container"><div class="hero-grid">
@@ -1076,13 +1149,18 @@ function render() {
   }
 
   if (show('contact')) {
+    const socials = getEnabledSocials();
+    const showContactSoc = !(CFG.socials && CFG.socials.showContact === false);
+    const contactSocHTML = showContactSoc
+      ? socials.map(s => `<a class="c-row" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer"><span class="c-ic" style="color:${esc(s.color)}"><i class="${esc(s.icon)}" aria-hidden="true"></i></span><div><small>${esc(s.name)}</small><strong>View ${esc(s.name)} Profile ↗</strong></div></a>`).join('')
+      : '';
     html += `<div class="curve-sep" aria-hidden="true"><span></span></div>
     <section class="sec alt" id="contact"><div class="container">${secHead('contact', ++n)}
       <div class="contact-grid">
         <div class="c-list rv">
           ${p.email ? `<a class="c-row" href="mailto:${esc(p.email)}"><span class="c-ic"><i class="fa-solid fa-envelope" aria-hidden="true"></i></span><div><small>Email</small><strong>${esc(p.email)}</strong></div></a>` : ''}
           ${p.phone ? `<a class="c-row" href="tel:${esc(p.phone)}"><span class="c-ic"><i class="fa-solid fa-phone" aria-hidden="true"></i></span><div><small>Phone / WhatsApp</small><strong>${esc(p.phone)}</strong></div></a>` : ''}
-          ${p.linkedin ? `<a class="c-row" href="${esc(safeUrl(p.linkedin))}" target="_blank" rel="noopener noreferrer"><span class="c-ic"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></span><div><small>LinkedIn</small><strong>View LinkedIn Profile ↗</strong></div></a>` : ''}
+          ${contactSocHTML}
           ${p.location ? `<div class="c-row"><span class="c-ic"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span><div><small>${esc(p.availability)}</small><strong>${esc(p.location)}</strong></div></div>` : ''}
         </div>
         <div class="card rv" style="--d:.06s">
@@ -1110,6 +1188,12 @@ function render() {
 
   $('#app-root').innerHTML = html;
 
+  const allSocials = getEnabledSocials();
+  const showFooterSoc = !(CFG.socials && CFG.socials.showFooter === false);
+  const footerSocHTML = showFooterSoc
+    ? allSocials.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" style="--soc-c:${esc(s.color)}"><i class="${esc(s.icon)}" aria-hidden="true"></i>${esc(s.name)}</a>`).join('')
+    : '';
+
   $('#footer-c').innerHTML = `<div class="f-top">
     <a href="#home" class="brand f-brand"><span class="brand-mark">${esc((p.initials || 'SFH').slice(0, 3))}</span><span class="brand-name">${esc(p.firstName + ' ' + p.lastName)}<small>${esc(CFG.footer.tagline)}</small></span></a>
     <div class="f-meta">
@@ -1120,11 +1204,18 @@ function render() {
   <div class="f-copy">
     <span>© ${new Date().getFullYear()} ${esc(p.firstName + ' ' + p.lastName)}. ${esc(CFG.footer.text)}</span>
     <div class="f-soc">
-      ${p.linkedin ? `<a href="${esc(safeUrl(p.linkedin))}" target="_blank" rel="noopener noreferrer">LinkedIn</a>` : ''}
+      ${footerSocHTML}
       ${p.email ? `<a href="mailto:${esc(p.email)}">Email</a>` : ''}
       ${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener noreferrer">WhatsApp</a>` : ''}
     </div>
   </div>`;
+
+  const dockRoot = $('#soc-dock-root');
+  if (dockRoot) {
+    dockRoot.innerHTML = (CFG.socials && CFG.socials.floatingBar && allSocials.length)
+      ? `<nav class="soc-dock" aria-label="Social links">${allSocials.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" title="${esc(s.name)}" aria-label="${esc(s.name)}" style="--soc-c:${esc(s.color)}"><i class="${esc(s.icon)}" aria-hidden="true"></i></a>`).join('')}</nav>`
+      : '';
+  }
 
   const sw = $('#skills');
   if (sw) sw.addEventListener('click', e => {
